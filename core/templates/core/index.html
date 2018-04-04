@@ -3,19 +3,24 @@
 
 {% block content %}
     <section class="hero">
-        <div class="hero-image-container container-fluid no-padding-x">
-            <img class="hero-image" src="{% static 'core/images/hero/family_3840x1955px.jpg' %}">
-        </div>
-        <div class="hero__title-container text-center row container-fluid">
-            <div class="col-md-12">
-                <img class="navigation__site-logo"
-                     srcset=""
-                     sizes="100vw"
-                     src=""
-                alt="">
-                <h2 class="navigation__subtitle">Sharing Chores to Have More Time for Fun</h2>
+        <div class="hero-image-container container-fluid px-0 mx-0">
+            <div class="row px-0 mx-0">
+                <div class="col-12 px-0 mx-0">
+                    <img class="hero-image" src="{% static 'core/images/hero/family_3840x1955px.jpg' %}">
+                </div>
+            </div>
+            <div class="hero__title-container text-center row px-0 mx-0">
+                <div class="col-md-12">
+                    <img class="hero__site-logo"
+                         srcset=""
+                         sizes="100vw"
+                         src="{% static 'core/images/logo/Bnice_logo_1744x484px.png' %}"
+                    alt="Be Nice Main Logo">
+                    <h2 class="hero__page-title">More You, Less Chores</h2>
+                </div>
             </div>
         </div>
+
         <div class="container row">
             <div class="col-12">
                 <h1>TEST CONTENT</h1>

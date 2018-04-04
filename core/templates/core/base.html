@@ -9,14 +9,15 @@
           content="B.Nice - share family chores to have more time for fun.">
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Cabin+Sketch" rel="stylesheet">
     <title>B.Nice</title>
     <link rel="stylesheet" href="{% static 'scss/main.scss'|compile %}"/>
 </head>
 <body>
     <nav class="navigation navbar navbar-expand-lg navbar-dark sticky-top">
-        <a class="navigation__brand-link navbar-brand" href="">
+        <a class="navigation__brand-link navbar-brand" href="{% url 'core:home' %}">
             <img class="navigation__brand-img"
-                 src=""
+                 src="{% static 'core/images/logo/Bnice_logo_1744x484px.png' %}"
                  alt="Be Nice Logo">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
