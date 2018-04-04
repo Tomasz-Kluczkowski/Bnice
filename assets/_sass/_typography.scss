@@ -31,9 +31,16 @@ html {
   }
 }
 
-
-.page-title {
+@mixin title-font {
   font-family: 'Cabin Sketch', cursive;
-  font-size: 3rem;
 }
 
+.page-title {
+  @include title-font;
+  font-size: 4rem;
+}
+
+.section-title {
+  @include title-font;
+  font-size: 3rem;
+}
