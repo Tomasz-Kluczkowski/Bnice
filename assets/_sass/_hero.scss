@@ -68,7 +68,7 @@
 
 .hero__title-container {
   padding: 1rem;
-  width: 55%;
+  width: 90%;
   z-index: 2;
   position: absolute;
   top: 50%;
@@ -77,13 +77,22 @@
   -webkit-transform: translate(50%, -50%);
   -ms-transform: translate(50%, -50%);
   transform: translate(50%, -50%);
-  //background: linear-gradient(180deg, transparent 0%, $titlebackground 2%, $titlebackground 98%, transparent 100%),
-  //            linear-gradient(90deg, transparent 0%, $titlebackground 2%, $titlebackground 98%, transparent 100%);
-  //border-radius: 0.75rem;
 }
 
 .hero__site-logo {
-  width: 80%;
+  width: 90%;
+}
+
+@media (min-width: 576px) {
+  .hero__site-logo {
+    width: 70%;
+  }
+}
+
+@media (min-width: 982px) {
+  .hero__site-logo {
+    width: 50%;
+  }
 }
 
 .hero__page-title {

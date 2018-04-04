@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load staticfiles %}
+{% load static %}
 {% load compile_static %}
 <html lang="en">
 <head>
@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{% static 'scss/main.scss'|compile %}"/>
 </head>
 <body>
-    <nav class="navigation navbar navbar-expand-lg navbar-dark sticky-top">
+    <nav class="navigation navbar navbar-expand-lg navbar-dark fixed-top">
         <a class="navigation__brand-link navbar-brand" href="{% url 'core:home' %}">
             <img class="navigation__brand-img"
                  src="{% static 'core/images/logo/Bnice_logo_1744x484px.png' %}"
