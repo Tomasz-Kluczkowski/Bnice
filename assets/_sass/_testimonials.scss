@@ -1,0 +1,37 @@
+.testimonials {
+  margin-bottom: 5rem;
+}
+
+.testimonials__container {
+  width: 80%;
+}
+
+.testimonials__section-title {
+  @extend .section-title;
+  margin-top: 6rem;
+  margin-bottom: 2rem;
+}
+
+.testimonials__img {
+  box-shadow: black 3px 3px 5px;
+  border: $palegreen 1px solid;
+}
+
+.testimonials__title {
+  @include title-font;
+  font-size: 2rem;
+}
+
+.testimonials__cite {
+  @include paragraph-font;
+  font-size: 1rem;
+  color: $salmon;
+}
+
+.testimonials__username {
+  @include title-font;
+  font-size: 1.25rem;
+  color: $armygreen;
+  margin-top: 0.5rem;
+  text-align: right;
+}

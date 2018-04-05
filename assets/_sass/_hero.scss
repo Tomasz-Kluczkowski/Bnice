@@ -56,7 +56,7 @@
 
 .hero__button {
   margin-top: 1rem;
-  @include section-title-font;
+  @include title-font;
   font-size: 2rem;
   width: 12rem;
   color: $salmon;

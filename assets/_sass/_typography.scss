@@ -31,11 +31,11 @@ html {
   }
 }
 
-@mixin page-title-font {
+@mixin section-title-font {
   font-family: 'Cabin Sketch', cursive;
 }
 
-@mixin section-title-font {
+@mixin title-font {
   font-family: 'Lato', sans-serif;
 }
 
@@ -44,11 +44,11 @@ html {
 }
 
 .page-title {
-  @include page-title-font;
+  @include section-title-font;
   font-size: 4rem;
 }
 
 .section-title {
-  @include page-title-font;
+  @include section-title-font;
   font-size: 3rem;
 }

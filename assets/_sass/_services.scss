@@ -1,8 +1,7 @@
 .services{
-  margin-bottom: 5rem;
 }
 
-.services__title {
+.services__section-title {
   @extend .section-title;
   margin-top: 4rem;
   margin-bottom: 2rem;
@@ -14,7 +13,7 @@
 }
 
 .services__card-header {
-  @include page-title-font;
+  @include section-title-font;
   position: absolute;
   top: 0;
   left: 0;
@@ -31,14 +30,12 @@
 }
 
 .services__card-title {
-  @include section-title-font;
+  @include title-font;
   color: $olive;
   font-size: 2rem;
   text-align: center;
   margin-bottom: 1rem;
 }
-
-
 
 .services__card-text {
   @include paragraph-font;
