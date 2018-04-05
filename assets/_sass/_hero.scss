@@ -53,3 +53,23 @@
   @extend .page-title;
   color: $grass;
 }
+
+.hero__button {
+  margin-top: 1rem;
+  @include section-title-font;
+  font-size: 2rem;
+  width: 12rem;
+  color: $salmon;
+  border-color: $grass;
+  background-color: rgba(60, 128, 109, 0.26);
+  &:hover {
+    background: rgba(227, 125, 121, 0.55);
+  }
+  &:active {
+    background-color: rgba(60, 128, 109, 0.26) !important;
+    box-shadow: #E37D79 0 0 0.5rem !important;
+  }
+  &:focus {
+    box-shadow: #E37D79 0 0 0.5rem;
+  }
+}

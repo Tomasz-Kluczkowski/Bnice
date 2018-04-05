@@ -31,16 +31,20 @@ html {
   }
 }
 
-@mixin title-font {
+@mixin page-title-font {
   font-family: 'Cabin Sketch', cursive;
 }
 
+@mixin section-title-font {
+  font-family: 'Lato', sans-serif;
+}
+
 .page-title {
-  @include title-font;
+  @include page-title-font;
   font-size: 4rem;
 }
 
 .section-title {
-  @include title-font;
+  @include page-title-font;
   font-size: 3rem;
 }
