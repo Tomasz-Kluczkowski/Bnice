@@ -39,6 +39,10 @@ html {
   font-family: 'Lato', sans-serif;
 }
 
+@mixin paragraph-font {
+  font-family: 'Raleway', sans-serif;
+}
+
 .page-title {
   @include page-title-font;
   font-size: 4rem;

@@ -28,21 +28,20 @@
 }
 
 .services__card-img {
-  &::after {
-
-  }
 }
 
 .services__card-title {
+  @include section-title-font;
   color: $olive;
   font-size: 2rem;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 
 
 .services__card-text {
+  @include paragraph-font;
   color: $olive;
   text-align: center;
 }
