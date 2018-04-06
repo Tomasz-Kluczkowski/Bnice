@@ -51,4 +51,5 @@ html {
 .section-title {
   @include section-title-font;
   font-size: 3rem;
+  color: $skyblue;
 }

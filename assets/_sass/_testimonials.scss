@@ -1,7 +1,8 @@
 .testimonials {
-  background: linear-gradient(#ffffff 0%, #fafafa 5%, #fafafa 100%);
+  background: $section-background;
+  margin-top: 3rem;
   margin-bottom: 5rem;
-  padding-bottom: 1rem;
+  padding-bottom: 3rem;
 }
 
 .testimonials__container {
@@ -10,7 +11,7 @@
 
 .testimonials__section-title {
   @extend .section-title;
-  margin-top: 6rem;
+  margin-top: 3rem;
   margin-bottom: 2rem;
 }
 
