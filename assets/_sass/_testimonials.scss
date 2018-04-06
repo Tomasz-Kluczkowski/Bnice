@@ -1,5 +1,7 @@
 .testimonials {
+  background: linear-gradient(#ffffff 0%, #fafafa 5%, #fafafa 100%);
   margin-bottom: 5rem;
+  padding-bottom: 1rem;
 }
 
 .testimonials__container {
@@ -14,12 +16,19 @@
 
 .testimonials__img {
   box-shadow: black 3px 3px 5px;
-  border: $palegreen 1px solid;
+  border: $olive 1px solid;
 }
 
 .testimonials__title {
   @include title-font;
   font-size: 2rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 768px){
+  .testimonials__title {
+    margin-top: auto;
+  }
 }
 
 .testimonials__cite {
