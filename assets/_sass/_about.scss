@@ -30,11 +30,10 @@
 
 .about__section-title {
   @extend .section-title;
-  color: $salmon;
+  color: $section-title-color;
   margin-top: 2rem;
 }
 
 .about__paragraph {
   @include paragraph-font;
-  color: $skyblue;
 }
