@@ -2,9 +2,9 @@
 {% load static %}
 {% block content %}
     <section class="hero">
-        <div class="hero-image-container container-fluid px-0 mx-0">
-            <div class="row px-0 mx-0">
-                <div class="col-12 px-0 mx-0">
+        <div class="hero-image-container container-fluid px-0">
+            <div class="row mx-0">
+                <div class="col-12 px-0">
                     <picture>
                         <source srcset="{% static 'core/images/hero/family_480x270px.jpg' %} 480w,
                                         {% static 'core/images/hero/family_960x480px.jpg' %} 960w,
@@ -23,7 +23,7 @@
                     </picture>
                 </div>
             </div>
-            <div class="hero__title-container text-center row px-0 mx-0">
+            <div class="hero__title-container text-center row mx-0">
                 <div class="col-md-12">
                     <img class="hero__site-logo"
                          srcset="{% static 'core/images/logo/Bnice_logo_218x61px.png' %} 218w,
@@ -52,36 +52,36 @@
                         <div class="services__card card">
                             <div class="services__card-header">1</div>
                             <img class="services__card-img card-img-top"
-{#                                 srcset="{% static 'core/images/services/family_with_laptop_177x118px.jpg' %} 177w,#}
-{#                                         {% static 'core/images/services/family_with_laptop_355x237px.jpg' %} 355w,#}
-{#                                         {% static 'core/images/services/family_with_laptop_771x514px.jpg' %} 771w"#}
+                                 srcset="{% static 'core/images/services/family_with_laptop_177x118px.jpg' %} 177w,
+                                         {% static 'core/images/services/family_with_laptop_355x237px.jpg' %} 355w,
+                                         {% static 'core/images/services/family_with_laptop_771x514px.jpg' %} 771w"
                                  src="{% static 'core/images/services/family_with_laptop_771x514px.jpg' %}"
-{#                                 sizes=""#}
+                                 sizes=""
                                  alt="Family Sharing Laptop">
                             <div class="card-body">
                                 <h5 class="services__card-title card-title">Sign Up</h5>
                                 <p class="services__card-text card-text">Register for free and start using our services.</p>
                             </div>
                             <div class="card-footer">
-{#                                <p class="services__card-text card-text"></p>#}
+                                <p class="services__card-text card-text"></p>
                             </div>
                         </div>
 
                         <div class="card">
                             <div class="services__card-header">2</div>
                             <img class="card-img-top"
-{#                                 srcset="{% static 'core/images/services/doing_chores_177x118px.jpg' %} 177w,#}
-{#                                         {% static 'core/images/services/doing_chores_355x237px.jpg' %} 355w,#}
-{#                                         {% static 'core/images/services/doing_chores_771x514px.jpg' %} 771w"#}
+                                 srcset="{% static 'core/images/services/doing_chores_177x118px.jpg' %} 177w,
+                                         {% static 'core/images/services/doing_chores_355x237px.jpg' %} 355w,
+                                         {% static 'core/images/services/doing_chores_771x514px.jpg' %} 771w"
                                  src="{% static 'core/images/services/doing_chores_771x514px.jpg' %}"
-{#                                 sizes=""#}
+                                 sizes=""
                                  alt="Mum and daughter doing chores together">
                             <div class="card-body">
                                 <h5 class="services__card-title card-title">Motivate</h5>
                                 <p class="services__card-text card-text">Add tasks to family members and ask them to help you. Agree on the prize they get on completion.</p>
                             </div>
                             <div class="card-footer">
-{#                                <p class="services__card-text card-text"></p>#}
+                                <p class="services__card-text card-text"></p>
                             </div>
                         </div>
 
@@ -89,18 +89,18 @@
                         <div class="card">
                             <div class="services__card-header">3</div>
                             <img class="card-img-top"
-{#                                 srcset="{% static 'core/images/services/boy_with_a_toy_plane_177x118px.jpg' %} 177w,#}
-{#                                         {% static 'core/images/services/boy_with_a_toy_plane_355x237px.jpg' %} 355w,#}
-{#                                         {% static 'core/images/services/boy_with_a_toy_plane_771x514px.jpg' %} 771w"#}
+                                 srcset="{% static 'core/images/services/boy_with_a_toy_plane_177x118px.jpg' %} 177w,
+                                         {% static 'core/images/services/boy_with_a_toy_plane_355x237px.jpg' %} 355w,
+                                         {% static 'core/images/services/boy_with_a_toy_plane_771x514px.jpg' %} 771w"
                                  src="{% static 'core/images/services/boy_with_a_toy_plane_771x514px.jpg' %}"
-{#                                 sizes=""#}
+                                 sizes=""
                                  alt="Rewarding your child">
                             <div class="card-body">
                                 <h5 class="services__card-title card-title">Reward</h5>
                                 <p class="services__card-text card-text">Positive reinforcement is best. Make them feel happy by seeing your smile.</p>
                             </div>
                             <div class="card-footer">
-{#                                <p class="services__card-text card-text"></p>#}
+                                <p class="services__card-text card-text"></p>
                             </div>
                         </div>
                     </div>
@@ -130,24 +130,53 @@
                 </div>
             </div>
             <div class="row mt-5">
-                <div class="col-md-6">
+                <div class="col-md-6 order-lg-1">
                     <h2 class="testimonials__title">Why I keep using B.Nice</h2>
                     <cite class="testimonials__cite">
                         "I barely had any time for myself, there was always so much work at home. I tried many times asking my child for help but it never worked in the long run. Since I started using B.Nice we finally have spare time and can enjoy each others company and go out."
                     </cite>
                     <h3 class="testimonials__username">Violet, London, UK</h3>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 order-lg-2">
                     <img class="testimonials__img img-fluid rounded" src="{% static 'core/images/testimonials/woman_whispering_to_child_540x360px.jpg' %}">
                 </div>
             </div>
         </div>
     </section>
     <section class="about">
-        <div class="container-fluid">
+        <div class="container-fluid px-0">
+            <div class="row mx-0">
+                <div class="about__img-container col-12 px-0">
+                    <img class="img-fluid" src="{% static 'core/images/about/girl_playing_on_grass_3840x950px.jpg' %}">
+{#                    <div class="about__text-container">#}
+{#                        <h3 class="about__quote"><em>#}
+{#                            “The greatest gifts you can give your children are the roots of responsibility and the wings of independence.”#}
+{#                        </em></h3>#}
+{#                        <h3 class="about__quote-autor">Denis Waitley</h3>#}
+{#                    </div>#}
+
+                </div>
+            </div>
+        </div>
+        <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <img class="img-fluid" src="{% static 'core/images/about/girl_playing_on_grass_3840x950px.jpg' %}">
+                        <h2 class="about__section-title">About Us</h2>
+                        <p class="about__paragraph">
+                            I was going round in circles trying to teach my
+                            daughter how to be a good person.
+                            It all starts at home and the earlier you start the
+                            better.
+                            Easier said than done.
+                            I started from making a wall chart with her good and
+                            bad behaviour listed with smileys and sad face
+                            icons.
+                            Me and my wife noticed straight away a change in her
+                            and since I am a web developer why not convert a
+                            chart to a web site?
+                            That's how B.Nice started - out of a simple need to
+                            bring more happiness to our family.
+                        </p>
                 </div>
             </div>
         </div>

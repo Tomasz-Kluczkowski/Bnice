@@ -3,6 +3,7 @@
 
 .services__section-title {
   @extend .section-title;
+  color: $section-title-color;
   margin-top: 4rem;
   margin-bottom: 2rem;
 }

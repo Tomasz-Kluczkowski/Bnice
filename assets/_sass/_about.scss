@@ -1,2 +1,40 @@
 .about {
 }
+
+.about__img-container {
+  position: relative;
+  &::after {
+    @include img-overlay(0.6, 0.1);
+  }
+}
+
+.about__text-container {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 2;
+}
+
+.about__quote {
+  @include title-font;
+  font-size: 1.5rem;
+  color: $grass;
+}
+
+.about__quote-autor {
+  @include title-font;
+  font-size: 1.75rem;
+  color: $salmon;
+  text-align: right;
+}
+
+.about__section-title {
+  @extend .section-title;
+  color: $salmon;
+  margin-top: 2rem;
+}
+
+.about__paragraph {
+  @include paragraph-font;
+  color: $skyblue;
+}

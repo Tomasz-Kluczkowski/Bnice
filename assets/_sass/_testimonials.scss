@@ -11,13 +11,14 @@
 
 .testimonials__section-title {
   @extend .section-title;
+  color: $section-title-color;
   margin-top: 3rem;
   margin-bottom: 2rem;
 }
 
 .testimonials__img {
   box-shadow: black 3px 3px 5px;
-  border: $olive 1px solid;
+  border: rgba(0, 0, 0, 0.17) 1px solid;
 }
 
 .testimonials__title {
@@ -35,13 +36,13 @@
 .testimonials__cite {
   @include paragraph-font;
   font-size: 1rem;
-  color: $salmon;
+  color: $skyblue;
 }
 
 .testimonials__username {
   @include title-font;
   font-size: 1.25rem;
-  color: $armygreen;
+  color: $olive;
   margin-top: 0.5rem;
   text-align: right;
 }
