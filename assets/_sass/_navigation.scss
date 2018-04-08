@@ -12,14 +12,37 @@
 .navigation__icon {
 }
 
+.navbar {
+ padding: 0.25rem 0.5rem;
+}
+
 .navbar-dark {
   .navbar-nav {
     .navigation__link {
+      @include title-font;
+      font-size: 1.5rem;
       color: $armygreen;
       transition: all 0.5s ease-in-out;
       &:hover {
         color: $grass;
       }
     }
+  }
+}
+
+#toTopButton {
+  display: none;
+  position: fixed;
+  bottom: 5rem;
+  right: 0.5rem;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: $salmon;
+  padding: 0 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 2rem;
+  transition: background-color 500ms ease-in-out;
+  &:hover {
+    background-color: fade-in(rgba(0, 0, 0, 0.5), .2);
   }
 }

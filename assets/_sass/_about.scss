@@ -8,26 +8,6 @@
   }
 }
 
-.about__text-container {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  z-index: 2;
-}
-
-.about__quote {
-  @include title-font;
-  font-size: 1.5rem;
-  color: $grass;
-}
-
-.about__quote-autor {
-  @include title-font;
-  font-size: 1.75rem;
-  color: $salmon;
-  text-align: right;
-}
-
 .about__section-title {
   @extend .section-title;
   color: $section-title-color;
