@@ -1,0 +1,8 @@
+.contact {
+}
+
+.contact__section-title {
+  @extend .section-title;
+  color: $section-title-color;
+  margin-top: 2rem;
+}
