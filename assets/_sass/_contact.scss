@@ -4,5 +4,8 @@
 .contact__section-title {
   @extend .section-title;
   color: $section-title-color;
-  margin-top: 2rem;
+  margin-top: 8rem;
+  margin-bottom: 25rem;
+//  the margins are temporary to test section scrolling
+//  remove when django from is auto injected.
 }
