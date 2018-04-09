@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'static_precompiler',
     'core',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -140,3 +141,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [STATIC_DIR]
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+LOGIN_REDIRECT_URL = "accounts:login_ok"
+LOGOUT_REDIRECT_URL = "accounts:logout_ok"
