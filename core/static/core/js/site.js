@@ -39,7 +39,7 @@ function setActiveClass() {
     });
 }
 
-// Automatic navigation active state.
+// Automatic navigation links active state.
 function autoActiveNavLinks() {
     $(window).on('scroll', setActiveClass)
 }
