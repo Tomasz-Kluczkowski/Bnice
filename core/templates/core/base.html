@@ -31,18 +31,22 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarToggler">
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-                <li class="nav-item">
-                    <a class="navigation__link nav-link" href="#services">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="navigation__link nav-link" href="#opinions">Opinions</a>
-                </li>
-                <li class="nav-item">
-                    <a class="navigation__link nav-link" href="#about">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="navigation__link nav-link" href="#contact">Contact</a>
-                </li>
+
+                {% if request.path == "/" %}
+                    <li class="nav-item">
+                        <a class="navigation__link nav-link" href="#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="navigation__link nav-link" href="#opinions">Opinions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="navigation__link nav-link"
+                           href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="navigation__link nav-link" href="#contact">Contact</a>
+                    </li>
+                {% endif %}
                 {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="navigation__link nav-link" href="{% url 'accounts:logout' %}">Log Out</a>
