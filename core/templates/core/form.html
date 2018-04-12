@@ -1,0 +1,22 @@
+{% load bootstrap4 %}
+<div class="form-container container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="signup__section-title">{{ title }}</h1>
+            {% bootstrap_messages %}
+            <form method="post">
+                {% csrf_token %}
+                {% bootstrap_form form size="small" label_class="form-label" %}
+                <div class="row">
+                    <div class="col-12 text-center">
+                        {% buttons %}
+                            <button type="submit" class="form-button btn btn-primary">
+                                {{ title }}
+                            </button>
+                        {% endbuttons %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

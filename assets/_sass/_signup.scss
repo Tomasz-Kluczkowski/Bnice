@@ -1,22 +1,10 @@
 .signup {
-  margin-bottom: 3rem;
 }
 
 .signup__section-title {
   @extend .section-title;
   color: $section-title-color;
-  margin-top: 8rem;
-//  the margins are temporary to test section scrolling
-//  remove when django from is auto injected.
+  margin-top: 5rem;
+  margin-bottom: 2rem;
 }
 
-.signup__label {
-  @include title-font;
-  margin-top: 0.75rem;
-  margin-bottom: 0.10rem;
-}
-
-.signup__help {
-  @include paragraph-font;
-  margin-bottom: 0.25rem;
-}
