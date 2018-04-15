@@ -48,11 +48,20 @@
 {#                    </li>#}
                 {% endif %}
                 {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="navigation__link nav-link" href="{% url 'accounts:logout' %}">Log Out</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="navigation__link nav-link" href="{% url 'dashboard:dashboard' %}">Dashboard</a>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href=""
+                           id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded="false">
+                            <i class="navigation__icon fas fa-user"></i>
+                        </a>
+                        <div class="dropdown-menu"
+                             aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'dashboard:dashboard' %}">Dashboard</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'accounts:logout' %}">Log Out</a>
+                        </div>
                     </li>
                 {% else %}
                     <li class="nav-item">

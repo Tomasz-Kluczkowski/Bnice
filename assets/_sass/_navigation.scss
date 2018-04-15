@@ -10,10 +10,17 @@
 }
 
 .navigation__icon {
+  vertical-align: middle;
 }
 
 .navbar {
  padding: 0.25rem 0.5rem;
+}
+
+@media (min-width: 982px) {
+  .navbar-collapse {
+    margin-right: 7rem;
+  }
 }
 
 .navbar-dark {
@@ -45,4 +52,39 @@
   &:hover {
     background-color: fade-in(rgba(0, 0, 0, 0.5), .2);
   }
+}
+
+#navbarDropdown {
+  color: $armygreen;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+  transition: all 0.5s ease-in-out;
+  &:hover {
+    color: $grass;
+  }
+}
+
+@media (min-width: 982px) {
+  .dropdown-menu {
+    position: relative;
+    border-left: 1px solid rgba(0, 0, 0, .15);
+    border-right: 1px solid rgba(0, 0, 0, .15);
+    border-bottom: 1px solid rgba(0, 0, 0, .15);
+    border-top: none;
+    &::before {
+      color: white;
+      position: absolute;
+      display: inline-block;
+      content: "";
+      top: -16px;
+      right: auto;
+      left: 16px;
+      border: 8px solid transparent;
+      border-bottom-color: white;
+    }
+  }
+}
+
+.dropdown-item {
+  @include title-font;
 }

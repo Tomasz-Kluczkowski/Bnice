@@ -2,6 +2,18 @@ var toTopButton = $("#toTopButton");
 var sections = $('section'),
     nav = $('nav'),
     nav_height = nav.outerHeight();
+var dropdown = $(".dropdown");
+
+
+// Add fade in for dropdown.
+dropdown.on('show.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').first().stop(true, true).fadeIn(500);
+});
+
+// Add fade out for dropdown
+dropdown.on('hide.bs.dropdown', function() {
+    $(this).find('.dropdown-menu').first().stop(true, true).fadeOut(500);
+});
 
 function detectScroll() {
     var offset = 800;
