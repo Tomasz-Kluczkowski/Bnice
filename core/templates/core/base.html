@@ -17,7 +17,7 @@
 </head>
 <body>
 <a href="#" id="toTopButton"><i class="fas fa-angle-up"></i></a>
-<nav class="navigation navbar navbar-expand-lg navbar-dark fixed-top">
+<nav class="navigation navbar navbar-expand-sm navbar-dark fixed-top">
         <a class="navigation__brand-link navbar-brand" href="{% url 'core:home' %}">
             <img class="navigation__brand-img"
                  src="{% static 'core/images/logo/Bnice_logo_1744x484px.png' %}"
@@ -48,8 +48,13 @@
 {#                    </li>#}
                 {% endif %}
                 {% if user.is_authenticated %}
-
-                    <li class="nav-item dropdown">
+                    <li class="nav-item d-sm-none">
+                        <a class="navigation__link nav-link" href="{% url 'dashboard:dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item d-sm-none">
+                        <a class="navigation__link nav-link" href="{% url 'accounts:logout' %}">Log Out</a>
+                    </li>
+                    <li class="nav-item dropdown d-none d-sm-block">
                         <a class="nav-link dropdown-toggle" href=""
                            id="navbarDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true"
