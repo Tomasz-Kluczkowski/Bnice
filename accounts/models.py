@@ -1,34 +1,26 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 
-class Parent(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class User(AbstractUser):
+    is_parent = models.BooleanField(default=False)
+    is_child = models.BooleanField(default=False)
+    profile_pic = models.ImageField(upload_to='profiles/', blank=True)
 
     def __str__(self):
-        return self.user.username
+        return self.username
 
 
 class Child(models.Model):
-    name = models.CharField(max_length=255, blank=False)
-    surname = models.CharField(max_length=255, blank=True)
-    parent = models.ForeignKey(Parent,
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE,
+                                primary_key=True)
+    parent = models.ForeignKey(settings.AUTH_USER_MODEL,
                                null=True,
                                on_delete=models.CASCADE,
                                related_name="children")
 
     def __str__(self):
-        return self.name
-
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Parent.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.parent.save()
+        return self.user.username

@@ -1,7 +1,10 @@
 {% extends "core/base.html" %}
 {% load static %}
 {% block content %}
-{#    <section class="signup">#}
-{#        {% include "core/form.html" with title="Sign Up" %}#}
-{#    </section>#}
+    <section class="dashboard">
+        <h1>Add child test</h1>
+        <a href="{% url 'dashboard:add_child' %}">Add child test</a>
+           {% block child_form %}
+           {% endblock %}
+    </section>
 {% endblock %}
