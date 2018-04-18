@@ -2,6 +2,37 @@
 {% load static %}
 {% block content %}
     <section class="dashboard">
+
+
+
+    <h1>Child List</h1>
+
+    {% if child_list %}
+    <ul>
+
+      {% for child in child_list %}
+      <li>
+        <a href="{{ child.get_absolute_url }}">{{ child.user.name }}</a>
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>You have no children added. Please use the form below to add your first child.</p>
+    {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
         <h1>Add child test</h1>
         <a href="{% url 'dashboard:add_child' %}">Add child test</a>
            {% block child_form %}
