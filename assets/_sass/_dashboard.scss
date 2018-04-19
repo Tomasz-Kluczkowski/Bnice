@@ -1,19 +1,36 @@
 .dashboard {
-  margin-top: 4rem;
+  padding-top: 3rem;
 }
+.dashboard__alert {
+  background-color: $olive;
+  text-align: center;
+  height: 2rem;
+  color: white;
+}
+
 
 .dashboard__user-panel {
   border-left: rgba(0, 0, 0, 0.15) 1px solid;
+  border-bottom: rgba(0, 0, 0, 0.15) 1px solid;
+  padding-bottom: 1rem;
+  border-bottom-left-radius: 0.5rem;
+  height: 100%;
 }
 
 .dashboard__title {
   @include title-font;
   font-size: 1.5rem;
+  text-align: center;
+  padding-top: 0.5rem;
 }
 
 .dashboard__welcome {
   @include title-font;
   font-size: 1.5rem;
+}
+
+.dashboard__username {
+  color: $salmon;
 }
 
 .dashboard__paragraph {
