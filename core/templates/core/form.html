@@ -1,12 +1,17 @@
 {% load bootstrap4 %}
 <div class="form-container container">
     <div class="row">
-        <div class="col-12">
+        <div class="col-md-6">
             <h1 class="form__section-title">{{ title }}</h1>
+        </div>
+        <div class="col-md-6">
             {% bootstrap_messages %}
             <form method="post">
                 {% csrf_token %}
                 {% bootstrap_form form size="small" label_class="form-label" %}
+                {% if form.non_field_errors and request.path == "/accounts/login/" %}
+                    <div class="invalid-feedback d-block">The username and password do not match.</div>
+                {% endif %}
                 <div class="row">
                     <div class="col-12 text-center">
                         {% buttons %}

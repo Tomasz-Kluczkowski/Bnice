@@ -1,0 +1,22 @@
+.dashboard {
+  margin-top: 4rem;
+}
+
+.dashboard__user-panel {
+  border-left: rgba(0, 0, 0, 0.15) 1px solid;
+}
+
+.dashboard__title {
+  @include title-font;
+  font-size: 1.5rem;
+}
+
+.dashboard__welcome {
+  @include title-font;
+  font-size: 1.5rem;
+}
+
+.dashboard__paragraph {
+  @include paragraph-font;
+  font-size: 1rem;
+}

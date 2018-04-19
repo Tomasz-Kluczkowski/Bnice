@@ -2,40 +2,61 @@
 {% load static %}
 {% block content %}
     <section class="dashboard">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
 
 
-
-    <h1>Child List</h1>
-
-    {% if child_list %}
-    <ul>
-
-      {% for child in child_list %}
-      <li>
-        <a href="{{ child.get_absolute_url }}">{{ child.user.name }}</a>
-      </li>
-      {% endfor %}
-
-    </ul>
-    {% else %}
-      <p>You have no children added. Please use the form below to add your first child.</p>
-    {% endif %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <h1>Add child test</h1>
-        <a href="{% url 'dashboard:add_child' %}">Add child test</a>
-           {% block child_form %}
-           {% endblock %}
+                    <div class="row">
+                        <div class="col-md-9">
+{#                            {% if child_list and user.is_parent %}#}
+{#                                <ul>#}
+{#                                    {% for child in child_list %}#}
+{#                                        <li>#}
+{#                                            <a href="{{ child.get_absolute_url }}">{{ child.user.name }}</a>#}
+{#                                        </li>#}
+{#                                    {% endfor %}#}
+{#                                </ul>#}
+{#                            {% else %}#}
+{#                                <p>You have no children added. Please use the form below to add#}
+{#                                    your first child.</p>#}
+{#                            {% endif %}#}
+{#                            {% if user.is_authenticated and user.is_parent %}#}
+{#                                <h1>Add child test</h1>#}
+{#                                <a href="{% url 'dashboard:add_child' %}">Add child test</a>#}
+                                {% block child_form %}
+                                {% endblock %}
+{#                            {% endif %}#}
+                        </div>
+                        <div class="dashboard__user-panel col-md-3">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h1 class="dashboard__title text-center">User Panel</h1>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h2 class="dashboard__welcome">Welcome {{ request.user.username }}</h2>
+                                    <p class="dashboard__paragraph">Please select from one of the actions below.</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <a class="btn btn-primary form-button" href="{% url 'dashboard:dashboard' %}">View Dashboard</a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                     {% if user.is_authenticated and user.is_parent or user.is_superuser %}
+                                         <a class="btn btn-primary form-button" href="{% url 'dashboard:add_child' %}">Add Child</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 {% endblock %}

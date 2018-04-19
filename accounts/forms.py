@@ -3,9 +3,10 @@ from django.db import transaction
 from accounts.models import User, Child
 
 help_dict = {
-    "password1": '<ul><li>Minimum 8 characters long.\n</li><li>Cannot be numerical only.\n</li><li>Cannot be similar to your personal data.\n</li><li>Common words are not allowed.</li></ul>',
+    # "password1": '<ul><li>Minimum 8 characters long.\n</li><li>Cannot be numerical only.\n</li><li>Cannot be similar to your personal data.\n</li><li>Common words are not allowed.</li></ul>',
+    "password1": '8 characters or more & not numerical only.',
     "required": "Required",
-    "profile_photo": 'Image file, size 500x500 px. Jpeg, png or gif type only.'
+    "profile_photo": 'Image file, size: 500x500 px, jpeg, png or gif type only.'
 }
 
 
