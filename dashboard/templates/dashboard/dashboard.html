@@ -5,19 +5,36 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-
-
                     <div class="row">
                         <div class="col-md-9">
+                            {% block child_form %}
+                            {% endblock %}
                             {% if user.is_parent or user.is_superuser %}
                                 {% if child_list %}
-                                    <ul>
+                                    <div class="dashboard__card-deck card-deck">
                                         {% for child in child_list %}
-                                            <li>
-                                                <a href="{{ child.get_absolute_url }}">{{ child.user.name }}</a>
-                                            </li>
+                                            <div class="dashboard__card card">
+                                                <img class="card-img-top" src=""
+                                                     alt="Card image cap">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">
+                                                        <a href="{{ child.get_absolute_url }}">{{ child.user.name }}</a>
+                                                    </h5>
+                                                    <p class="card-text">This is a
+                                                        longer card with supporting
+                                                        text below as a natural
+                                                        lead-in to additional
+                                                        content. This content is a
+                                                        little bit longer.</p>
+                                                    <p class="card-text">
+                                                        <small class="text-muted">
+                                                            Last updated 3 mins ago
+                                                        </small>
+                                                    </p>
+                                                </div>
+                                            </div>
                                         {% endfor %}
-                                    </ul>
+                                    </div>
                                 {% elif request.path == "/dashboard/" %}
                                     <div class="dashboard__alert row">
                                         <div class="col-12 my-auto">
@@ -37,8 +54,7 @@
                                     </div>
                                 {% endif %}
                             {% endif %}
-                            {% block child_form %}
-                            {% endblock %}
+
                         </div>
                         <div class="dashboard__user-panel col-md-3">
                             <div class="row">

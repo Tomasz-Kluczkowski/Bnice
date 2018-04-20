@@ -42,7 +42,12 @@ class ChildCreateForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'name', 'profile_photo', 'password1', 'password2')
+        fields = ('username', 'email', 'name', 'profile_photo', 'password1', 'password2')
+        help_texts = {
+            'email': help_dict["required"],
+            'profile_photo': help_dict["profile_photo"],
+            'name': help_dict["required"],
+        }
 
     @transaction.atomic
     def save(self, commit=False):
