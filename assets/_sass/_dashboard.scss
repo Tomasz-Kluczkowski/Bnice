@@ -5,12 +5,27 @@
 .dashboard__card-deck {
 }
 
-.dashboard__card {
-  max-width: 33%;
+@media (min-width: 768px) {
+  .dashboard__card {
+    max-width: 252px;
+  }
 }
 
 .dashboard__card-img {
-  width: 250px;
+  border-bottom: rgba(0, 0, 0, 0.15) 1px solid;
+}
+
+@media (min-width: 768px) {
+  .dashboard__card-img {
+    max-width: 250px;
+  }
+}
+
+.dashboard__card-title {
+  @include title-font;
+  color: $salmon;
+  font-size: 1.5rem;
+  text-align: center;
 }
 
 .dashboard__alert {
@@ -20,19 +35,26 @@
   color: white;
 }
 
-
 .dashboard__user-panel {
-  border-left: rgba(0, 0, 0, 0.15) 1px solid;
-  border-bottom: rgba(0, 0, 0, 0.15) 1px solid;
+  border: rgba(0, 0, 0, 0.15) 1px solid;
+  margin-right: 15px;
+  margin-left: 15px;
   padding-bottom: 1rem;
-  border-bottom-left-radius: 0.5rem;
+  border-radius: 0.25rem;
   height: 100%;
+}
+
+@media (max-width: 768px) {
+  .dashboard__user-panel {
+    margin-top: 1rem;
+  }
 }
 
 .dashboard__title {
   @include title-font;
   font-size: 1.5rem;
   text-align: center;
+  margin-top: 0.5rem;
 }
 
 .dashboard__welcome {
