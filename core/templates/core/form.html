@@ -6,7 +6,7 @@
         </div>
         <div class="col-md-6">
             {% bootstrap_messages %}
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% bootstrap_form form size="small" label_class="form-label" %}
                 {% if form.non_field_errors and request.path == "/accounts/login/" %}
