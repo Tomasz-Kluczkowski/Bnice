@@ -30,8 +30,10 @@
                                     <div class="dashboard__card-columns card-columns">
                                         {% for child in child_list %}
                                             <div class="dashboard__card card">
-                                                <img class="dashboard__card-img card-img-top" src="{{ child.user.profile_photo.url }}"
-                                                     alt="Card image cap">
+                                                {% if child.user.profile_photo %}
+                                                    <img class="dashboard__card-img card-img-top" src="{{ child.user.profile_photo.url }}"
+                                                         alt="Child profile photo">
+                                                {%  endif %}
                                                 <div class="card-body">
                                                     <h5 class="dashboard__card-title card-title">
                                                         {{ child.user.name }}
