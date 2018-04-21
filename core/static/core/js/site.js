@@ -1,9 +1,16 @@
 var toTopButton = $("#toTopButton");
 var sections = $('section'),
     nav = $('nav'),
-    nav_height = nav.outerHeight();
+    navHeight = nav.outerHeight();
 var dropdown = $(".dropdown");
 
+// function setProfileHeight() {
+//     var profilePhotoHeight = $(".dashboard__card-img").outerHeight();
+//     var profilesWithIcon = $(".dashboard__profile-icon").parent();
+//     profilesWithIcon.each(function () {
+//         $(this).height(profilePhotoHeight);
+//     });
+// }
 
 // Add fade in for dropdown.
 dropdown.on('show.bs.dropdown', function() {
@@ -38,8 +45,7 @@ function scrollToTop() {
 function setActiveClass() {
     sections.each(function () {
         var cur_pos = $(window).scrollTop();
-        console.log("cur_pos:", cur_pos);
-        var top = $(this).offset().top - nav_height - 85,
+        var top = $(this).offset().top - navHeight - 85,
             bottom = top + $(this).outerHeight();
 
         if (cur_pos >= top && cur_pos <= bottom) {
@@ -56,11 +62,16 @@ function autoActiveNavLinks() {
     $(window).on('scroll', setActiveClass)
 }
 
+// Activate on readiness of the document.
 $(document).ready(function () {
     detectScroll();
     scrollToTop();
     autoActiveNavLinks();
+    // setProfileHeight();
 });
+
+// Adjust height of profiles with no photos to match the ones with a photo.
+// $(window).resize(setProfileHeight);
 
 
 // Code for scrolling

@@ -33,15 +33,12 @@
   }
 }
 
+.dashboard__card-img-container {
+}
+
 .dashboard__card-img {
   border-bottom: rgba(0, 0, 0, 0.15) 1px solid;
 }
-
-//@media (min-width: 768px) {
-//  .dashboard__card-img {
-//    max-width: 250px;
-//  }
-//}
 
 .dashboard__card-title {
   @include title-font;
