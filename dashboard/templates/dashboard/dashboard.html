@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-md-7 mr-auto">
+                        <div class="dashboard__display-panel col-md-9 mr-auto">
                             {% if request.path == "/dashboard/add_child/" %}
                                 <div class="row">
                                     <div class="col-12 my-auto">
@@ -27,12 +27,9 @@
                             {% endblock %}
                             {% if user.is_parent or user.is_superuser %}
                                 {% if child_list %}
-                                    <div class="dashboard__card-deck card-deck">
+                                    <div class="dashboard__card-columns card-columns">
                                         {% for child in child_list %}
                                             <div class="dashboard__card card">
-{#                                                <div class="card-header">#}
-{#                                                    <a href="{{ child.get_absolute_url }}">{{ child.user.name }}</a>#}
-{#                                                </div>#}
                                                 <img class="dashboard__card-img card-img-top" src="{{ child.user.profile_photo.url }}"
                                                      alt="Card image cap">
                                                 <div class="card-body">
@@ -74,7 +71,7 @@
                                 {% endif %}
                             {% endif %}
                         </div>
-                        <div class="dashboard__user-panel col-lg-3 col-md-4">
+                        <div class="dashboard__user-panel col-lg-3">
                             <div class="row">
                                 <div class="col-12">
                                     <h1 class="dashboard__title">User Panel</h1>
@@ -87,9 +84,10 @@
                                     <p class="dashboard__paragraph">Please select from one of the actions below.</p>
                                 </div>
                             </div>
+                            <hr>
                             <div class="row">
                                 <div class="col-12 text-center">
-                                    <a class="btn btn-secondary form-button" href="{% url 'dashboard:dashboard' %}">View Dashboard</a>
+                                    <a class="btn btn-secondary form-button" href="{% url 'dashboard:dashboard' %}">Dashboard</a>
                                 </div>
                             </div>
                             <div class="row">
