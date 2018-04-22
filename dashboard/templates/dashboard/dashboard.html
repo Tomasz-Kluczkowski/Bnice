@@ -43,13 +43,8 @@
                                 <h5 class="dashboard__card-title card-title">
                                     {{ child.user.name }}
                                 </h5>
-                                <a href="{% url 'dashboard:child_detail' parent=child.parent.username name=child.user.username pk=child.pk %}">{{ child.user.name }}</a>
-                                <p class="card-text">This is a
-                                    longer card with supporting
-                                    text below as a natural
-                                    lead-in to additional
-                                    content. This content is a
-                                    little bit longer.</p>
+                                <a href="{% url 'dashboard:child_detail' parent=child.parent.username child_username=child.user.username pk=child.pk %}">{{ child.user.name }}</a>
+                                <p class="card-text">Child description here?</p>
                                 <p class="card-text">
                                     <small class="text-muted">
                                         Last updated 3 mins ago

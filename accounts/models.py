@@ -30,7 +30,7 @@ class Child(models.Model):
             "dashboard:child_detail",
             kwargs={
                 "parent": self.parent.username,
-                "name": self.user.username,
+                "child_username": self.user.username,
                 "pk": self.pk
             }
         )

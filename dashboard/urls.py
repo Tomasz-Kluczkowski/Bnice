@@ -22,6 +22,6 @@ app_name = "dashboard"
 urlpatterns = [
     path('', DashboardPage.as_view(), name="dashboard"),
     path('add_child/', CreateChildPage.as_view(), name="add_child"),
-    re_path(r'^child/(?P<parent>[-\w]+)/(?P<name>[-\w]+)/(?P<pk>\d+)$',
+    re_path(r'^child/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
             ChildDetail.as_view(), name="child_detail"),
 ]

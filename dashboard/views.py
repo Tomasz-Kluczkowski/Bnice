@@ -1,8 +1,9 @@
 from django.views.generic import ListView, DetailView, CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from accounts.models import Child
 from accounts.forms import ChildCreateForm
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 
@@ -30,6 +31,14 @@ class CreateChildPage(LoginRequiredMixin, CreateView):
         return self.initial
 
 
-class ChildDetail(LoginRequiredMixin, DetailView):
+class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
     model = Child
     template_name = "dashboard/child_detail.html"
+
+    def test_func(self):
+        current_user = self.request.user.username
+        parent = self.kwargs["parent"]
+        if current_user == parent:
+            return True
+        else:
+            raise PermissionDenied
