@@ -1,4 +1,5 @@
 from django.views.generic import ListView, TemplateView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from accounts.models import Child
 from accounts.forms import ChildCreateForm
@@ -6,7 +7,7 @@ from accounts.forms import ChildCreateForm
 # Create your views here.
 
 
-class DashboardPage(ListView):
+class DashboardPage(LoginRequiredMixin, ListView):
     model = Child
     template_name = "dashboard/dashboard.html"
 
@@ -14,7 +15,7 @@ class DashboardPage(ListView):
         return Child.objects.filter(parent=self.request.user)
 
 
-class CreateChildPage(CreateView):
+class CreateChildPage(LoginRequiredMixin, CreateView):
     model = Child
     template_name = "dashboard/add_child.html"
     form_class = ChildCreateForm
