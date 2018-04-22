@@ -1,117 +1,82 @@
-{% extends "core/base.html" %}
+{% extends "dashboard/dashboard_base.html" %}
 {% load static %}
-{% block content %}
-    <section class="dashboard">
-        <div class="container-fluid">
+{% block display_panel %}
+    <div class="dashboard__display-panel col-md-9 mr-auto">
+        {% if request.path == "/dashboard/add_child/" %}
             <div class="row">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="dashboard__display-panel col-md-9 mr-auto">
-                            {% if request.path == "/dashboard/add_child/" %}
-                                <div class="row">
-                                    <div class="col-12 my-auto">
-                                        <div class="alert alert-info alert-dismissible fade show" role="alert">
-                                            Please fill in your child's account details.
-                                            They can use it to log in and view their progress.
-                                            <button type="button"
-                                                    class="close"
-                                                    data-dismiss="alert"
-                                                    aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-                            {% block child_form %}
-                            {% endblock %}
-                            {% if user.is_parent or user.is_superuser %}
-                                {% if child_list %}
-                                    <div class="dashboard__card-columns card-columns">
-                                        {% for child in child_list %}
-                                            <div class="dashboard__card card">
-                                                {% if child.user.profile_photo %}
-                                                    <div class="dashboard__card-img-container">
-                                                        <img class="dashboard__card-img card-img-top"
-                                                             src="{{ child.user.profile_photo.url }}"
-                                                             alt="Child profile photo">
-                                                    </div>
-                                                {% else %}
-                                                    <div class="dashboard__card-img-container text-center">
-                                                        <img class="dashboard__card-img card-img-top"
-                                                             src="{% static 'dashboard/images/avatar_500x500px.png' %}"
-                                                             alt="Child avatar">
-                                                    </div>
-                                                {%  endif %}
-                                                <div class="card-body">
-                                                    <h5 class="dashboard__card-title card-title">
-                                                        {{ child.user.name }}
-                                                    </h5>
-                                                    <a href="{{ child.get_absolute_url }}">{{ child.user.name }}</a>
-                                                    <p class="card-text">This is a
-                                                        longer card with supporting
-                                                        text below as a natural
-                                                        lead-in to additional
-                                                        content. This content is a
-                                                        little bit longer.</p>
-                                                    <p class="card-text">
-                                                        <small class="text-muted">
-                                                            Last updated 3 mins ago
-                                                        </small>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                {% elif request.path == "/dashboard/" %}
-                                    <div class="row">
-                                        <div class="col-12 my-auto">
-                                            <div class="alert alert-info alert-dismissible fade show"
-                                                 role="alert">
-                                                You have no children added.
-                                                Please use "Add Child" option in the User Panel to get started.
-                                                <button type="button"
-                                                        class="close"
-                                                        data-dismiss="alert"
-                                                        aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            {% endif %}
-                        </div>
-                        <div class="dashboard__user-panel col-lg-3">
-                            <div class="row">
-                                <div class="col-12">
-                                    <h1 class="dashboard__title">User Panel</h1>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-12">
-                                    <h2 class="dashboard__welcome">Welcome <span class="dashboard__username">{{ request.user.username }}</span></h2>
-                                    <p class="dashboard__paragraph">Please select from one of the actions below.</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-12 text-center">
-                                    <a class="btn btn-secondary form-button" href="{% url 'dashboard:dashboard' %}">Dashboard</a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12 text-center">
-                                     {% if user.is_authenticated and user.is_parent or user.is_superuser %}
-                                         <a class="btn btn-secondary form-button" href="{% url 'dashboard:add_child' %}">Add Child</a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
+                <div class="col-12 my-auto">
+                    <div class="alert alert-info alert-dismissible fade show"
+                         role="alert">
+                        Please fill in your child's account details.
+                        They can use it to log in and view their progress.
+                        <button type="button"
+                                class="close"
+                                data-dismiss="alert"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        {% endif %}
+        {% block child_form %}
+        {% endblock %}
+        {% if user.is_parent or user.is_superuser %}
+            {% if child_list %}
+                <div class="dashboard__card-columns card-columns">
+                    {% for child in child_list %}
+                        <div class="dashboard__card card">
+                            {% if child.user.profile_photo %}
+                                <div class="dashboard__card-img-container">
+                                    <img class="dashboard__card-img card-img-top"
+                                         src="{{ child.user.profile_photo.url }}"
+                                         alt="Child profile photo">
+                                </div>
+                            {% else %}
+                                <div class="dashboard__card-img-container text-center">
+                                    <img class="dashboard__card-img card-img-top"
+                                         src="{% static 'dashboard/images/avatar_500x500px.png' %}"
+                                         alt="Child avatar">
+                                </div>
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="dashboard__card-title card-title">
+                                    {{ child.user.name }}
+                                </h5>
+                                <a href="{% url 'dashboard:child_detail' parent=child.parent.username name=child.user.username pk=child.pk %}">{{ child.user.name }}</a>
+                                <p class="card-text">This is a
+                                    longer card with supporting
+                                    text below as a natural
+                                    lead-in to additional
+                                    content. This content is a
+                                    little bit longer.</p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        Last updated 3 mins ago
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% elif request.path == "/dashboard/" %}
+                <div class="row">
+                    <div class="col-12 my-auto">
+                        <div class="alert alert-info alert-dismissible fade show"
+                             role="alert">
+                            You have no children added.
+                            Please use "Add Child" option in the User Panel to
+                            get started.
+                            <button type="button"
+                                    class="close"
+                                    data-dismiss="alert"
+                                    aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
 {% endblock %}

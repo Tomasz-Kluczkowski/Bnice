@@ -13,8 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
-from dashboard.views import DashboardPage, CreateChildPage
+from django.urls import path, re_path
+from dashboard.views import DashboardPage, CreateChildPage, ChildDetail
 
 app_name = "dashboard"
 
@@ -22,4 +22,6 @@ app_name = "dashboard"
 urlpatterns = [
     path('', DashboardPage.as_view(), name="dashboard"),
     path('add_child/', CreateChildPage.as_view(), name="add_child"),
+    re_path(r'^child/(?P<parent>[-\w]+)/(?P<name>[-\w]+)/(?P<pk>\d+)$',
+            ChildDetail.as_view(), name="child_detail"),
 ]

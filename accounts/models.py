@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.urls import reverse
 
 
 class User(AbstractUser):
@@ -23,6 +24,16 @@ class Child(models.Model):
                                null=True,
                                on_delete=models.CASCADE,
                                related_name="children")
+
+    def get_absolute_url(self):
+        return reverse(
+            "dashboard:child_detail",
+            kwargs={
+                "parent": self.parent.username,
+                "name": self.user.username,
+                "pk": self.pk
+            }
+        )
 
     def __str__(self):
         return self.user.username

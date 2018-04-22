@@ -1,4 +1,4 @@
-from django.views.generic import ListView, TemplateView, CreateView
+from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from accounts.models import Child
@@ -28,3 +28,8 @@ class CreateChildPage(LoginRequiredMixin, CreateView):
     def get_initial(self):
         self.initial.update({"current_user": self.request.user})
         return self.initial
+
+
+class ChildDetail(LoginRequiredMixin, DetailView):
+    model = Child
+    template_name = "dashboard/child_detail.html"

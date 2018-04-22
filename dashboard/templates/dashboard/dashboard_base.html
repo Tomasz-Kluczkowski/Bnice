@@ -1,0 +1,43 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block content %}
+    <section class="dashboard">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        {% block display_panel %}
+                        {% endblock %}
+                        <div class="dashboard__user-panel col-lg-3">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h1 class="dashboard__title">User Panel</h1>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h2 class="dashboard__welcome">Welcome <span class="dashboard__username">{{ request.user.username }}</span></h2>
+                                    <p class="dashboard__paragraph">Please select from one of the actions below.</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <a class="btn btn-secondary form-button" href="{% url 'dashboard:dashboard' %}">Dashboard</a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                     {% if user.is_authenticated and user.is_parent or user.is_superuser %}
+                                         <a class="btn btn-secondary form-button" href="{% url 'dashboard:add_child' %}">Add Child</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
