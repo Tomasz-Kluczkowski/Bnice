@@ -45,6 +45,11 @@
   color: $salmon;
   font-size: 1.5rem;
   text-align: center;
+  transition: all 0.5s ease-in-out;
+  text-decoration: none!important;
+  &:hover {
+    color: $grass;
+  }
 }
 
 .dashboard__alert {
@@ -94,4 +99,15 @@
 .dashboard__paragraph {
   @include paragraph-font;
   font-size: 1rem;
+}
+
+//Styles related to child_detail.html
+
+.dashboard__child-img {
+  max-width: 320px;
+}
+
+.dashboard__field-col {
+  max-width: 12%;
+  margin-left: 2rem;
 }
