@@ -1,0 +1,47 @@
+.footer {
+  margin-top: 4rem;
+  background: linear-gradient(180deg, $olive 0%, black 100%);
+}
+
+.footer__brand-row {
+  max-width: 50%;
+  margin: 2rem auto;
+}
+
+.footer__brand-img {
+  width: 12rem;
+  padding: 1rem;
+}
+
+.footer__copy-row {
+  margin-top: 3rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem;
+  border-top: rgba(175, 189, 163, 0.3) 1px solid;
+}
+
+@media (min-width: 576px) {
+  .footer__copy-row {
+    max-width: 75%;
+  }
+}
+
+.footer__text {
+  @include title-font;
+  color: $grass;
+}
+
+.footer__link {
+  color: $armygreen;
+  text-decoration: none !important;
+  transition: all 0.5s ease-in-out;
+  &:hover {
+    color: $salmon;
+  }
+
+}
+
+.footer__logo {
+  width: 5rem;
+}

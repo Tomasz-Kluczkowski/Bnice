@@ -81,6 +81,43 @@
     </nav>
     {% block content %}
     {% endblock %}
+    <section class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="footer__brand-row col-12 text-center">
+                    <a class=""
+                       href="{% url 'core:home' %}">
+                        <img class="footer__brand-img"
+                             src="{% static 'core/images/logo/Bnice_logo_1744x484px.png' %}"
+                             alt="Be Nice Logo">
+                    </a>
+                </div>
+            </div>
+            <div class="footer__copy-row row text-center">
+                <div class="col-md-4">
+                    <p class="footer__text">
+                        ©
+                        <script>document.write(new Date().getFullYear())</script>
+                        B.Nice
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p class="footer__text">
+                        Powered by
+                        <a href="https://www.djangoproject.com/">
+                            <img class="footer__logo" src="{% static 'core/images/footer/django_logo.png' %}">
+                        </a>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p class="footer__text">
+                        Created by
+                        <a class="footer__link" href="http://tomasz-kluczkowski.com/">Tomasz Kluczkowski</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
