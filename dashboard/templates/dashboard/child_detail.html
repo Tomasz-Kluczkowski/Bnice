@@ -1,5 +1,6 @@
 {% extends "dashboard/dashboard_base.html" %}
 {% load static %}
+{% load dashboard_tags %}
 {% block display_panel %}
     <div class="dashboard__display-panel col-md-9 mr-auto">
         <div class="row">
@@ -14,28 +15,28 @@
                              alt="Child avatar">
                 {% endif %}
             </div>
-            <div class="col-md-9">
+            <div class="dashboard__detail-col col-lg-9">
                 <div class="row">
-                    <div class="dashboard__field-col col-3">
+                    <div class="dashboard__field-col col-md-2">
                         <label class="form-label">Username</label>
                     </div>
-                    <div class="col-9">
+                    <div class="col-md-10">
                         <h3 class="form-control form-control-sm">{{ child.user.username }}</h3>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="dashboard__field-col col-3">
+                    <div class="dashboard__field-col col-md-2">
                         <label class="form-label">Name</label>
                     </div>
-                    <div class="col-9">
+                    <div class="col-md-10">
                         <h3 class="form-control form-control-sm">{{ child.user.name }}</h3>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="dashboard__field-col col-3">
+                    <div class="dashboard__field-col col-md-2">
                         <label class="form-label">Email</label>
                     </div>
-                    <div class="col-9">
+                    <div class="col-md-10">
                         <h3 class="form-control form-control-sm">{{ child.user.email }}</h3>
                     </div>
                 </div>
@@ -45,6 +46,36 @@
             <div class="col-12">
                 {% block add_action %}
                 {% endblock %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-6">
+                        {% set_var "" as current_date %}
+                        {% if smileys %}
+                            {% for smiley in smileys %}
+                                {% if current_date != smiley.earned_on %}
+                                    <p>{{ smiley.earned_on }}</p>
+                                {% endif %}
+                                <p>{{ smiley.description }}</p>
+                                {% set_var smiley.earned_on as current_date %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="col-6">
+                        {% set_var "" as current_date %}
+                            {% if oopsies %}
+                                {% for oopsy in oopsies %}
+                                    {% if current_date != oopsy.earned_on %}
+                                        <p>{{ oopsy.earned_on }}</p>
+                                    {% endif %}
+                                <p>{{ oopsy.description }}</p>
+                                {% set_var oopsy.earned_on as current_date %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

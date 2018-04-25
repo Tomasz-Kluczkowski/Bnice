@@ -60,6 +60,8 @@
 }
 
 .dashboard__user-panel {
+  background-color: rgba(60, 128, 109, 0.2);
+  //box-shadow: black 2px 2px 5px;
   border: rgba(0, 0, 0, 0.15) 1px solid;
   margin-right: 15px;
   margin-left: 15px;
@@ -102,12 +104,34 @@
 }
 
 //Styles related to child_detail.html
-
 .dashboard__child-img {
-  max-width: 320px;
+    width: 100%;
+  }
+
+@media (min-width: 576px){
+  .dashboard__child-img {
+    max-width: 320px;
+  }
 }
 
-.dashboard__field-col {
-  max-width: 12%;
-  margin-left: 2rem;
+.dashboard__detail-col {
+  margin-top: 1rem;
+}
+
+@media (min-width: 992px) {
+  .dashboard__detail-col {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}
+
+@media (min-width: 576px) {
+  .dashboard__field-col {
+    //width: 6rem;
+    //margin-left: 2rem;
+  }
+}
+
+.dashboard__action-form {
+  margin-top: 2rem;
 }

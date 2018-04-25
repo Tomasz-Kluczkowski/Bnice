@@ -38,6 +38,13 @@ class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
     model = Child
     template_name = "dashboard/child_detail.html"
 
+    def get_context_data(self, **kwargs):
+        kwargs['smileys'] = Smiley.objects.filter(
+            owner=self.object)
+        kwargs['oopsies'] = Oopsy.objects.filter(
+            owner=self.object)
+        return super().get_context_data(**kwargs)
+
     def test_func(self):
         current_user = self.request.user.username
         parent = self.kwargs["parent"]

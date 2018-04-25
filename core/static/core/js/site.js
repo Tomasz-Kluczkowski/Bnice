@@ -4,23 +4,21 @@ var sections = $('section'),
     navHeight = nav.outerHeight();
 var dropdown = $(".dropdown");
 
-// function setProfileHeight() {
-//     var profilePhotoHeight = $(".dashboard__card-img").outerHeight();
-//     var profilesWithIcon = $(".dashboard__profile-icon").parent();
-//     profilesWithIcon.each(function () {
-//         $(this).height(profilePhotoHeight);
-//     });
-// }
-
-// Add fade in for dropdown.
-dropdown.on('show.bs.dropdown', function() {
-    $(this).find('.dropdown-menu').first().stop(true, true).fadeIn(500);
+$('li.dropdown').hover(function() {
+  $(this).find('.dropdown-menu').stop(true, true).delay(500).fadeIn();
+}, function() {
+  $(this).find('.dropdown-menu').stop(true, true).delay(500).fadeOut();
 });
 
-// Add fade out for dropdown
-dropdown.on('hide.bs.dropdown', function() {
-    $(this).find('.dropdown-menu').first().stop(true, true).fadeOut(500);
-});
+// // Add fade in for dropdown.
+// dropdown.on('show.bs.dropdown', function() {
+//     $(this).find('.dropdown-menu').first().stop(true, true).fadeIn(500);
+// });
+//
+// // Add fade out for dropdown
+// dropdown.on('hide.bs.dropdown', function() {
+//     $(this).find('.dropdown-menu').first().stop(true, true).fadeOut(500);
+// });
 
 function detectScroll() {
     var offset = 800;
