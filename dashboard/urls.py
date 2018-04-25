@@ -14,14 +14,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, re_path
-from dashboard.views import DashboardPage, CreateChildPage, ChildDetail
+from dashboard.views import DashboardPage, CreateChildPage, ChildDetail,\
+    AddSmiley, AddOopsy
 
 app_name = "dashboard"
-
 
 urlpatterns = [
     path('', DashboardPage.as_view(), name="dashboard"),
     path('add_child/', CreateChildPage.as_view(), name="add_child"),
-    re_path(r'^child/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
-            ChildDetail.as_view(), name="child_detail"),
+    re_path(
+        r'^child/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
+        ChildDetail.as_view(), name="child_detail"),
+    re_path(
+        r'^child/add_smiley/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
+        AddSmiley.as_view(), name="add_smiley"),
+    re_path(
+        r'^child/add_oopsy/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
+        AddOopsy.as_view(), name="add_oopsy"),
 ]

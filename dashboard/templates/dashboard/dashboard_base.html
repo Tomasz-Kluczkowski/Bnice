@@ -31,6 +31,16 @@
                                 <div class="col-12 text-center">
                                      {% if user.is_authenticated and user.is_parent or user.is_superuser %}
                                          <a class="btn btn-secondary form-button" href="{% url 'dashboard:add_child' %}">Add Child</a>
+                                         {% if "dashboard/child/" in request.path %}
+                                             <a class="btn btn-secondary form-button"
+                                                href="{% url 'dashboard:add_smiley' parent=child.parent.username child_username=child.user.username pk=child.pk %}">
+                                                 Add Smiley
+                                             </a>
+                                             <a class="btn btn-secondary form-button"
+                                                href="{% url 'dashboard:add_oopsy' parent=child.parent.username child_username=child.user.username pk=child.pk %}">
+                                                 Add Oopsy
+                                             </a>
+                                         {% endif %}
                                     {% endif %}
                                 </div>
                             </div>
