@@ -6,9 +6,10 @@ class AddSmileyForm(forms.ModelForm):
 
     class Meta:
         model = Smiley
-        fields = ('description', )
+        fields = ('description', 'points')
         help_texts = {
             'description': 'Required',
+            'points': 'Required',
         }
 
 
@@ -16,7 +17,8 @@ class AddOopsyForm(forms.ModelForm):
 
     class Meta:
         model = Oopsy
-        fields = ('description', )
+        fields = ('description', 'points')
         help_texts = {
             'description': 'Required',
+            'points': 'Required',
         }

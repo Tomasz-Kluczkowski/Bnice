@@ -11,6 +11,7 @@ class Action(models.Model):
                               null=True)
     earned_on = models.DateField(blank=False)
     description = models.CharField(max_length=255, blank=False)
+    points = models.IntegerField(default=3, blank=False)
 
     class Meta:
         abstract = True
@@ -32,3 +33,5 @@ class Smiley(Action):
 
 class Oopsy(Action):
     pass
+
+
