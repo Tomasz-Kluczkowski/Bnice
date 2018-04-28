@@ -42,28 +42,47 @@
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-12">
                 {% block add_action %}
                 {% endblock %}
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
+        <div class="dashboard__actions-container row">
+            <div class="col-md-12">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-12">
+                        <h2 class="dashboard__actions-title">{{ child.user.name }}'s Progress</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="dashboard__actions-box col-md-6">
                         {% set_var "" as current_date %}
                         {% if smileys %}
                             {% for smiley in smileys %}
                                 {% if current_date != smiley.earned_on %}
-                                    <p>{{ smiley.earned_on }}</p>
+                                    <li class="dashboard__action-date-wrapper list-group-item d-flex justify-content-between align-items-center">
+                                        <p class="dashboard__action-date">
+                                            <i class="far fa-calendar-alt"></i>
+                                            {{ smiley.earned_on }}
+                                        </p>
+                                        {% if forloop.first %}
+                                            <p class="dashboard__action-date">Points earned</p>
+                                        {% endif %}
+                                    </li>
                                 {% endif %}
-                                <p>{{ smiley.description }}</p>
+                                <li class="dashboard__list-group-description list-group-item d-flex justify-content-between align-items-center">
+                                    <p class="dashboard__action-description">
+                                        {{ smiley.description }}
+                                    </p>
+                                    <span class="badge badge-success badge-pill">{{ smiley.points }}</span>
+                                </li>
                                 {% set_var smiley.earned_on as current_date %}
                             {% endfor %}
                         {% endif %}
                     </div>
-                    <div class="col-6">
+                    <div class="dashboard__actions-box col-md-6">
                         {% set_var "" as current_date %}
                             {% if oopsies %}
                                 {% for oopsy in oopsies %}

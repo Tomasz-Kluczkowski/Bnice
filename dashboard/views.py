@@ -40,9 +40,9 @@ class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         kwargs['smileys'] = Smiley.objects.filter(
-            owner=self.object)
+            owner=self.object).order_by("-earned_on")
         kwargs['oopsies'] = Oopsy.objects.filter(
-            owner=self.object)
+            owner=self.object).order_by("-earned_on")
         return super().get_context_data(**kwargs)
 
     def test_func(self):
