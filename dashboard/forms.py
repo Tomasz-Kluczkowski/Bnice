@@ -1,7 +1,7 @@
 from django import forms
 from dashboard.models import Smiley, Oopsy
 
-base_descriptions = [
+base_description = [
     ('add_new_description', 'Add new description'),
     ]
 
@@ -34,7 +34,6 @@ class AddSmileyForm(AddActionForm):
         super().__init__(*args, **kwargs)
         self.choices = Smiley.objects.order_by(
                 "description").values_list("description", flat=True).distinct()
-        print(self.choices)
         self.fields['description'] = forms.ChoiceField(
             # empty_label="Select description",
             # queryset=Smiley.objects.order_by(
