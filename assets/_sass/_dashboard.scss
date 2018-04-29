@@ -151,6 +151,7 @@
   border-radius: 0.25rem;
   padding-left: 0;
   padding-right: 0;
+  margin-bottom: 1rem;
 }
 
 @media (min-width: 768px) {
@@ -165,6 +166,8 @@
 .dashboard__action-date-wrapper {
   background-color: darken(white, 5%);
   pointer-events: none;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 
 .dashboard__action-date {
