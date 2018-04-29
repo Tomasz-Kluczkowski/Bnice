@@ -54,51 +54,36 @@ class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
             return False
 
 
-class AddSmiley(UserPassesTestMixin, LoginRequiredMixin, CreateView):
+class AddAction(UserPassesTestMixin, LoginRequiredMixin, CreateView):
+
+    def get_context_data(self, **kwargs):
+        kwargs['child'] = Child.objects.get(pk=self.kwargs["pk"])
+        return super().get_context_data(**kwargs)
+
+    def test_func(self):
+        current_user = self.request.user.username
+        parent = self.kwargs["parent"]
+        if current_user == parent:
+            return True
+        else:
+            return False
+
+    def form_valid(self, form):
+        form.instance = form.save(commit=False)
+        form.instance.owner = Child.objects.get(pk=self.kwargs["pk"])
+        form.instance.earned_on = timezone.now()
+        form.save()
+        return super().form_valid(form)
+
+
+class AddSmiley(AddAction):
     model = Smiley
     template_name = "dashboard/add_action.html"
     form_class = AddSmileyForm
 
-    def get_context_data(self, **kwargs):
-        kwargs['child'] = Child.objects.get(pk=self.kwargs["pk"])
-        return super().get_context_data(**kwargs)
 
-    def test_func(self):
-        current_user = self.request.user.username
-        parent = self.kwargs["parent"]
-        if current_user == parent:
-            return True
-        else:
-            return False
-
-    def form_valid(self, form):
-        form.instance = form.save(commit=False)
-        form.instance.owner = Child.objects.get(pk=self.kwargs["pk"])
-        form.instance.earned_on = timezone.now()
-        form.save()
-        return super().form_valid(form)
-
-
-class AddOopsy(UserPassesTestMixin, LoginRequiredMixin, CreateView):
+class AddOopsy(AddAction):
     model = Oopsy
     template_name = "dashboard/add_action.html"
     form_class = AddOopsyForm
 
-    def get_context_data(self, **kwargs):
-        kwargs['child'] = Child.objects.get(pk=self.kwargs["pk"])
-        return super().get_context_data(**kwargs)
-
-    def test_func(self):
-        current_user = self.request.user.username
-        parent = self.kwargs["parent"]
-        if current_user == parent:
-            return True
-        else:
-            return False
-
-    def form_valid(self, form):
-        form.instance = form.save(commit=False)
-        form.instance.owner = Child.objects.get(pk=self.kwargs["pk"])
-        form.instance.earned_on = timezone.now()
-        form.save()
-        return super().form_valid(form)
