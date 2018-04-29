@@ -3,11 +3,11 @@
     {% set_var "" as current_date %}
     <ul class="list-group">
         {% for action in actions %}
-            {% if current_date != action.earned_on %}
+            {% if current_date != action.earned_on|date:"j M Y" %}
                 <li class="dashboard__action-date-wrapper list-group-item  d-flex justify-content-between align-items-center">
                     <p class="dashboard__action-date">
                         <i class="far fa-calendar-alt"></i>
-                        {{ action.earned_on }}
+                        {{ action.earned_on|date:"j M Y" }}
                     </p>
                     {% if forloop.first %}
                         {% if action|get_model_name == "Smiley" %}
@@ -27,7 +27,7 @@
                 </p>
                 <span class="badge badge-{{ badge_color }} badge-pill">{{ action.points }}</span>
             </li>
-            {% set_var action.earned_on as current_date %}
+            {% set_var action.earned_on|date:"j M Y" as current_date %}
         {% endfor %}
     </ul>
 </div>
