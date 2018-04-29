@@ -60,6 +60,16 @@
                                             </a>
                                         </div>
                                     </div>
+                                    {% if "add" in request.path %}
+                                        <div class="row">
+                                            <div class="col-12 text-center">
+                                                <a class="btn btn-dark form-button"
+                                                   href="{% url 'dashboard:child_detail' parent=child.parent.username child_username=child.user.username pk=child.pk %}">
+                                                   View Progress
+                                                </a>
+                                            </div>
+                                        </div>
+                                        {% endif %}
                                 {% endif %}
                             {% endif %}
                         </div>
