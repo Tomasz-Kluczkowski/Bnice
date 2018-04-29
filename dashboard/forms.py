@@ -55,9 +55,10 @@ class AddOopsyForm(AddActionForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        self.fields['description'] = forms.ModelChoiceField(
-            queryset=Oopsy.objects.distinct()
+        self.choices = Oopsy.objects.order_by(
+            "description").values_list("description", flat=True).distinct()
+        self.fields['description'] = forms.ChoiceField(
+            choices=[(choice, choice) for choice in self.choices]
         )
 
     class Meta(AddActionForm.Meta):

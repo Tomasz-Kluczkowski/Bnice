@@ -25,9 +25,9 @@ class CreateChildPage(LoginRequiredMixin, CreateView):
     form_class = ChildCreateForm
     success_url = reverse_lazy('dashboard:dashboard')
 
-    def get_context_data(self, **kwargs):
-        kwargs['child_list'] = Child.objects.filter(parent=self.request.user)
-        return super().get_context_data(**kwargs)
+    # def get_context_data(self, **kwargs):
+    #     kwargs['child_list'] = Child.objects.filter(parent=self.request.user)
+    #     return super().get_context_data(**kwargs)
 
     def get_initial(self):
         self.initial.update({"current_user": self.request.user})
