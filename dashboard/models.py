@@ -9,7 +9,7 @@ class Action(models.Model):
     owner = models.ForeignKey(Child,
                               on_delete=models.CASCADE,
                               null=True)
-    earned_on = models.DateField(blank=False)
+    earned_on = models.DateTimeField(blank=False)
     description = models.CharField(max_length=255, blank=False)
     points = models.IntegerField(default=3, blank=False)
 
