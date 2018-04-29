@@ -148,7 +148,6 @@
 }
 
 .dashboard__actions-box {
-  //background-color: darken(white, 5%);
   border-radius: 0.25rem;
   padding-left: 0;
   padding-right: 0;
@@ -165,6 +164,7 @@
 
 .dashboard__action-date-wrapper {
   background-color: darken(white, 5%);
+  pointer-events: none;
 }
 
 .dashboard__action-date {
@@ -172,7 +172,6 @@
   color: $salmon;
   margin-bottom: 0;
   font-weight: bold;
-  //font-size: 1.1rem;
 }
 
 .dashboard__action-description {
@@ -183,4 +182,5 @@
 .dashboard__list-group-description {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
+  pointer-events: none;
 }
