@@ -38,7 +38,6 @@ function setNewDescriptionVisibility() {
     }
 }
 
-
 function detectScroll() {
     var offset = 800;
     var delay = 500;

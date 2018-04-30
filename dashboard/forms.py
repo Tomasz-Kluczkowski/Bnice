@@ -6,13 +6,15 @@ base_smileys = [
     'Folded washing',
     'Cleaned bathroom',
     'Mopped floor',
+    'Removed cutlery from dishwasher'
 ]
 
 base_oopsies = [
     'Add new',
-    "Was lying",
+    'Was lying',
     'Left mess',
     'Talked back to parent',
+    "Didn't do homework",
 ]
 
 

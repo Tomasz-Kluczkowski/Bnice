@@ -24,6 +24,8 @@ class Child(models.Model):
                                null=True,
                                on_delete=models.CASCADE,
                                related_name="children")
+    # Points required to be rewarded with a star.
+    star_points = models.PositiveSmallIntegerField(blank=False, null=True)
 
     def get_absolute_url(self):
         return reverse(

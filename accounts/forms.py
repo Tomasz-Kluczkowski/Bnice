@@ -1,16 +1,21 @@
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 from accounts.models import User, Child
 
 help_dict = {
-    # "password1": '<ul><li>Minimum 8 characters long.\n</li><li>Cannot be numerical only.\n</li><li>Cannot be similar to your personal data.\n</li><li>Common words are not allowed.</li></ul>',
     "password1": '8 characters or more & not numerical only.',
     "required": "Required",
-    "profile_photo": 'Image file, size: 500x500 px, jpeg, png or gif type only.'
+    "profile_photo": 'Image file, size: 500x500 px, jpeg, png or gif type only.',
+    'star_points': 'Required, How many points to earn a star?',
 }
 
 
 class UserCreateForm(UserCreationForm):
+    """
+    Normal users are classified as parents. They are able later on to add
+    children which are also users but have mostly read-only access to the site.
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -34,25 +39,49 @@ class UserCreateForm(UserCreationForm):
 
 
 class ChildCreateForm(UserCreationForm):
+    """
+    A child user is capable of viewing only the website (atm). We may consider
+    giving them an option to edit their own profile in the future.
+    """
+
+    star_points = forms.IntegerField(initial=15, required=True)
+    star_points.help_text = help_dict['star_points']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['password1'].help_text = help_dict["password1"]
+        # current_user is the user logged in classified as parent/superuser).
         self.current_user = kwargs["initial"]["current_user"]
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'name', 'profile_photo', 'password1', 'password2')
+        fields = ('username', 'email', 'name', 'star_points', 'profile_photo',
+                  'password1', 'password2')
         help_texts = {
             'email': help_dict["required"],
             'profile_photo': help_dict["profile_photo"],
             'name': help_dict["required"],
         }
 
+    def clean(self):
+        """
+        We need to record the star_points field value before trying to save a
+        child object.
+
+        Returns
+        -------
+            None
+        """
+        super().clean()
+        self.star_points = self.cleaned_data.get("star_points")
+
+        return self.cleaned_data
+
     @transaction.atomic
     def save(self, commit=False):
         user = super().save(commit=False)
         user.is_child = True
         user.save()
-        child = Child.objects.create(user=user, parent=self.current_user)
+        child = Child.objects.create(user=user, parent=self.current_user,
+                                     star_points=self.star_points)
         return user
