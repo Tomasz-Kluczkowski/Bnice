@@ -3,11 +3,13 @@ var sections = $('section'),
     nav = $('nav'),
     navHeight = nav.outerHeight();
 var dropdown = $(".dropdown");
+var newDescription = $('#id_new_description');
+var description = $('#id_description');
 
-$('li.dropdown').hover(function() {
-  $(this).find('.dropdown-menu').stop(true, true).delay(500).fadeIn();
+dropdown.hover(function() {
+  $(this).find('.dropdown-menu').stop(true, true).fadeIn(500);
 }, function() {
-  $(this).find('.dropdown-menu').stop(true, true).delay(500).fadeOut();
+  $(this).find('.dropdown-menu').stop(true, true).delay(500).fadeOut(500);
 });
 
 // // Add fade in for dropdown.
@@ -19,6 +21,23 @@ $('li.dropdown').hover(function() {
 // dropdown.on('hide.bs.dropdown', function() {
 //     $(this).find('.dropdown-menu').first().stop(true, true).fadeOut(500);
 // });
+
+
+function setNewDescriptionVisibility() {
+    /*
+    Set enabled/disabled state of "new description" field in Smiley and Oopsy
+    forms.
+     */
+    let optionSelected = description.find("option:selected").attr("value");
+    if (optionSelected !== "Add new") {
+        newDescription.prop('disabled', true);
+        newDescription.prop('required', false);
+    } else {
+        newDescription.prop('disabled', false);
+        newDescription.prop('required', true);
+    }
+}
+
 
 function detectScroll() {
     var offset = 800;
@@ -65,12 +84,9 @@ $(document).ready(function () {
     detectScroll();
     scrollToTop();
     autoActiveNavLinks();
-    // setProfileHeight();
+    setNewDescriptionVisibility();
+    description.on("change", setNewDescriptionVisibility);
 });
-
-// Adjust height of profiles with no photos to match the ones with a photo.
-// $(window).resize(setProfileHeight);
-
 
 // Code for scrolling
 $(document).ready(function() {

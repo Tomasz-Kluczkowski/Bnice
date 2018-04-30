@@ -24,7 +24,6 @@ class AddActionForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['description'].help_text = "Required"
 
     def clean(self):
         super().clean()
@@ -54,7 +53,6 @@ class AddActionForm(forms.ModelForm):
         -------
             None
         """
-        print(model)
         choices = list(model.objects.order_by(
             "description").values_list("description", flat=True).distinct())
         distinct_choices = initial_choice_list + [
@@ -62,6 +60,7 @@ class AddActionForm(forms.ModelForm):
         self.fields['description'] = forms.ChoiceField(
             choices=[(choice, choice) for choice in distinct_choices]
         )
+        self.fields['description'].help_text = "Required"
 
     class Meta:
         fields = ("description", "new_description", "points")
