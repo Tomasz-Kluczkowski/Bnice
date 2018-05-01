@@ -1,12 +1,13 @@
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse, reverse_lazy
-from accounts.models import Child
-from dashboard.models import Smiley, Oopsy
-from accounts.forms import ChildCreateForm
-from dashboard.forms import AddSmileyForm, AddOopsyForm
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
+from accounts.models import Child
+from accounts.forms import ChildCreateForm
+from dashboard.models import Smiley, Oopsy
+from dashboard.forms import AddSmileyForm, AddOopsyForm
+from dashboard.services import get_total_points
 
 # Create your views here.
 
@@ -35,14 +36,22 @@ class CreateChildPage(LoginRequiredMixin, CreateView):
 
 
 class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
+    """
+    Here we need logic that will allow claiming stars for points gathered by
+    a child. This logic has to be run when child detail is updated.
+    """
     model = Child
     template_name = "dashboard/child_detail.html"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
     def get_context_data(self, **kwargs):
         kwargs['smileys'] = Smiley.objects.filter(
             owner=self.object).order_by("-earned_on")
         kwargs['oopsies'] = Oopsy.objects.filter(
             owner=self.object).order_by("-earned_on")
+        print(get_total_points(kwargs['smileys'], kwargs['oopsies']))
         return super().get_context_data(**kwargs)
 
     def test_func(self):

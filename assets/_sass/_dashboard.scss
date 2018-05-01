@@ -27,6 +27,10 @@
   }
 }
 
+.dashboard__card {
+  background-color: darken(white, 2%  );
+}
+
 @media (min-width: 768px) {
   .dashboard__card {
     max-width: 320px;
@@ -156,8 +160,8 @@
 
 @media (min-width: 768px) {
   .dashboard__actions-box {
-    flex: 0 0 47%;
-    max-width: 47%;
+    flex: 0 0 44%;
+    max-width: 44%;
     margin-left: 15px;
     margin-right: 15px;
   }
@@ -187,7 +191,3 @@
   padding-bottom: 0.25rem;
   pointer-events: none;
 }
-
-//.dashboard__hide {
-//  visibility: hidden;
-//}
