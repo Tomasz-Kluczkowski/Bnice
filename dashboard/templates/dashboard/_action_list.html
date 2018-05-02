@@ -33,12 +33,20 @@
                 <span class="badge badge-{{ badge_color }} badge-pill">{{ action.points }}</span>
             </li>
             {% if action.star_awarded %}
-                <li class="dashboard__list-group-description {{ action_status }} list-group-item d-flex justify-content-between align-items-center">
+                <li class="dashboard__list-group-description dashboard__star-awarded list-group-item d-flex justify-content-between align-items-center">
                     <p class="dashboard__action-description">
-                        You earned a star!
+                        <i class="far fa-calendar-alt"></i>
+                        {{ action.earned_on|date:"j M Y" }}
                     </p>
-                    <i class="fas fa-star"></i>
-{#                    <span class="badge badge-{{ badge_color }} badge-pill">{{ action.points }}</span>#}
+                    <i class="dashboard__star fas fa-star"></i>
+                </li>
+            {% endif %}
+            {% if action.points_remaining > 0 %}
+                <li class="dashboard__list-group-description list-group-item d-flex justify-content-between align-items-center">
+                    <p class="dashboard__action-description">
+                        Remaining points
+                    </p>
+                    <span class="badge badge-{{ badge_color }} badge-pill">{{ action.points_remaining }}</span>
                 </li>
             {% endif %}
             {% set_var action.earned_on|date:"j M Y" as current_date %}

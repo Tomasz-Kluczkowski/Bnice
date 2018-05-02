@@ -195,3 +195,12 @@
   padding-bottom: 0.25rem;
   pointer-events: none;
 }
+
+.dashboard__star-awarded {
+  background-color: $main-background;
+  color: $grass;
+}
+
+.dashboard__star {
+  color: gold;
+}
