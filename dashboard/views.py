@@ -7,7 +7,7 @@ from accounts.models import Child
 from accounts.forms import ChildCreateForm
 from dashboard.models import Smiley, Oopsy
 from dashboard.forms import AddSmileyForm, AddOopsyForm
-from dashboard.services import get_total_points
+from dashboard.services import StarAwarding
 
 # Create your views here.
 
@@ -36,9 +36,8 @@ class CreateChildPage(LoginRequiredMixin, CreateView):
 
 
 class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
-    """
-    Here we need logic that will allow claiming stars for points gathered by
-    a child. This logic has to be run when child detail is updated.
+    """Awards stars before displaying Child details.
+
     """
     model = Child
     template_name = "dashboard/child_detail.html"
@@ -51,7 +50,9 @@ class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
             owner=self.object).order_by("-earned_on")
         kwargs['oopsies'] = Oopsy.objects.filter(
             owner=self.object).order_by("-earned_on")
-        print(get_total_points(kwargs['smileys'], kwargs['oopsies']))
+        star_awarding = StarAwarding(kwargs['smileys'], kwargs['oopsies'],
+                                     self.object.star_points)
+        star_awarding.award_star()
         return super().get_context_data(**kwargs)
 
     def test_func(self):
