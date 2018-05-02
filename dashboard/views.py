@@ -47,12 +47,13 @@ class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         kwargs['smileys'] = Smiley.objects.filter(
-            owner=self.object).order_by("-earned_on")
+            owner=self.object).order_by("earned_on")
         kwargs['oopsies'] = Oopsy.objects.filter(
-            owner=self.object).order_by("-earned_on")
+            owner=self.object).order_by("earned_on")
         star_awarding = StarAwarding(kwargs['smileys'], kwargs['oopsies'],
                                      self.object.star_points)
         star_awarding.award_star()
+        print(star_awarding)
         return super().get_context_data(**kwargs)
 
     def test_func(self):

@@ -181,6 +181,10 @@
   font-weight: bold;
 }
 
+.dashboard__action-claimed {
+  background-color: rgba(60,128,109,0.2);
+}
+
 .dashboard__action-description {
   @include paragraph-font;
   margin-bottom: 0;

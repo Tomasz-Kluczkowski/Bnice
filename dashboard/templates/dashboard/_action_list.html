@@ -2,7 +2,7 @@
 <div class="dashboard__actions-box col-md-6">
     {% set_var "" as current_date %}
     <ul class="list-group">
-        {% for action in actions %}
+        {% for action in actions reversed %}
             {% if current_date != action.earned_on|date:"j M Y" %}
                 <li class="dashboard__action-date-wrapper list-group-item  d-flex justify-content-between align-items-center">
                     <p class="dashboard__action-date">
@@ -21,12 +21,26 @@
                     {% endif %}
                 </li>
             {% endif %}
-            <li class="dashboard__list-group-description list-group-item d-flex justify-content-between align-items-center">
+            {% if action.claimed %}
+                {% set_var "dashboard__action-claimed" as action_status %}
+            {% else %}
+                {% set_var "" as action_status %}
+            {% endif %}
+            <li class="dashboard__list-group-description {{ action_status }} list-group-item d-flex justify-content-between align-items-center">
                 <p class="dashboard__action-description">
                     {{ action.description }}
                 </p>
                 <span class="badge badge-{{ badge_color }} badge-pill">{{ action.points }}</span>
             </li>
+            {% if action.star_awarded %}
+                <li class="dashboard__list-group-description {{ action_status }} list-group-item d-flex justify-content-between align-items-center">
+                    <p class="dashboard__action-description">
+                        You earned a star!
+                    </p>
+                    <i class="fas fa-star"></i>
+{#                    <span class="badge badge-{{ badge_color }} badge-pill">{{ action.points }}</span>#}
+                </li>
+            {% endif %}
             {% set_var action.earned_on|date:"j M Y" as current_date %}
         {% endfor %}
     </ul>

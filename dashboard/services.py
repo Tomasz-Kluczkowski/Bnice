@@ -161,7 +161,7 @@ class StarAwarding:
                     self.update_total_points()
                     # After awarding a star abort if sum of points is too
                     # little to award another star.
+                    smiley.save()
                     if self.total_points < self.star_points:
-                        smiley.save()
                         break
                 smiley.save()
