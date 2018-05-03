@@ -197,8 +197,9 @@
 }
 
 .dashboard__star-awarded {
-  background-color: $main-background;
+  background: linear-gradient(90deg, $olive, $main-background);
   color: $grass;
+  border: $olive 1px solid;
 }
 
 .dashboard__star {
