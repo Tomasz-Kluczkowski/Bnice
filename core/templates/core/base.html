@@ -48,12 +48,21 @@
 {#                    </li>#}
                 {% endif %}
                 {% if user.is_authenticated %}
-                    <li class="nav-item d-sm-none">
-                        <a class="navigation__link nav-link" href="{% url 'dashboard:dashboard' %}">Dashboard</a>
-                    </li>
+{#                    Content to be displayed on small screens in the navbar #}
+                    {% if user.is_child %}
+                        <li class="nav-item d-sm-none">
+                            <a class="navigation__link nav-link" href="{% url 'dashboard:child_detail' parent=parent child_username=user.username pk=user.pk %}">View Profile</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item d-sm-none">
+                            <a class="navigation__link nav-link"
+                               href="{% url 'dashboard:dashboard' %}">Dashboard</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item d-sm-none">
                         <a class="navigation__link nav-link" href="{% url 'accounts:logout' %}">Log Out</a>
                     </li>
+{#                    Content to be displayed only on large screens in dropdown menu #}
                     <li class="nav-item dropdown d-none d-sm-block">
                         <a class="nav-link dropdown-toggle" href=""
                            id="navbarDropdown" role="button"
@@ -63,7 +72,13 @@
                         </a>
                         <div class="dropdown-menu"
                              aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{% url 'dashboard:dashboard' %}">Dashboard</a>
+                            {% if user.is_child %}
+                                <a class="dropdown-item" href="{% url 'dashboard:child_detail' parent=parent child_username=user.username pk=user.pk %}">
+                                    View Profile
+                                </a>
+                            {% else %}
+                                <a class="dropdown-item" href="{% url 'dashboard:dashboard' %}">Dashboard</a>
+                            {% endif %}
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{% url 'accounts:logout' %}">Log Out</a>
                         </div>

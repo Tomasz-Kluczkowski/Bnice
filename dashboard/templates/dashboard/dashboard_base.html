@@ -20,21 +20,23 @@
                                     <h2 class="dashboard__welcome">Welcome <span
                                             class="dashboard__username">{{ request.user.username }}</span>
                                     </h2>
-                                    <p class="dashboard__paragraph">Please
+                                    {% if not user.is_child %}
+                                        <p class="dashboard__paragraph">Please
                                         select from one of the actions
                                         below.</p>
+                                    {% endif %}
                                 </div>
                             </div>
                             <hr>
-                            <div class="row">
-                                <div class="col-12 text-center">
-                                    <a class="btn btn-dark form-button"
-                                       href="{% url 'dashboard:dashboard' %}">
-                                        Dashboard
-                                    </a>
-                                </div>
-                            </div>
                             {% if user.is_authenticated and user.is_parent or user.is_superuser %}
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <a class="btn btn-dark form-button"
+                                           href="{% url 'dashboard:dashboard' %}">
+                                            Dashboard
+                                        </a>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-12 text-center">
                                         <a class="btn btn-dark form-button"

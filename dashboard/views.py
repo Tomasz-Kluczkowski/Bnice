@@ -1,7 +1,6 @@
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse, reverse_lazy
-from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from accounts.models import Child
 from accounts.forms import ChildCreateForm
@@ -46,6 +45,8 @@ class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
         super().__init__(**kwargs)
 
     def get_context_data(self, **kwargs):
+        if self.request.user.is_authenticated and self.request.user.is_child:
+            kwargs['parent'] = Child.objects.get(user=self.request.user).parent.username
         kwargs['smileys'] = Smiley.objects.filter(
             owner=self.object).order_by("earned_on")
         kwargs['oopsies'] = Oopsy.objects.filter(
@@ -53,13 +54,22 @@ class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
         star_awarding = StarAwarding(kwargs['smileys'], kwargs['oopsies'],
                                      self.object.star_points)
         star_awarding.award_star()
-        print(star_awarding)
         return super().get_context_data(**kwargs)
 
     def test_func(self):
-        current_user = self.request.user.username
+        """Allow access only to logged in users.
+
+        We have to check differently for parent and child users hence if/elif.
+
+        Returns
+        -------
+            Bool
+        """
+        current_user = self.request.user
         parent = self.kwargs["parent"]
-        if current_user == parent:
+        if current_user.is_parent and current_user.username == parent:
+            return True
+        elif current_user.is_child and current_user.username == self.kwargs["child_username"]:
             return True
         else:
             return False

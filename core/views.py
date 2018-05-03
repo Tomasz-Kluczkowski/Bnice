@@ -10,7 +10,6 @@ class HomePage(TemplateView):
 
     def get_context_data(self, **kwargs):
         if self.request.user.is_authenticated and self.request.user.is_child:
-            print("user is a child")
-            kwargs['parent_username'] = Child.objects.get(user=self.request.user).parent.username
-            print(kwargs['parent_username'])
+            kwargs['parent'] = Child.objects.get(
+                user=self.request.user).parent.username
         return super().get_context_data(**kwargs)
