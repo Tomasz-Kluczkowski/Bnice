@@ -40,6 +40,15 @@
                                 <div class="row">
                                     <div class="col-12 text-center">
                                         <a class="btn btn-dark form-button"
+
+                                           href="{% url 'dashboard:user_update' pk=user.pk %}">
+                                            Update Profile
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <a class="btn btn-dark form-button"
                                            href="{% url 'dashboard:add_child' %}">
                                             Add Child
                                         </a>

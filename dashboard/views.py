@@ -1,8 +1,8 @@
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from accounts.models import Child
+from accounts.models import Child, User
 from accounts.forms import ChildCreateForm
 from dashboard.models import Smiley, Oopsy
 from dashboard.forms import AddSmileyForm, AddOopsyForm
@@ -108,3 +108,12 @@ class AddOopsy(AddAction):
     template_name = "dashboard/add_action.html"
     form_class = AddOopsyForm
 
+
+# UserPassesTestMixin,
+
+
+class UserUpdate(LoginRequiredMixin, UpdateView):
+    model = User
+    fields = ('username', 'email', 'profile_photo') # 'password1', 'password2'
+    template_name = 'dashboard/user_update.html'
+    success_url = reverse_lazy('dashboard:dashboard')

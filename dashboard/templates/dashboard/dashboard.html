@@ -19,7 +19,7 @@
                 </div>
             </div>
         {% endif %}
-        {% block child_form %}
+        {% block form %}
         {% endblock %}
         {% if user.is_parent or user.is_superuser %}
             {% if child_list %}

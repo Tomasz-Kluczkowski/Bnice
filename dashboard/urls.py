@@ -15,13 +15,15 @@ Including another URLconf
 """
 from django.urls import path, re_path
 from dashboard.views import DashboardPage, CreateChildPage, ChildDetail,\
-    AddSmiley, AddOopsy
+    AddSmiley, AddOopsy, UserUpdate
 
 app_name = "dashboard"
 
 urlpatterns = [
     path('', DashboardPage.as_view(), name="dashboard"),
     path('add_child/', CreateChildPage.as_view(), name="add_child"),
+    re_path('user_update/(?P<pk>\d+)$', UserUpdate.as_view(),
+            name="user_update"),
     re_path(
         r'^child/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
         ChildDetail.as_view(), name="child_detail"),
