@@ -124,15 +124,11 @@ class ChildUpdate(LoginRequiredMixin, UpdateView):
     model = User
     fields = ('username', 'name', 'email', 'profile_photo')
     template_name = 'dashboard/user_update.html'
-    success_url = reverse_lazy('core:home')
+    success_url = reverse_lazy('dashboard:dashboard')
 
     def get_context_data(self, **kwargs):
-        print(self.object.pk)
         kwargs['parent'] = Child.objects.get(
             user__pk=self.object.pk).parent.username
-        print(kwargs['parent'])
-        print(self.object)
-
         return super().get_context_data(**kwargs)
 
     # def get_success_url(self):
