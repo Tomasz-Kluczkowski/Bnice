@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.urls import path, re_path
 from dashboard.views import DashboardPage, CreateChildPage, ChildDetail,\
-    AddSmiley, AddOopsy, UserUpdate
+    AddSmiley, AddOopsy, UserUpdate, ChildUpdate
 
 app_name = "dashboard"
 
@@ -24,6 +24,18 @@ urlpatterns = [
     path('add_child/', CreateChildPage.as_view(), name="add_child"),
     re_path('user_update/(?P<pk>\d+)$', UserUpdate.as_view(),
             name="user_update"),
+    re_path('child_update/(?P<pk>\d+)$', ChildUpdate.as_view(),
+            name="child_update"),
+    re_path(
+        r'^child/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
+        ChildDetail.as_view(), name="child_detail"),
+    re_path(
+        r'^child/add_smiley/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
+        AddSmiley.as_view(), name="add_smiley"),
+    re_path(
+        r'^child/add_oopsy/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
+        AddOopsy.as_view(), name="add_oopsy"),
+
     re_path(
         r'^child/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
         ChildDetail.as_view(), name="child_detail"),

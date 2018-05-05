@@ -1,5 +1,6 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth import login
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from accounts.models import Child, User
@@ -7,6 +8,7 @@ from accounts.forms import ChildCreateForm
 from dashboard.models import Smiley, Oopsy
 from dashboard.forms import AddSmileyForm, AddOopsyForm
 from dashboard.services import StarAwarding
+
 
 # Create your views here.
 
@@ -46,7 +48,8 @@ class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         if self.request.user.is_authenticated and self.request.user.is_child:
-            kwargs['parent'] = Child.objects.get(user=self.request.user).parent.username
+            kwargs['parent'] = Child.objects.get(
+                user=self.request.user).parent.username
         kwargs['smileys'] = Smiley.objects.filter(
             owner=self.object).order_by("earned_on")
         kwargs['oopsies'] = Oopsy.objects.filter(
@@ -69,7 +72,8 @@ class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
         parent = self.kwargs["parent"]
         if current_user.is_parent and current_user.username == parent:
             return True
-        elif current_user.is_child and current_user.username == self.kwargs["child_username"]:
+        elif current_user.is_child and current_user.pk == self.kwargs[
+            "pk"]:
             return True
         else:
             return False
@@ -109,11 +113,41 @@ class AddOopsy(AddAction):
     form_class = AddOopsyForm
 
 
-# UserPassesTestMixin,
-
-
 class UserUpdate(LoginRequiredMixin, UpdateView):
     model = User
-    fields = ('username', 'email', 'profile_photo') # 'password1', 'password2'
+    fields = ('username', 'email', 'profile_photo')
     template_name = 'dashboard/user_update.html'
     success_url = reverse_lazy('dashboard:dashboard')
+
+
+class ChildUpdate(LoginRequiredMixin, UpdateView):
+    model = User
+    fields = ('username', 'name', 'email', 'profile_photo')
+    template_name = 'dashboard/user_update.html'
+    success_url = reverse_lazy('core:home')
+
+    def get_context_data(self, **kwargs):
+        print(self.object.pk)
+        kwargs['parent'] = Child.objects.get(
+            user__pk=self.object.pk).parent.username
+        print(kwargs['parent'])
+        print(self.object)
+
+        return super().get_context_data(**kwargs)
+
+    # def get_success_url(self):
+    #     print(type(self.object))
+    #     # login(self.request, self.object)
+    #     return reverse_lazy('dashboard:child_detail',
+    #                         kwargs={'parent': Child.objects.get(
+    #                             user__username=self.object).parent.get_username(),
+    #                                 'child_username': self.object.get_username(),
+    #                                 'pk': self.object.pk
+    #                                 })
+
+        # return reverse_lazy('dashboard:child_detail',
+        #                     kwargs={'parent': Child.objects.get(
+        #                         user__username=self.object).parent.username,
+        #                             'child_username': self.request.user.get_username(),
+        #                             'pk': self.request.user.pk
+        #                             })

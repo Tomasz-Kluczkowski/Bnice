@@ -20,14 +20,22 @@
                                     <h2 class="dashboard__welcome">Welcome <span
                                             class="dashboard__username">{{ request.user.username }}</span>
                                     </h2>
-                                    {% if not user.is_child %}
-                                        <p class="dashboard__paragraph">Please
-                                        select from one of the actions
-                                        below.</p>
-                                    {% endif %}
+                                    <p class="dashboard__paragraph">Please
+                                    select from one of the actions
+                                    below.</p>
                                 </div>
                             </div>
                             <hr>
+                            {% if user.is_child %}
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <a class="btn btn-dark form-button"
+                                           href="{% url 'dashboard:child_update' pk=user.pk %}">
+                                            Update Profile
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
                             {% if user.is_authenticated and user.is_parent or user.is_superuser %}
                                 <div class="row">
                                     <div class="col-12 text-center">
@@ -54,6 +62,7 @@
                                         </a>
                                     </div>
                                 </div>
+{#                                Show Add Smiley / Oopsy when in child detail view. #}
                                 {% if "dashboard/child/" in request.path %}
                                     <div class="row">
                                         <div class="col-12 text-center">
@@ -71,6 +80,7 @@
                                             </a>
                                         </div>
                                     </div>
+{#                                    Show View Progress when in Add Smiley / Add Oopsy view. #}
                                     {% if "add" in request.path %}
                                         <div class="row">
                                             <div class="col-12 text-center">
@@ -80,7 +90,7 @@
                                                 </a>
                                             </div>
                                         </div>
-                                        {% endif %}
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                         </div>
