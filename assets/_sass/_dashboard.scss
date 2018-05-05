@@ -93,10 +93,12 @@
 
 .dashboard__welcome {
   @include title-font;
+  text-align: center;
   font-size: 1.5rem;
 }
 
 .dashboard__username {
+  word-break: break-all;
   color: $salmon;
 }
 

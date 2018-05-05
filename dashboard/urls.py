@@ -27,22 +27,24 @@ urlpatterns = [
     re_path('child_update/(?P<pk>\d+)$', ChildUpdate.as_view(),
             name="child_update"),
     re_path(
-        r'^child/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
+        r'^child/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
         ChildDetail.as_view(), name="child_detail"),
     re_path(
-        r'^child/add_smiley/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
+        r'^child/add_smiley/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
         AddSmiley.as_view(), name="add_smiley"),
     re_path(
-        r'^child/add_oopsy/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
+        r'^child/add_oopsy/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
         AddOopsy.as_view(), name="add_oopsy"),
 
     re_path(
-        r'^child/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
+        r'^child/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
         ChildDetail.as_view(), name="child_detail"),
     re_path(
-        r'^child/add_smiley/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
+        r'^child/add_smiley/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
         AddSmiley.as_view(), name="add_smiley"),
     re_path(
-        r'^child/add_oopsy/(?P<parent>[-\w]+)/(?P<child_username>[-\w]+)/(?P<pk>\d+)$',
+        r'^child/add_oopsy/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
         AddOopsy.as_view(), name="add_oopsy"),
 ]
+
+# (?P<slug>[\w.@+-]+)/$'
