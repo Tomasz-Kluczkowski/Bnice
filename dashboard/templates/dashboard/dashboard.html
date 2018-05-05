@@ -47,6 +47,14 @@
                                         </a>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <a class="btn btn-danger form-button"
+                                           href="{% url 'dashboard:child_delete' pk=child.pk %}">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     {% endfor %}

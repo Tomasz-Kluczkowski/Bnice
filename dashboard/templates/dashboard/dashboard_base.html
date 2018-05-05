@@ -65,7 +65,7 @@
                                 <div class="row">
                                     <div class="col-12 text-center">
                                         <a class="btn btn-dark form-button"
-                                           href="{% url 'dashboard:add_child' %}">
+                                           href="{% url 'dashboard:child_add' %}">
                                             Add Child
                                         </a>
                                     </div>
@@ -75,7 +75,7 @@
                                     <div class="row">
                                         <div class="col-12 text-center">
                                             <a class="btn btn-dark form-button"
-                                               href="{% url 'dashboard:add_smiley' parent=child.parent.username child_username=child.user.username pk=child.pk %}">
+                                               href="{% url 'dashboard:smiley_add' parent=child.parent.username child_username=child.user.username pk=child.pk %}">
                                                 Add Smiley
                                             </a>
                                         </div>
@@ -83,7 +83,7 @@
                                     <div class="row">
                                         <div class="col-12 text-center">
                                             <a class="btn btn-dark form-button"
-                                               href="{% url 'dashboard:add_oopsy' parent=child.parent.username child_username=child.user.username pk=child.pk %}">
+                                               href="{% url 'dashboard:oopsy_add' parent=child.parent.username child_username=child.user.username pk=child.pk %}">
                                                 Add Oopsy
                                             </a>
                                         </div>

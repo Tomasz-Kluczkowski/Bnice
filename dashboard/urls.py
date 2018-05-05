@@ -14,37 +14,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, re_path
-from dashboard.views import DashboardPage, CreateChildPage, ChildDetail,\
-    AddSmiley, AddOopsy, UserUpdate, ChildUpdate
+from dashboard.views import (
+    DashboardPage, CreateChildPage, ChildDetail,
+    AddSmiley, AddOopsy, UserUpdate, ChildUpdate, ChildDelete)
 
 app_name = "dashboard"
 
 urlpatterns = [
     path('', DashboardPage.as_view(), name="dashboard"),
-    path('add_child/', CreateChildPage.as_view(), name="add_child"),
-    re_path('user_update/(?P<pk>\d+)$', UserUpdate.as_view(),
+    path('add/child/', CreateChildPage.as_view(), name="child_add"),
+    path('user/update/<int:pk>', UserUpdate.as_view(),
             name="user_update"),
-    re_path('child_update/(?P<pk>\d+)$', ChildUpdate.as_view(),
+    path('child/update/<int:pk>', ChildUpdate.as_view(),
             name="child_update"),
+    path('child/delete/<int:pk>/', ChildDelete.as_view(), name='child_delete'),
     re_path(
-        r'^child/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
+        r'^child/detail/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
         ChildDetail.as_view(), name="child_detail"),
     re_path(
-        r'^child/add_smiley/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
-        AddSmiley.as_view(), name="add_smiley"),
+        r'^child/add/smiley/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
+        AddSmiley.as_view(), name="smiley_add"),
     re_path(
-        r'^child/add_oopsy/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
-        AddOopsy.as_view(), name="add_oopsy"),
-
-    re_path(
-        r'^child/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
-        ChildDetail.as_view(), name="child_detail"),
-    re_path(
-        r'^child/add_smiley/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
-        AddSmiley.as_view(), name="add_smiley"),
-    re_path(
-        r'^child/add_oopsy/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
-        AddOopsy.as_view(), name="add_oopsy"),
+        r'^child/add/oopsy/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
+        AddOopsy.as_view(), name="oopsy_add"),
 ]
-
-# (?P<slug>[\w.@+-]+)/$'

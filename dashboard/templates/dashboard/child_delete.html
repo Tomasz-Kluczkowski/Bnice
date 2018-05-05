@@ -1,0 +1,15 @@
+{% extends "dashboard/dashboard.html" %}
+{% load static %}
+{% block form %}
+
+
+<h1>Delete Child</h1>
+
+<p>Are you sure you want to delete the child: {{ child.user.name }}?</p>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit" action="" value="Yes, delete." />
+</form>
+
+{% endblock %}

@@ -1,4 +1,5 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import (
+    ListView, DetailView, CreateView, UpdateView, DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth import login
 from django.urls import reverse, reverse_lazy
@@ -133,3 +134,26 @@ class ChildUpdate(LoginRequiredMixin, UpdateView):
             user__pk=self.object.pk).parent.username
         return super().get_context_data(**kwargs)
 
+
+class ChildDelete(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
+    model = Child
+    success_url = reverse_lazy('dashboard:dashboard')
+    template_name = 'dashboard/child_delete.html'
+
+    def test_func(self):
+        """Allow access only to logged in users.
+
+        We have to check differently for parent and child users hence if/elif.
+
+        Returns
+        -------
+            Bool
+        """
+        current_user = self.request.user
+        child = self.get_object()
+        parent = Child.objects.get(
+            user__pk=child.pk).parent.username
+        if current_user.is_parent and current_user.username == parent:
+            return True
+        else:
+            return False
