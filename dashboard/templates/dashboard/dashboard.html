@@ -21,7 +21,6 @@
         {% endif %}
         {% block form %}
         {% endblock %}
-        {% if user.is_parent or user.is_superuser %}
             {% if child_list %}
                 <div class="dashboard__card-columns card-columns">
                     {% for child in child_list %}
@@ -70,6 +69,5 @@
                     </div>
                 </div>
             {% endif %}
-        {% endif %}
     </div>
 {% endblock %}

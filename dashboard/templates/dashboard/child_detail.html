@@ -5,9 +5,17 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-12">
-                    <h2 class="dashboard__actions-title">{{ child.user.name }}'s Progress</h2>
+                    {% if user.is_child %}
+                        <h2 class="dashboard__actions-title">Your Progress</h2>
+                    {% else %}
+                        <h2 class="dashboard__actions-title">{{ child.user.name }}'s Progress</h2>
+                    {% endif %}
                     {% if not smileys and not oopsies %}
-                        <p class="dashboard__paragraph">Your child has no actions added yet. Use the User Panel to add them!</p>
+                        {% if user.is_child %}
+                            <p class="dashboard__paragraph">You have no actions added yet. Ask your parent to add them. It would be nice if you asked how you can help!</p>
+                        {% else %}
+                            <p class="dashboard__paragraph">Your child has no actions added yet. Use the User Panel to add them!</p>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>

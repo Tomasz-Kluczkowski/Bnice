@@ -18,7 +18,10 @@ class DashboardPage(LoginRequiredMixin, ListView):
     template_name = "dashboard/dashboard.html"
 
     def get_queryset(self):
-        return Child.objects.filter(parent=self.request.user)
+        if self.request.user.is_child:
+            return Child.objects.filter(pk=self.request.user.pk)
+        else:
+            return Child.objects.filter(parent=self.request.user)
 
 
 class CreateChildPage(LoginRequiredMixin, CreateView):
@@ -72,8 +75,7 @@ class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
         parent = self.kwargs["parent"]
         if current_user.is_parent and current_user.username == parent:
             return True
-        elif current_user.is_child and current_user.pk == self.kwargs[
-            "pk"]:
+        elif current_user.is_child and current_user.pk == int(self.kwargs["pk"]):
             return True
         else:
             return False
@@ -131,19 +133,3 @@ class ChildUpdate(LoginRequiredMixin, UpdateView):
             user__pk=self.object.pk).parent.username
         return super().get_context_data(**kwargs)
 
-    # def get_success_url(self):
-    #     print(type(self.object))
-    #     # login(self.request, self.object)
-    #     return reverse_lazy('dashboard:child_detail',
-    #                         kwargs={'parent': Child.objects.get(
-    #                             user__username=self.object).parent.get_username(),
-    #                                 'child_username': self.object.get_username(),
-    #                                 'pk': self.object.pk
-    #                                 })
-
-        # return reverse_lazy('dashboard:child_detail',
-        #                     kwargs={'parent': Child.objects.get(
-        #                         user__username=self.object).parent.username,
-        #                             'child_username': self.request.user.get_username(),
-        #                             'pk': self.request.user.pk
-        #                             })
