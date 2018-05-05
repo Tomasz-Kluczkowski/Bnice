@@ -33,9 +33,16 @@
 
 @media (min-width: 768px) {
   .dashboard__card {
+    max-width: 200px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .dashboard__card {
     max-width: 320px;
   }
 }
+
 
 .dashboard__card-img-container {
 }

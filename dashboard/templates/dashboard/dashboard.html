@@ -1,7 +1,7 @@
 {% extends "dashboard/dashboard_base.html" %}
 {% load static %}
 {% block display_panel %}
-    <div class="dashboard__display-panel col-md-9 mr-auto">
+    <div class="dashboard__display-panel col-md-9 ml-2 mr-auto">
         {% if request.path == "/dashboard/add_child/" %}
             <div class="row">
                 <div class="col-12 my-auto">
@@ -22,9 +22,10 @@
         {% block form %}
         {% endblock %}
             {% if child_list %}
-                <div class="dashboard__card-columns card-columns">
+                <div class="row">
+{#                <div class="dashboard__card-columns card-columns">#}
                     {% for child in child_list %}
-                        <div class="dashboard__card card">
+                        <div class="col-lg-3 col-md-4 col-sm-6 d-flex dashboard__card card">
                             {% if child.user.profile_photo %}
                                 <div class="dashboard__card-img-container">
                                     <img class="dashboard__card-img card-img-top"
@@ -49,7 +50,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 text-center">
-                                        <a class="btn btn-danger form-button"
+                                        <a class="btn btn-danger form-button-small"
                                            href="{% url 'dashboard:child_delete' pk=child.pk %}">
                                             <i class="fas fa-trash-alt"></i>
                                         </a>
