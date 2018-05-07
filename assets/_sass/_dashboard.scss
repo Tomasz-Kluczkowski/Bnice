@@ -55,8 +55,10 @@
 }
 
 .dashboard__card {
-  background-color: darken(white, 2%);
+  background-image: linear-gradient(180deg, white, black 100%);
+  //background-color: darken(white, 2%);
   margin-bottom: 1vw;
+  border: black 1px solid;
 }
 
 //@media (min-width: 576px) {
@@ -128,6 +130,7 @@
   border-radius: 0.25rem;
   height: 100%;
 }
+
 
 //@media (max-width: 576px) {
 //  .dashboard__user-panel {
