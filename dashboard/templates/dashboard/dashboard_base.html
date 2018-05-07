@@ -2,13 +2,13 @@
 {% load static %}
 {% block content %}
     <section class="dashboard">
-        <div class="container-fluid">
-            <div class="row">
+        <div class="container-fluid px-0">
+            <div class="row dashboard__container">
                 <div class="col-12">
                     <div class="row">
                         {% block display_panel %}
                         {% endblock %}
-                        <div class="dashboard__user-panel col-lg-3">
+                        <div class="dashboard__user-panel col-sm-4">
                             <div class="row">
                                 <div class="col-12 text-center">
                                     <h1 class="dashboard__title">User Panel</h1>

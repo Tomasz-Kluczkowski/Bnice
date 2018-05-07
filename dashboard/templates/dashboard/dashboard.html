@@ -1,7 +1,7 @@
 {% extends "dashboard/dashboard_base.html" %}
 {% load static %}
 {% block display_panel %}
-    <div class="dashboard__display-panel col-md-9 ml-2 mr-auto">
+    <div class="dashboard__display-panel col-sm-8 col-lg-8 mr-auto">
         {% if request.path == "/dashboard/add_child/" %}
             <div class="row">
                 <div class="col-12 my-auto">
@@ -25,7 +25,7 @@
                 <div class="row">
 {#                <div class="dashboard__card-columns card-columns">#}
                     {% for child in child_list %}
-                        <div class="col-lg-3 col-md-4 col-sm-6 d-flex dashboard__card card">
+                        <div class="col-lg-4 col-md-6 d-flex dashboard__card card">
                             {% if child.user.profile_photo %}
                                 <div class="dashboard__card-img-container">
                                     <img class="dashboard__card-img card-img-top"
