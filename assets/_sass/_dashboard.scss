@@ -9,7 +9,7 @@
 }
 
 .dashboard__profile-photo {
-  max-width: 25%;
+  max-width: 150px;
   border-radius: 50%;
   margin-top: 1rem;
 }
@@ -17,6 +17,18 @@
 @media (min-width: 576px) {
   .dashboard__display-panel {
     max-width: 64.3vw;
+  }
+}
+
+@media (min-width: 992px) {
+  .dashboard__display-panel {
+    max-width: 74vw;
+  }
+}
+
+@media (min-width: 1200px) {
+  .dashboard__display-panel {
+    max-width: 82vw;
   }
 }
 

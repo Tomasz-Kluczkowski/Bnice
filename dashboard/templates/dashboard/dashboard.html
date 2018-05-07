@@ -1,7 +1,7 @@
 {% extends "dashboard/dashboard_base.html" %}
 {% load static %}
 {% block display_panel %}
-    <div class="dashboard__display-panel col-sm-8 col-lg-8 mr-auto">
+    <div class="dashboard__display-panel col-sm-8 col-lg-9 col-xl-10 mr-auto">
         {% if request.path == "/dashboard/add_child/" %}
             <div class="row">
                 <div class="col-12 my-auto">
@@ -27,19 +27,19 @@
                     {% for child in child_list %}
                         <div class="col-lg-4 col-md-6 d-flex dashboard__card card">
                             {% if child.user.profile_photo %}
-                                <div class="dashboard__card-img-container">
-                                    <img class="dashboard__card-img card-img-top"
+                                <div class="dashboard__card-img-container text-center">
+                                    <img class="dashboard__profile-photo card-img-top"
                                          src="{{ child.user.profile_photo.url }}"
                                          alt="Child profile photo">
                                 </div>
                             {% else %}
                                 <div class="dashboard__card-img-container text-center">
-                                    <img class="dashboard__card-img card-img-top"
+                                    <img class="dashboard__profile-photo card-img-top"
                                          src="{% static 'dashboard/images/avatar_500x500px.png' %}"
                                          alt="Child avatar">
                                 </div>
                             {% endif %}
-                            <div class="card-body">
+                            <div class="card-body p-0">
                                 <div class="row">
                                     <div class="col-12 text-center">
                                         <a class="dashboard__card-title card-title"
@@ -48,13 +48,21 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-12 text-center">
-                                        <a class="btn btn-danger form-button-small"
-                                           href="{% url 'dashboard:child_delete' pk=child.pk %}">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
-                                    </div>
+{#                                <div class="row">#}
+{#                                    <div class="col-12 text-center">#}
+{#                                        <a class="btn btn-danger form-button-small"#}
+{#                                           href="{% url 'dashboard:child_delete' pk=child.pk %}">#}
+{#                                            <i class="fas fa-trash-alt"></i>#}
+{#                                        </a>#}
+{#                                    </div>#}
+{#                                </div>#}
+                            </div>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <a class="btn btn-danger form-button-small"
+                                       href="{% url 'dashboard:child_delete' pk=child.pk %}">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
