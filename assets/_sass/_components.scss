@@ -76,6 +76,12 @@ body {
 }
 
 //Delete template
+@media (min-width: 576px) {
+  .delete-wrapper {
+    padding-left: 0;
+  }
+}
+
 .delete-container {
   border: rgba(0, 0, 0, 0.15) 1px solid;
   background: linear-gradient(180deg, $olive, black 100%);
