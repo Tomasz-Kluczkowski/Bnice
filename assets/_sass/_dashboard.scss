@@ -1,5 +1,6 @@
 .dashboard {
-  margin-top: 4rem;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 
 .dashboard__container {
@@ -55,18 +56,12 @@
 }
 
 .dashboard__card {
-  background-image: linear-gradient(180deg, white, black 100%);
-  //background-color: darken(white, 2%);
+  background-image: radial-gradient(ellipse farthest-corner at 50% 35%,
+      $olive 0%, black 100%);
   margin-bottom: 1vw;
-  border: black 1px solid;
+  border: rgba(0, 0, 0, 0.15) 1px solid;
 }
 
-//@media (min-width: 576px) {
-//  .dashboard__card {
-//    max-width: 64.3vw;
-//  }
-//}
-////
 // Two cards next to each other.
 @media (min-width: 768px ) and (max-width: 981px) {
   .dashboard__card {
@@ -74,27 +69,21 @@
     &:nth-child(2n+1) {
       margin-right: 1vw;
     }
-    //&:nth-child(even) {
-    //  margin-left: 1%;
-    //}
   }
 }
 
   @media (min-width: 982px) {
     .dashboard__card {
       margin-right: 1vw;
-      //margin-left: 15px;
       max-width: 30%;
     }
   }
-
 
 @media (min-width: 1200px) {
   .dashboard__card {
     max-width: 23%
   }
 }
-
 
 .dashboard__card-img-container {
 }
@@ -131,23 +120,11 @@
   height: 100%;
 }
 
-
-//@media (max-width: 576px) {
-//  .dashboard__user-panel {
-//  }
-//}
-
-
 @media (max-width: 768px) {
   .dashboard__user-panel {
     margin-left: 1vw;
   }
 }
-
-//@media (min-width: 768px) {
-//  .dashboard__user-panel {
-//  }
-//}
 
 .dashboard__title {
   @include title-font;

@@ -74,3 +74,25 @@ body {
   @include title-font;
   font-size: 0.75rem;
 }
+
+//Delete template
+.delete-container {
+  border: rgba(0, 0, 0, 0.15) 1px solid;
+  background: linear-gradient(180deg, $olive, black 100%);
+  margin-right: auto;
+}
+
+.delete-title {
+  @include title-font;
+  color: red;
+}
+
+.delete-paragraph {
+  margin-top: 1rem;
+  @include paragraph-font;
+  color: $palegreen;
+}
+
+.delete-button {
+  @include title-font;
+}

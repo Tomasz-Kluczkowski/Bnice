@@ -2,14 +2,30 @@
 {% load static %}
 {% block form %}
 
-
-<h1>Delete Child</h1>
-
-<p>Are you sure you want to delete the child: {{ child.user.name }}?</p>
-
-<form action="" method="POST">
-  {% csrf_token %}
-  <input type="submit" action="" value="Yes, delete." />
-</form>
+<div class="delete-container jumbotron text-center">
+    <h1 class="delete-title">Delete Child</h1>
+    {% if child.user.profile_photo %}
+        <div class="dashboard__card-img-container text-center">
+            <img class="dashboard__profile-photo card-img-top"
+                 src="{{ child.user.profile_photo.url }}"
+                 alt="Child profile photo">
+        </div>
+    {% else %}
+        <div class="dashboard__card-img-container text-center">
+            <img class="dashboard__profile-photo card-img-top"
+                 src="{% static 'dashboard/images/avatar_500x500px.png' %}"
+                 alt="Child avatar">
+        </div>
+    {% endif %}
+    <p class="delete-paragraph">Are you sure you want to delete the child:
+        <span class="delete-object-name">
+            {{ child.user.name }}?
+        </span>
+    </p>
+    <form action="" method="POST">
+      {% csrf_token %}
+      <input class="delete-button btn btn-danger" type="submit" action="" value="Yes, delete."/>
+    </form>
+</div>
 
 {% endblock %}
