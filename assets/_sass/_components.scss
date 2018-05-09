@@ -21,7 +21,8 @@ body {
   padding: 1rem;
   border-radius: 0.5rem;
   max-width: 90%;
-  background-color: $section-background;
+  background-color: rgba(175, 189, 163, 0.3);
+  border: $olive 1px solid;
   margin-bottom: 1rem;
 }
 

@@ -165,6 +165,10 @@
 
 .dashboard__detail-col {
   margin-top: 1rem;
+  background-color: rgba(175, 189, 163, 0.3);
+  border: $olive 1px solid;
+  padding: 1rem;
+  border-radius: 0.5rem;
 }
 
 @media (min-width: 992px) {
