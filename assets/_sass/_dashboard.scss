@@ -59,7 +59,7 @@
   background-image: radial-gradient(ellipse farthest-corner at 50% 35%,
       $olive 0%, black 100%);
   margin-bottom: 1vw;
-  border: rgba(0, 0, 0, 0.15) 1px solid;
+  border: $palegreen 1px solid;
 }
 
 // Two cards next to each other.
@@ -150,6 +150,7 @@
   @include paragraph-font;
   font-size: 1rem;
 }
+
 
 //Styles related to child_detail.html
 .dashboard__child-img {

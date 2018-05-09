@@ -60,19 +60,24 @@ body {
   margin-bottom: 0;
 }
 
-.form-button {
-  width: 8rem;
-  margin-top: 1rem;
+.form-button-base {
   @include title-font;
-  font-size: 1rem;
+  margin-top: 1rem;
+  padding: 0.25rem;
+  box-shadow: black 2px 2px 5px;
+}
+
+.form-button {
+  @extend .form-button-base;
+  width: 8rem;
+  font-size: 1.25rem;
 }
 
 .form-button-small {
+  @extend .form-button-base;
   width: 6rem;
-  margin-top: 1rem;
   margin-bottom: 1rem;
-  @include title-font;
-  font-size: 0.75rem;
+  font-size: 1rem;
 }
 
 //Delete template
