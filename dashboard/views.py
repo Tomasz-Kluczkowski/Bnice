@@ -143,9 +143,8 @@ class ChildDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = 'dashboard/child_delete.html'
 
     def test_func(self):
-        """Allow access only to logged in users.
-
-        We have to check differently for parent and child users hence if/elif.
+        """Allow access only to logged in parent users who match child's to be
+        deleted parent.
 
         Returns
         -------
@@ -153,8 +152,7 @@ class ChildDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         """
         current_user = self.request.user
         child = self.get_object()
-        parent = Child.objects.get(
-            user__pk=child.pk).parent.username
+        parent = child.parent.username
         if current_user.is_parent and current_user.username == parent:
             return True
         else:
