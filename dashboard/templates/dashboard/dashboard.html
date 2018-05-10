@@ -50,14 +50,16 @@
                                 </div>
                             </div>
                             <hr>
-                            <div class="row">
-                                <div class="col-12 text-center">
-                                    <a class="btn btn-danger form-button-small"
-                                       href="{% url 'dashboard:child_delete' pk=child.pk %}">
-                                            <i class="fas fa-user-slash"></i>
-                                    </a>
+                            {%  if user.is_parent %}
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <a class="btn btn-danger form-button-small"
+                                           href="{% url 'dashboard:child_delete' pk=child.pk %}">
+                                                <i class="fas fa-user-slash"></i>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
+                            {% endif %}
                         </div>
                     {% endfor %}
                 </div>

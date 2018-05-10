@@ -40,7 +40,7 @@ class CreateChildPage(LoginRequiredMixin, CreateView):
         return self.initial
 
 
-class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
+class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     """Awards stars before displaying Child details.
 
     """
@@ -51,15 +51,17 @@ class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
         super().__init__(**kwargs)
 
     def get_context_data(self, **kwargs):
-        if self.request.user.is_authenticated and self.request.user.is_child:
+        child = self.get_object()
+        current_user = self.request.user
+        if current_user.is_authenticated and current_user.is_child:
             kwargs['parent'] = Child.objects.get(
-                user=self.request.user).parent.username
+                user=current_user).parent.username
         kwargs['smileys'] = Smiley.objects.filter(
-            owner=self.object).order_by("earned_on")
+            owner=child).order_by("earned_on")
         kwargs['oopsies'] = Oopsy.objects.filter(
-            owner=self.object).order_by("earned_on")
+            owner=child).order_by("earned_on")
         star_awarding = StarAwarding(kwargs['smileys'], kwargs['oopsies'],
-                                     self.object.star_points)
+                                     child.star_points)
         star_awarding.award_star()
         return super().get_context_data(**kwargs)
 
@@ -82,7 +84,7 @@ class ChildDetail(UserPassesTestMixin, LoginRequiredMixin, DetailView):
             return False
 
 
-class AddAction(UserPassesTestMixin, LoginRequiredMixin, CreateView):
+class AddAction(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         kwargs['child'] = Child.objects.get(pk=self.kwargs["pk"])
@@ -135,7 +137,7 @@ class ChildUpdate(LoginRequiredMixin, UpdateView):
         return super().get_context_data(**kwargs)
 
 
-class ChildDelete(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
+class ChildDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Child
     success_url = reverse_lazy('dashboard:dashboard')
     template_name = 'dashboard/child_delete.html'
