@@ -31,10 +31,6 @@ class CreateChildPage(LoginRequiredMixin, CreateView):
     form_class = ChildCreateForm
     success_url = reverse_lazy('dashboard:dashboard')
 
-    # def get_context_data(self, **kwargs):
-    #     kwargs['child_list'] = Child.objects.filter(parent=self.request.user)
-    #     return super().get_context_data(**kwargs)
-
     def get_initial(self):
         self.initial.update({"current_user": self.request.user})
         return self.initial
@@ -53,7 +49,7 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     def get_context_data(self, **kwargs):
         child = self.get_object()
         current_user = self.request.user
-        if current_user.is_authenticated and current_user.is_child:
+        if current_user.is_child:
             kwargs['parent'] = Child.objects.get(
                 user=current_user).parent.username
         kwargs['smileys'] = Smiley.objects.filter(
@@ -66,7 +62,7 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         return super().get_context_data(**kwargs)
 
     def test_func(self):
-        """Allow access only to logged in users.
+        """Allow access only to parent / child users.
 
         We have to check differently for parent and child users hence if/elif.
 
@@ -91,9 +87,9 @@ class AddAction(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return super().get_context_data(**kwargs)
 
     def test_func(self):
-        current_user = self.request.user.username
+        current_user = self.request.user
         parent = self.kwargs["parent"]
-        if current_user == parent:
+        if current_user.is_parent and current_user.username == parent:
             return True
         else:
             return False
