@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'core',
     'accounts',
     'dashboard',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'Bnice.urls'
@@ -151,3 +153,4 @@ MEDIA_URL = '/media/'
 LOGIN_REDIRECT_URL = "core:home"
 LOGOUT_REDIRECT_URL = "core:home"
 AUTH_USER_MODEL = "accounts.User"
+INTERNAL_IPS = ['127.0.0.1']

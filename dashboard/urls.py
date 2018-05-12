@@ -16,7 +16,7 @@ Including another URLconf
 from django.urls import path, re_path
 from dashboard.views import (
     DashboardPage, CreateChildPage, ChildDetail,
-    AddSmiley, AddOopsy, UserUpdate, ChildUpdate, ChildDelete)
+    AddSmiley, AddOopsy, UserUpdate, ChildUpdate, ChildDelete, SmileyDelete)
 
 app_name = "dashboard"
 
@@ -32,9 +32,11 @@ urlpatterns = [
         r'^child/detail/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
         ChildDetail.as_view(), name="child_detail"),
     re_path(
-        r'^child/add/smiley/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
+        r'^child/add_smiley/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
         AddSmiley.as_view(), name="smiley_add"),
+    path('child/delete_smiley/<int:pk>', SmileyDelete.as_view(),
+         name='smiley_delete'),
     re_path(
-        r'^child/add/oopsy/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
+        r'^child/add_oopsy/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
         AddOopsy.as_view(), name="oopsy_add"),
 ]

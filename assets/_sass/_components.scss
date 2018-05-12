@@ -81,6 +81,14 @@ body {
   font-size: 1rem;
 }
 
+.form-button-min {
+  @extend .form-button-base;
+  width: 1.5rem;
+  margin: 0 0.1rem 0 0;
+  padding: 0.15rem 0;
+  font-size: 0.5rem;
+}
+
 //Delete template
 @media (min-width: 576px) {
   .delete-wrapper {

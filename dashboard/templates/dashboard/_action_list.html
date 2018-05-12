@@ -30,7 +30,18 @@
                 <p class="dashboard__action-description">
                     {{ action.description }}
                 </p>
-                <span class="badge badge-{{ badge_color }} badge-pill">{{ action.points }}</span>
+                <div>
+                    {#            Allow deleting of actions if not claimed #}
+                    {% if not action.claimed %}
+                        <a class="btn btn-danger form-button-min"
+                           href="{% url 'dashboard:smiley_delete' pk=action.pk %}">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    {% endif %}
+                    <span class="badge badge-{{ badge_color }} badge-pill">
+                        {{ action.points }}
+                    </span>
+                </div>
             </li>
             {% if action.star_awarded %}
                 <li class="dashboard__list-group-description dashboard__star-awarded list-group-item d-flex justify-content-between align-items-center">

@@ -153,3 +153,40 @@ class ChildDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         else:
             return False
+
+
+class SmileyDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Smiley
+    template_name = 'dashboard/smiley_delete.html'
+
+    def get_context_data(self, **kwargs):
+        smiley = self.get_object()
+        kwargs['child'] = smiley.owner
+        return super().get_context_data(**kwargs)
+
+    def get_success_url(self):
+        smiley = self.get_object()
+        child = smiley.owner
+        child_username = child.user.username
+        parent = smiley.owner.parent.username
+
+        return reverse('dashboard:child_detail',
+                       kwargs={'parent': parent,
+                               'child_username': child_username,
+                               'pk': child.pk})
+
+    def test_func(self):
+        """Allow access only to logged in parent user who is parent
+        of the child who's action we are deleting.
+
+        Returns
+        -------
+            Bool
+        """
+        current_user = self.request.user
+        smiley = self.get_object()
+        parent = smiley.owner.parent.username
+        if current_user.is_parent and current_user.username == parent:
+            return True
+        else:
+            return False
