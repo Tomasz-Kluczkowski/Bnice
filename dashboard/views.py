@@ -45,19 +45,13 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Child
     template_name = "dashboard/child_detail.html"
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def get_context_data(self, **kwargs):
         child = self.get_object()
         current_user = self.request.user
         if current_user.is_child:
-            kwargs['parent'] = Child.objects.get(
-                user=current_user).parent.username
-        kwargs['smileys'] = Smiley.objects.filter(
-            owner=child).order_by("earned_on")
-        kwargs['oopsies'] = Oopsy.objects.filter(
-            owner=child).order_by("earned_on")
+            kwargs['parent'] = child.parent.username
+        kwargs['smileys'] = child.smiley_set.all()
+        kwargs['oopsies'] = child.oopsy_set.all()
         star_awarding = StarAwarding(kwargs['smileys'], kwargs['oopsies'],
                                      child.star_points)
         star_awarding.award_star()

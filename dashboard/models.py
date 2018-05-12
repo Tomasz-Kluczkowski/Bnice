@@ -23,6 +23,7 @@ class Action(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ['earned_on']
 
     def get_absolute_url(self):
         return reverse(
