@@ -155,13 +155,19 @@ class SmileyDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Smiley
     template_name = 'dashboard/smiley_delete.html'
 
+    def get_queryset(self):
+        qs = Smiley.objects.filter(
+            pk=self.kwargs.get('pk')).select_related(
+            'owner', 'owner__user', 'owner__parent')
+        return qs
+
     def get_context_data(self, **kwargs):
-        smiley = self.get_object()
+        smiley = self.object
         kwargs['child'] = smiley.owner
         return super().get_context_data(**kwargs)
 
     def get_success_url(self):
-        smiley = self.get_object()
+        smiley = self.object
         child = smiley.owner
         child_username = child.user.username
         parent = smiley.owner.parent.username
