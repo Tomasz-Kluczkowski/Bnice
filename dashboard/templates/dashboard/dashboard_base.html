@@ -46,7 +46,6 @@
                                 </div>
                             {% endif %}
                             {% if user.is_authenticated and user.is_parent or user.is_superuser %}
-
                                 <div class="row">
                                     <div class="col-3 col-sm-12 text-center">
                                         <a class="btn btn-dark form-button"
@@ -78,60 +77,6 @@
                                         </div>
                                     {% endif %}
                                 </div>
-
-
-
-
-
-
-
-
-{#                                <div class="row">#}
-{#                                    <div class="col-12 text-center">#}
-{#                                        <a class="btn btn-dark form-button"#}
-{#                                           href="{% url 'dashboard:dashboard' %}">#}
-{#                                            <i class="fas fa-users"></i>#}
-{#                                        </a>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                <div class="row">#}
-{#                                    <div class="col-12 text-center">#}
-{#                                        <a class="btn btn-dark form-button"#}
-{#                                           href="{% url 'dashboard:child_add' %}">#}
-{#                                            <i class="fas fa-user-plus"></i>#}
-{#                                        </a>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                Show Add Smiley / Oopsy when in child detail view. #}
-{#                                {% if "dashboard/child/" in request.path %}#}
-{#                                    <div class="row">#}
-{#                                        <div class="col-12 text-center">#}
-{#                                            <a class="btn btn-dark form-button"#}
-{#                                               href="{% url 'dashboard:smiley_add' parent=child.parent.username child_username=child.user.username pk=child.pk %}">#}
-{#                                                <i class="fas fa-thumbs-up"></i>#}
-{#                                            </a>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                    <div class="row">#}
-{#                                        <div class="col-12 text-center">#}
-{#                                            <a class="btn btn-dark form-button"#}
-{#                                               href="{% url 'dashboard:oopsy_add' parent=child.parent.username child_username=child.user.username pk=child.pk %}">#}
-{#                                                <i class="fas fa-thumbs-down"></i>#}
-{#                                            </a>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                    Show View Progress when in Add Smiley / Add Oopsy view. #}
-                                    {% if "add" in request.path %}
-                                        <div class="row">
-                                            <div class="col-12 text-center">
-                                                <a class="btn btn-dark form-button"
-                                                   href="{% url 'dashboard:child_detail' parent=child.parent.username child_username=child.user.username pk=child.pk %}">
-                                                   View Progress
-                                                </a>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-{#                                {% endif %}#}
                             {% endif %}
                         </div>
                     </div>
