@@ -120,12 +120,6 @@
   height: 100%;
 }
 
-@media (max-width: 768px) {
-  .dashboard__user-panel {
-    margin-left: 1vw;
-  }
-}
-
 .dashboard__title {
   @include title-font;
   font-size: 1.5rem;
@@ -164,7 +158,6 @@
 }
 
 .dashboard__detail-col {
-  margin-top: 1rem;
   background-color: rgba(175, 189, 163, 0.3);
   border: $olive 1px solid;
   padding: 1rem;
@@ -187,18 +180,17 @@
   margin-top: 2rem;
 }
 
-@media (max-width: 768px) {
-  .dashboard__actions-container {
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
 .dashboard__actions-container {
 }
 
 .dashboard__actions-title {
   @include title-font;
   margin-top: 3rem;
+  margin-bottom: 1rem;
+}
+
+.dashboard__profile-title {
+  @include title-font;
   margin-bottom: 1rem;
 }
 
@@ -213,8 +205,6 @@
   .dashboard__actions-box {
     flex: 0 0 44%;
     max-width: 44%;
-    margin-left: 15px;
-    margin-right: 15px;
   }
 }
 
