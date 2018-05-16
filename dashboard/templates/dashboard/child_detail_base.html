@@ -3,17 +3,18 @@
 {% block display_panel %}
     <div class="dashboard__display-panel col-md-8 mr-auto">
         <div class="row">
-            <div class="col-12">
-                {% if user.is_child %}
-                    <h2 class="dashboard__profile-title">Your Profile</h2>
-                {% else %}
-                    <h2 class="dashboard__profile-title">{{ child.user.name }}'s
-                        Profile</h2>
-                {% endif %}
-            </div>
-        </div>
-        <div class="row">
             <div class="dashboard__detail-col col-md-12">
+                <div class="row">
+                    <div class="col-12">
+                        {% if user.is_child %}
+                            <h2 class="dashboard__profile-title">Your
+                                Profile</h2>
+                        {% else %}
+                            <h2 class="dashboard__profile-title">{{ child.user.name }}'s
+                                Profile</h2>
+                        {% endif %}
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-3">
                         {% if child.user.profile_photo %}
