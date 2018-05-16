@@ -192,3 +192,46 @@ class SmileyDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         else:
             return False
+
+
+class OopsyDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Oopsy
+    template_name = 'dashboard/oopsy_delete.html'
+
+    def get_queryset(self):
+        qs = Oopsy.objects.filter(
+            pk=self.kwargs.get('pk')).select_related(
+            'owner', 'owner__user', 'owner__parent')
+        return qs
+
+    def get_context_data(self, **kwargs):
+        oopsy = self.object
+        kwargs['child'] = oopsy.owner
+        return super().get_context_data(**kwargs)
+
+    def get_success_url(self):
+        oopsy = self.object
+        child = oopsy.owner
+        child_username = child.user.username
+        parent = oopsy.owner.parent.username
+
+        return reverse('dashboard:child_detail',
+                       kwargs={'parent': parent,
+                               'child_username': child_username,
+                               'pk': child.pk})
+
+    def test_func(self):
+        """Allow access only to logged in parent user who is parent
+        of the child who's action we are deleting.
+
+        Returns
+        -------
+            Bool
+        """
+        current_user = self.request.user
+        oopsy = self.get_object()
+        parent = oopsy.owner.parent.username
+        if current_user.is_parent and current_user.username == parent:
+            return True
+        else:
+            return False

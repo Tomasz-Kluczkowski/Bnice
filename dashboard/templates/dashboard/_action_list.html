@@ -34,7 +34,11 @@
                     {#            Allow deleting of actions if not claimed #}
                     {% if not action.claimed %}
                         <a class="btn btn-danger form-button-min"
+                        {% if action|get_model_name == "Smiley" %}
                            href="{% url 'dashboard:smiley_delete' pk=action.pk %}">
+                        {% else %}
+                           href="{% url 'dashboard:oopsy_delete' pk=action.pk %}">
+                        {% endif %}
                             <i class="fas fa-trash-alt"></i>
                         </a>
                     {% endif %}
