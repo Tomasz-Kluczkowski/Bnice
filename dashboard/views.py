@@ -151,87 +151,59 @@ class ChildDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return False
 
 
-class SmileyDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class ActionDeleteBase(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """Base class for deleting actions. Not to be used on its own."""
+
+    model = None
+
+    def get_queryset(self):
+        qs = self.model.objects.filter(
+            pk=self.kwargs.get('pk')).select_related(
+            'owner', 'owner__user', 'owner__parent')
+        return qs
+
+    def get_context_data(self, **kwargs):
+        action = self.object
+        kwargs['child'] = action.owner
+        return super().get_context_data(**kwargs)
+
+    def get_success_url(self):
+        action = self.object
+        child = action.owner
+        child_username = child.user.username
+        parent = action.owner.parent.username
+
+        return reverse('dashboard:child_detail',
+                       kwargs={'parent': parent,
+                               'child_username': child_username,
+                               'pk': child.pk})
+
+    def test_func(self):
+        """Allow access only to logged in parent user who is parent
+        of the child who's action we are deleting.
+
+        Returns
+        -------
+            Bool
+        """
+        current_user = self.request.user
+        action = self.get_object()
+        parent = action.owner.parent.username
+        if current_user.is_parent and current_user.username == parent:
+            return True
+        else:
+            return False
+
+
+class SmileyDelete(ActionDeleteBase):
+    """Delete smiley actions."""
+
     model = Smiley
     template_name = 'dashboard/smiley_delete.html'
 
-    def get_queryset(self):
-        qs = Smiley.objects.filter(
-            pk=self.kwargs.get('pk')).select_related(
-            'owner', 'owner__user', 'owner__parent')
-        return qs
 
-    def get_context_data(self, **kwargs):
-        smiley = self.object
-        kwargs['child'] = smiley.owner
-        return super().get_context_data(**kwargs)
+class OopsyDelete(ActionDeleteBase):
+    """Delete oopsy actions."""
 
-    def get_success_url(self):
-        smiley = self.object
-        child = smiley.owner
-        child_username = child.user.username
-        parent = smiley.owner.parent.username
-
-        return reverse('dashboard:child_detail',
-                       kwargs={'parent': parent,
-                               'child_username': child_username,
-                               'pk': child.pk})
-
-    def test_func(self):
-        """Allow access only to logged in parent user who is parent
-        of the child who's action we are deleting.
-
-        Returns
-        -------
-            Bool
-        """
-        current_user = self.request.user
-        smiley = self.get_object()
-        parent = smiley.owner.parent.username
-        if current_user.is_parent and current_user.username == parent:
-            return True
-        else:
-            return False
-
-
-class OopsyDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Oopsy
     template_name = 'dashboard/oopsy_delete.html'
-
-    def get_queryset(self):
-        qs = Oopsy.objects.filter(
-            pk=self.kwargs.get('pk')).select_related(
-            'owner', 'owner__user', 'owner__parent')
-        return qs
-
-    def get_context_data(self, **kwargs):
-        oopsy = self.object
-        kwargs['child'] = oopsy.owner
-        return super().get_context_data(**kwargs)
-
-    def get_success_url(self):
-        oopsy = self.object
-        child = oopsy.owner
-        child_username = child.user.username
-        parent = oopsy.owner.parent.username
-
-        return reverse('dashboard:child_detail',
-                       kwargs={'parent': parent,
-                               'child_username': child_username,
-                               'pk': child.pk})
-
-    def test_func(self):
-        """Allow access only to logged in parent user who is parent
-        of the child who's action we are deleting.
-
-        Returns
-        -------
-            Bool
-        """
-        current_user = self.request.user
-        oopsy = self.get_object()
-        parent = oopsy.owner.parent.username
-        if current_user.is_parent and current_user.username == parent:
-            return True
-        else:
-            return False
