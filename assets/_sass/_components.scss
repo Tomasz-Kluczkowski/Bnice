@@ -74,6 +74,23 @@ body {
   font-size: 1.25rem;
 }
 
+@media (min-width: 576px){
+  .form-button {
+    width: 25%;
+  }
+}
+
+.ui-button {
+  @extend .form-button-base;
+  width: 100%
+}
+
+@media (min-width: 576px){
+  .ui-button {
+    width: 50%;
+  }
+}
+
 .form-button-small {
   @extend .form-button-base;
   width: 6rem;
