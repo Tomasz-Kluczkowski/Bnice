@@ -41,6 +41,14 @@
                         {% endif %}
                             <i class="fas fa-trash-alt"></i>
                         </a>
+                        <a class="btn btn-warning form-button-min"
+                        {% if action|get_model_name == "Smiley" %}
+                           href="{% url 'dashboard:smiley_update' pk=action.pk %}">
+                        {% else %}
+                           href="{% url 'dashboard:oopsy_update' pk=action.pk %}">
+                        {% endif %}
+                            <i class="far fa-edit"></i>
+                        </a>
                     {% endif %}
                     <span class="badge badge-{{ badge_color }} badge-pill">
                         {{ action.points }}

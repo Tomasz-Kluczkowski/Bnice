@@ -207,3 +207,37 @@ class OopsyDelete(ActionDeleteBase):
 
     model = Oopsy
     template_name = 'dashboard/oopsy_delete.html'
+
+
+class ActionUpdateBase(LoginRequiredMixin, UpdateView):
+    """Base class for updating unclaimed smiley and oopsy objects.
+    Do not use on its own."""
+
+    model = None
+    fields = ('description', 'points')
+
+    def get_context_data(self, **kwargs):
+        action = self.object
+        kwargs['child'] = action.owner
+        return super().get_context_data(**kwargs)
+
+    def get_success_url(self):
+        action = self.object
+        child = action.owner
+        child_username = child.user.username
+        parent = action.owner.parent.username
+
+        return reverse('dashboard:child_detail',
+                       kwargs={'parent': parent,
+                               'child_username': child_username,
+                               'pk': child.pk})
+
+
+class SmileyUpdate(ActionUpdateBase):
+    model = Smiley
+    template_name = 'dashboard/smiley_update.html'
+
+
+class OopsyUpdate(ActionUpdateBase):
+    model = Oopsy
+    template_name = 'dashboard/oopsy_update.html'

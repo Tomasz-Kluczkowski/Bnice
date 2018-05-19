@@ -17,7 +17,7 @@ from django.urls import path, re_path
 from dashboard.views import (
     DashboardPage, CreateChildPage, ChildDetail,
     AddSmiley, AddOopsy, UserUpdate, ChildUpdate, ChildDelete,
-    SmileyDelete, OopsyDelete)
+    SmileyDelete, OopsyDelete, SmileyUpdate, OopsyUpdate)
 
 app_name = "dashboard"
 
@@ -32,14 +32,20 @@ urlpatterns = [
     re_path(
         r'^child/detail/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
         ChildDetail.as_view(), name="child_detail"),
+
     re_path(
         r'^child/add_smiley/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
         AddSmiley.as_view(), name="smiley_add"),
     path('child/delete_smiley/<int:pk>', SmileyDelete.as_view(),
          name='smiley_delete'),
-    path('child/delete_oopsy/<int:pk>', OopsyDelete.as_view(),
-         name='oopsy_delete'),
+    path('child/update_smiley/<int:pk>', SmileyUpdate.as_view(),
+         name='smiley_update'),
+
     re_path(
         r'^child/add_oopsy/(?P<parent>[\w.@+-]+)/(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
         AddOopsy.as_view(), name="oopsy_add"),
+    path('child/delete_oopsy/<int:pk>', OopsyDelete.as_view(),
+         name='oopsy_delete'),
+    path('child/update_oopsy/<int:pk>', OopsyUpdate.as_view(),
+         name='oopsy_update'),
 ]
