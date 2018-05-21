@@ -17,7 +17,7 @@ def test_url_reverse_name_for_signup_page(client):
 def test_signup_view_uses_correct_template(client):
     response = client.get(reverse('accounts:signup'))
     templates = response.templates
-    assert 'accounts/signup.html' == templates[0].name
+    assert templates[0].name == 'accounts/signup.html'
 
 
 def test_url_for_login_page(client):
@@ -33,5 +33,5 @@ def test_url_reverse_name_for_login_page(client):
 def test_login_view_uses_correct_template(client):
     response = client.get(reverse('accounts:login'))
     templates = response.templates
-    assert 'accounts/login.html' == templates[0].name
+    assert templates[0].name == 'accounts/login.html'
 

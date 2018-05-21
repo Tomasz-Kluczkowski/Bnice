@@ -24,7 +24,6 @@ def test_child_model(parent_user, child_user):
         '/dashboard/child/detail/{0}/{1}/{2}'.format(parent_user.username,
                                                      child_user.username,
                                                      child.pk))
-    # assert '/dashboard/child/detail/tom_k/nat_k/' in child.get_absolute_url()
     assert User.objects.count() == 2
     assert child.user.username == 'nat_k'
     assert child.user.name == 'Natalie'
