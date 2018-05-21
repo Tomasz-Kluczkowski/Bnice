@@ -30,7 +30,7 @@ from accounts.views import SignupPage
 app_name = "accounts"
 
 urlpatterns = [
-    path('signup/', SignupPage.as_view(), name="signup"),
+    path('signup/', SignupPage.as_view(), name='signup'),
     path('login/',
          LoginView.as_view(template_name='accounts/login.html'),
          name='login'),
