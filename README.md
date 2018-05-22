@@ -9,7 +9,7 @@ The main idea is for your kid to collect points and get stars as a reward. You d
 
 ## What tech is used?
 
-The app is written using **python / Django** and a few helpful libraries:
+The app is written using **python / Django** and a few helpful libraries which I am mentioning to pay credit to the authors:
 - bootstrap
 - django-bootstrap4 (excellent way of making forms look good, it's a godsend, check it out at: <https://github.com/zostera/django-bootstrap4>)
 - django-static-precompiler (way to use scss without any watchers and other complications, big thx to this project: <https://github.com/andreyfedoseev/django-static-precompiler>).
