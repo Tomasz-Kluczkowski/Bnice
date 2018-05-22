@@ -10,12 +10,12 @@ The main idea is for your kid to collect points and get stars as a reward. You d
 ## What tech is used?
 
 The app is written using **python / Django** and a few helpful libraries which I am mentioning to pay credit to the authors:
-- bootstrap
+- bootstrap (get your grid done in no time: <https://getbootstrap.com/>)
 - django-bootstrap4 (excellent way of making forms look good, it's a godsend, check it out at: <https://github.com/zostera/django-bootstrap4>)
-- django-static-precompiler (way to use scss without any watchers and other complications, big thx to this project: <https://github.com/andreyfedoseev/django-static-precompiler>).
-- pytest-django (way to test without too much boilerplate code: <https://pytest-django.readthedocs.io/en/latest/>)
-- python-decouple (easiest way to keep secret settings secret :) <https://github.com/henriquebastos/python-decouple>)
-- factory_boy (the ultimate answer to factory_girl - get the database objects made for you easily <http://factoryboy.readthedocs.io/en/latest/>)
+- django-static-precompiler (use scss without any watchers and other complications, big thx to this project: <https://github.com/andreyfedoseev/django-static-precompiler>).
+- pytest-django (test without too much boilerplate code: <https://pytest-django.readthedocs.io/en/latest/>)
+- python-decouple (keep secret settings secret :) <https://github.com/henriquebastos/python-decouple>)
+- factory_boy (get the database objects made for you easily <http://factoryboy.readthedocs.io/en/latest/>)
 - django-debug-toolbar (makes digging in your site so much faster: <https://django-debug-toolbar.readthedocs.io/en/stable/>)
 
 ## Installation
@@ -37,10 +37,10 @@ Please fork the project to your own Github account and then clone your own versi
 <https://github.com/Tomasz-Kluczkowski/Bnice>
 - Click Fork (Icon in top right corner). 
 - Go to your Github account and choose the Bnice repo there.
-- Click green icon Clone or Download, copy the address provided in the field - will be similar to: <https://github.com/your-account-name/Bnice>
+- Click green icon Clone or Download, copy the address provided in the field - will be similar to: <https://github.com/your-account-name/Bnice.git>
 - in terminal use what you copied and issue a command:
 ```
-git clone https://github.com/your-account-name/Bnice
+git clone https://github.com/your-account-name/Bnice.git
 ```
 
 ### Follow the rest of the instructions
