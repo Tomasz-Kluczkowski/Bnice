@@ -9,7 +9,7 @@ The main idea is for your kid to collect points and get stars as a reward. You d
 
 ## What tech is used?
 
-The app is written using **python / Django** and a few helpful libraries which I am mentioning to pay credit to the authors:
+The app is written using **Python / Django** and a few helpful libraries which I am mentioning to pay credit to the authors:
 - bootstrap (get your grid done in no time: <https://getbootstrap.com/>)
 - django-bootstrap4 (excellent way of making forms look good, it's a godsend, check it out at: <https://github.com/zostera/django-bootstrap4>)
 - django-static-precompiler (use scss without any watchers and other complications, big thx to this project: <https://github.com/andreyfedoseev/django-static-precompiler>).
@@ -29,7 +29,7 @@ In terminal:
 ```
 git clone https://github.com/Tomasz-Kluczkowski/Bnice.git #  Clone the project to your computer.
 ```
-### If you would like to contribute 
+### If you would like to contribute:
 
 Please fork the project to your own Github account and then clone your own version instead of mine.
 - Login to your Github account.
