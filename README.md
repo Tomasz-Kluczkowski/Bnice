@@ -37,10 +37,10 @@ Please fork the project to your own Github account and then clone your own versi
 <https://github.com/Tomasz-Kluczkowski/Bnice>
 - Click Fork (Icon in top right corner). 
 - Go to your Github account and choose the Bnice repo there.
-- Click green icon Clone or Download, copy the address provided in the field - will be similar to: <https://github.com/your account name/Bnice>
+- Click green icon Clone or Download, copy the address provided in the field - will be similar to: <https://github.com/your-account-name/Bnice>
 - in terminal use what you copied and issue a command:
 ```
-git clone https://github.com/your account name/Bnice
+git clone https://github.com/your-account-name/Bnice
 ```
 
 ### Follow the rest of the instructions
