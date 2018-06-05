@@ -13,6 +13,15 @@ def add_smiley_form_with_set_description():
     return form
 
 
+@pytest.fixture
+def add_smiley_form_with_new_description():
+    """Returns an instance of AddSmileyForm with a new, custom description."""
+    form = AddSmileyForm({'description': 'this should not be saved',
+                          'new_description': 'New description added',
+                          'points': 3})
+    return form
+
+
 @pytest.mark.django_db
 def test_add_smiley_form_with_valid_data(add_smiley_form_with_set_description):
     form = add_smiley_form_with_set_description
@@ -25,7 +34,7 @@ def test_add_smiley_form_with_valid_data(add_smiley_form_with_set_description):
         'Required, How much was this task worth?')
 
 @pytest.mark.django_db
-def
-
+def test_add_smiley_form_with_new_description()
+    pass
 
 
