@@ -1,13 +1,14 @@
 import pytest
 
 from dashboard.forms import AddSmileyForm, AddOopsyForm
+from dashboard.models import Smiley, Oopsy
 
 
 @pytest.fixture
 def add_smiley_form_with_set_description():
     """Returns an instance of AddSmileyForm with a description from one of the
     choices."""
-    form = AddSmileyForm({'description': 'Folded washing',
+    form = AddSmileyForm({'description': 'Add new',
                           'new_description': '',
                           'points': 3})
     return form
@@ -16,8 +17,8 @@ def add_smiley_form_with_set_description():
 @pytest.fixture
 def add_smiley_form_with_new_description():
     """Returns an instance of AddSmileyForm with a new, custom description."""
-    form = AddSmileyForm({'description': 'this should not be saved',
-                          'new_description': 'New description added',
+    form = AddSmileyForm({'description': 'Folded washing',
+                          'new_description': 'New description',
                           'points': 3})
     return form
 
@@ -34,7 +35,12 @@ def test_add_smiley_form_with_valid_data(add_smiley_form_with_set_description):
         'Required, How much was this task worth?')
 
 @pytest.mark.django_db
-def test_add_smiley_form_with_new_description()
-    pass
+def test_add_smiley_form_with_new_description(add_smiley_form_with_new_description):
+    form = add_smiley_form_with_new_description
+    assert form.is_valid() is True
+    # Save object to the database
+    # smiley = Smiley.objects.get(id=1)
+    # assert smiley.description == 'New description added'
+
 
 
