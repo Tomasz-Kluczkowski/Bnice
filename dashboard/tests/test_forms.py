@@ -1,40 +1,5 @@
 import pytest
-from django.utils import timezone
-
-from dashboard.forms import AddSmileyForm, AddOopsyForm
-from dashboard.models import Smiley, Oopsy
-
-
-@pytest.fixture
-def add_smiley_form_set_description():
-    """Returns an instance of AddSmileyForm with a description from one of the
-    choices."""
-    form = AddSmileyForm({'description': 'Folded washing',
-                          'new_description': '',
-                          'points': 3})
-    return form
-
-
-@pytest.fixture
-def add_smiley_form_new_description():
-    """Returns an instance of AddSmileyForm with a new, custom description."""
-    form = AddSmileyForm({'description': 'Add new',
-                          'new_description': 'New description',
-                          'points': 3})
-    return form
-
-
-@pytest.fixture
-def instanced_form_with_new_description(add_smiley_form_new_description, child):
-    """Returns a saved instance of the form with a new description."""
-    form = add_smiley_form_new_description
-    obj = form.save(commit=False)
-    obj.owner = child
-    current_time = timezone.now()
-    obj.earned_on = current_time
-    # Save object to the database
-    form.save()
-    return form
+# Fixtures are kept in dashboard/tests/conftest.py.
 
 
 @pytest.mark.django_db
@@ -48,21 +13,6 @@ def test_add_smiley_form_with_valid_data(add_smiley_form_set_description):
     assert form.fields['points'].help_text == (
         'Required, How much was this task worth?')
 
-# @pytest.mark.django_db
-# def test_add_smiley_form_with_new_description(
-#         add_smiley_form_new_description, child):
-#     form = add_smiley_form_new_description
-#     obj = form.save(commit=False)
-#     obj.owner = child
-#     current_time = timezone.now()
-#     obj.earned_on = current_time
-#     # Save object to the database
-#     assert form.clean() == 'New description'
-#     form.save()
-#     assert form.is_valid() is True
-#     smiley = Smiley.objects.get(id=1)
-#     # assert smiley.description == 'New description'
-
 
 @pytest.mark.django_db
 def test_add_smiley_form_clean(instanced_form_with_new_description):
@@ -74,7 +24,7 @@ def test_add_smiley_form_clean(instanced_form_with_new_description):
 
 
 @pytest.mark.django_db
-def test_add_smiley_standard_choices(instanced_form_with_new_description):
+def test_add_smiley_form_standard_choices(instanced_form_with_new_description):
     form = instanced_form_with_new_description
     choices = form.fields['description'].choices
     assert choices == [('Add new',
@@ -89,6 +39,22 @@ def test_add_smiley_standard_choices(instanced_form_with_new_description):
                         'Removed cutlery from dishwasher')]
 
 
-
-
-
+@pytest.mark.django_db
+def test_add_smiley_form_adds_choices(smiley_custom_description,
+                                      instanced_form_with_new_description):
+    # Create Smiley object with a custom description.
+    smiley = smiley_custom_description
+    form = instanced_form_with_new_description
+    choices = form.fields['description'].choices
+    assert choices == [('Add new',
+                        'Add new'),
+                       ('Folded washing',
+                        'Folded washing'),
+                       ('Cleaned bathroom',
+                        'Cleaned bathroom'),
+                       ('Mopped floor',
+                        'Mopped floor'),
+                       ('Removed cutlery from dishwasher',
+                        'Removed cutlery from dishwasher'),
+                       ('Removed rubbish',
+                        'Removed rubbish')]
