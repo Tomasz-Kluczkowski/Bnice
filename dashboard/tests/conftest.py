@@ -26,7 +26,7 @@ def add_smiley_form_new_description():
 
 
 @pytest.fixture
-def instanced_form_with_new_description(add_smiley_form_new_description, child):
+def smiley_form_new_description_saved(add_smiley_form_new_description, child):
     """Returns a saved instance of the form with a new description."""
     form = add_smiley_form_new_description
     obj = form.save(commit=False)
@@ -70,4 +70,26 @@ def add_oopsy_form_set_description():
     form = AddOopsyForm({'description': 'Left mess',
                          'new_description': '',
                          'points': 3})
+    return form
+
+
+@pytest.fixture
+def add_oopsy_form_new_description():
+    """Returns an instance of AddOopsyForm with a new, custom description."""
+    form = AddOopsyForm({'description': 'Add new',
+                         'new_description': 'New description',
+                         'points': 3})
+    return form
+
+
+@pytest.fixture
+def oopsy_form_new_description_saved(add_oopsy_form_new_description, child):
+    """Returns a saved instance of the form with a new description."""
+    form = add_oopsy_form_new_description
+    obj = form.save(commit=False)
+    obj.owner = child
+    current_time = timezone.now()
+    obj.earned_on = current_time
+    # Save object to the database
+    form.save()
     return form
