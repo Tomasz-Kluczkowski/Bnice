@@ -46,3 +46,14 @@ def smiley_custom_description(child):
                                   points=5)
     custom_smiley.save()
     return custom_smiley
+
+
+@pytest.fixture
+def smileys_with_same_description(child):
+    # Create 5 Smiley objects with the same description.
+    for i in range(5):
+        custom_smiley = SmileyFactory(owner=child,
+                                      earned_on=timezone.now(),
+                                      description="Removed rubbish",
+                                      points=5)
+        custom_smiley.save()
