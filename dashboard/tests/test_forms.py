@@ -87,3 +87,16 @@ def test_add_smiley_form_adds_only_distinct_choices(smileys_with_same_descriptio
                         'Removed cutlery from dishwasher'),
                        ('Removed rubbish',
                         'Removed rubbish')]
+
+# Tests for Oopsy forms.
+
+@pytest.mark.django_db
+def test_add_oopsy_form_with_valid_data(add_oopsy_form_set_description):
+    form = add_oopsy_form_set_description
+    assert form.is_valid() is True
+    # Confirm manually set field attributes are ok.
+    assert form.fields['description'].help_text == 'Required'
+    assert form.fields['new_description'].help_text == (
+        'Required, Create a new description')
+    assert form.fields['points'].help_text == (
+        'Required, How many points to take away?')

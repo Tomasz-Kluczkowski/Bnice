@@ -37,6 +37,7 @@ def instanced_form_with_new_description(add_smiley_form_new_description, child):
     form.save()
     return form
 
+
 @pytest.fixture
 def smiley_custom_description(child):
     """Return a Smiley object with a custom description."""
@@ -57,3 +58,16 @@ def smileys_with_same_description(child):
                                       description="Removed rubbish",
                                       points=5)
         custom_smiley.save()
+
+
+# Oopsy form fixtures.
+
+
+@pytest.fixture
+def add_oopsy_form_set_description():
+    """Returns an instance of AddSmileyForm with a description from one of the
+    choices."""
+    form = AddOopsyForm({'description': 'Left mess',
+                         'new_description': '',
+                         'points': 3})
+    return form
