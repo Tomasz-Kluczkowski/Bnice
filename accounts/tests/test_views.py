@@ -5,8 +5,8 @@ pytestmark = pytest.mark.django_db
 
 
 def test_url_for_signup_page(client):
-        response = client.get('/accounts/signup/')
-        assert response.status_code == 200
+    response = client.get('/accounts/signup/')
+    assert response.status_code == 200
 
 
 def test_url_reverse_name_for_signup_page(client):
