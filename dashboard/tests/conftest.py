@@ -93,3 +93,25 @@ def oopsy_form_new_description_saved(add_oopsy_form_new_description, child):
     # Save object to the database
     form.save()
     return form
+
+
+@pytest.fixture
+def oopsy_custom_description(child):
+    """Return an Oopsy object with a custom description."""
+    custom_oopsy = OopsyFactory(owner=child,
+                                earned_on=timezone.now(),
+                                description='Was rude',
+                                points=5)
+    custom_oopsy.save()
+    return custom_oopsy
+
+
+@pytest.fixture
+def oopsies_with_same_description(child):
+    """Create 5 Oopsy objects with the same description."""
+    for i in range(5):
+        custom_oopsy = OopsyFactory(owner=child,
+                                    earned_on=timezone.now(),
+                                    description='Was rude',
+                                    points=5)
+        custom_oopsy.save()
