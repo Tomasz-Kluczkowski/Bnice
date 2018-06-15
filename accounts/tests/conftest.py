@@ -21,7 +21,12 @@ def parent_user_password(db, parent_user):
 
 @pytest.fixture()
 def alt_parent_user_password(db):
-    """Creates an alt parent website user with password."""
+    """Creates an alt parent website user with password.
+
+    This will be used as an alternative parent user to confirm only children
+    of currently logged in parent are shown in views.
+    """
+
     user = UserFactory(username='johny_c', name='Johny',
                        email='johny@dot.pl', is_parent=True,
                        is_child=False, profile_photo='')
@@ -32,10 +37,10 @@ def alt_parent_user_password(db):
 @pytest.fixture()
 def child_user(db):
     """Creates a child website user."""
-    create_child_user = UserFactory(username='nat_k', name='Natalie',
-                                    email='nat@dot.pl', is_parent=False,
-                                    is_child=True, profile_photo='')
-    return create_child_user
+    child_user = UserFactory(username='nat_k', name='Natalie',
+                             email='nat@dot.pl', is_parent=False,
+                             is_child=True, profile_photo='')
+    return child_user
 
 
 @pytest.fixture()

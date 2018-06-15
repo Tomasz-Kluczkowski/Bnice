@@ -42,3 +42,17 @@ def test_dashboard_page_with_not_matching_user_child(client,
     assert response.status_code == 200
     # Since child has different parent it should not be added to the queryset.
     assert len(response.context['child_list']) == 0
+
+
+def test_dashboard_page_child_logged_in(client, child_user, child):
+    """Test logging to dashboard page with a child added."""
+    username = 'nat_k'
+    password = 'password'
+    user = child_user
+    user.set_password(password)
+    user.save()
+    client.login(username=username, password=password)
+    response = client.get('/dashboard/')
+    assert response.status_code == 200
+    assert len(response.context['child_list']) == 1
+    assert response.context['child_list'][0] == child
