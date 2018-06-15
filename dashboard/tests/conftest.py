@@ -3,7 +3,9 @@ from django.utils import timezone
 
 from dashboard.forms import AddSmileyForm, AddOopsyForm
 from dashboard.tests.factories import SmileyFactory, OopsyFactory
-from accounts.tests.conftest import child, child_user, parent_user
+# Imports of fixtures will show as unused.
+from accounts.tests.conftest import (child, child_user, parent_user,
+                                     parent_user_password)
 
 
 @pytest.fixture

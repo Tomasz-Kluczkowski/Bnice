@@ -5,10 +5,18 @@ from accounts.tests.factories import UserFactory, ChildFactory
 @pytest.fixture()
 def parent_user(db):
     """Creates a parent website user."""
-    create_parent_user = UserFactory(username='tom_k', name='Tom',
-                                     email='tom@dot.pl', is_parent=True,
-                                     is_child=False, profile_photo='')
-    return create_parent_user
+    user = UserFactory(username='tom_k', name='Tom',
+                       email='tom@dot.pl', is_parent=True,
+                       is_child=False, profile_photo='')
+    return user
+
+
+@pytest.fixture()
+def parent_user_password(db, parent_user):
+    """Creates a parent website user with password."""
+    user = parent_user
+    user.set_password('password')
+    user.save()
 
 
 @pytest.fixture()
