@@ -1,5 +1,3 @@
-import pytest
-
 from dashboard.templatetags.dashboard_tags import set_var, get_model_name
 
 
