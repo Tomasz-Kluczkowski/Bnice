@@ -63,8 +63,9 @@ def test_add_smiley_form_adds_choices(smiley_custom_description,
 
 
 @pytest.mark.django_db
-def test_add_smiley_form_adds_only_distinct_choices(smileys_with_same_description,
-                                                    smiley_form_new_description_saved):
+def test_add_smiley_form_adds_only_distinct_choices(
+        smileys_with_same_description,
+        smiley_form_new_description_saved):
     # Confirm that the new description is added to the description choices
     # only once (we have 5 Smiley objects from smileys_with_same_description
     # fixture and one from the form.
@@ -83,6 +84,7 @@ def test_add_smiley_form_adds_only_distinct_choices(smileys_with_same_descriptio
                        ('Removed rubbish',
                         'Removed rubbish')]
     assert Smiley.objects.count() == 6
+
 
 # Tests for Oopsy forms.
 
@@ -126,7 +128,7 @@ def test_add_oopsy_form_standard_choices(oopsy_form_new_description_saved):
 
 @pytest.mark.django_db
 def test_add_oopsy_form_adds_choices(oopsy_custom_description,
-                                      oopsy_form_new_description_saved):
+                                     oopsy_form_new_description_saved):
     """Check if new description is added to the description field's choices."""
     # Create Smiley object with a custom description.
     form = oopsy_form_new_description_saved
@@ -146,8 +148,9 @@ def test_add_oopsy_form_adds_choices(oopsy_custom_description,
 
 
 @pytest.mark.django_db
-def test_add_oopsy_form_adds_only_distinct_choices(oopsies_with_same_description,
-                                                    oopsy_form_new_description_saved):
+def test_add_oopsy_form_adds_only_distinct_choices(
+        oopsies_with_same_description,
+        oopsy_form_new_description_saved):
     # Confirm that the new description is added to the description choices
     # only once (we have 5 Oopsy objects from oopsies_with_same_description
     # fixture and one from the form.
