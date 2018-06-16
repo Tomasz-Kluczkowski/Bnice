@@ -6,7 +6,8 @@ from accounts.models import User, Child
 help_dict = {
     "password1": '8 characters or more & not numerical only.',
     "required": "Required",
-    "profile_photo": 'Image file, size: 500x500 px, jpeg, png or gif type only.',
+    "profile_photo":
+        'Image file, size: 500x500 px, jpeg, png or gif type only.',
     'star_points': 'Required, How many points to earn a star?',
 }
 
@@ -24,7 +25,8 @@ class UserCreateForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'profile_photo', 'password1', 'password2')
+        fields = ('username', 'email', 'profile_photo', 'password1',
+                  'password2')
         help_texts = {
             'email': help_dict["required"],
             'profile_photo': help_dict["profile_photo"],
@@ -82,6 +84,6 @@ class ChildCreateForm(UserCreationForm):
         user = super().save(commit=False)
         user.is_child = True
         user.save()
-        child = Child.objects.create(user=user, parent=self.current_user,
-                                     star_points=self.star_points)
+        Child.objects.create(user=user, parent=self.current_user,
+                             star_points=self.star_points)
         return user
