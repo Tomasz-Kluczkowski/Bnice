@@ -1,8 +1,8 @@
 import pytest
 from accounts.models import User
 
-from dashboard.views import DashboardPage
-from django.urls import reverse
+# from dashboard.views import DashboardPage
+# from django.urls import reverse
 
 # Mark all tests as requiring database.
 pytestmark = pytest.mark.django_db
@@ -20,7 +20,7 @@ def test_dashboard_page_parent_with_no_child(client, parent_user_password):
 
 
 def test_dashboard_page_parent_with_child(client, parent_user_password,
-                                                  child):
+                                          child):
     """Test logging to dashboard page with a child added."""
     username = 'tom_k'
     password = 'password'
