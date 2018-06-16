@@ -25,7 +25,8 @@ class StarAwarding:
             Django queryset of filtered Oopsy objects
             (for current child in view).
         star_points : int
-            Attribute of Child object. Amount of points required to earn a star.
+            Attribute of Child object. Amount of points required to earn a
+            star.
         """
         self.smileys = smileys
         self.oopsies = oopsies
@@ -75,8 +76,8 @@ class StarAwarding:
     def get_sum_action_points(self, actions):
         """Get total number of points for action collection.
 
-        Calculate sum of positive or negative points collected by child based on
-        action type and owner.
+        Calculate sum of positive or negative points collected by child based
+        on action type and owner.
 
         Parameters
         ----------
@@ -100,7 +101,8 @@ class StarAwarding:
             # Action not claimed.
             elif not action.claimed:
                 action_points += action.points
-            # Always add remaining points no matter if action is claimed or not.
+            # Always add remaining points no matter if action is claimed or
+            # not.
             action_points += action.points_remaining
 
         return action_points
@@ -133,8 +135,8 @@ class StarAwarding:
         if self.total_points >= self.star_points:
             # Make sure all oopsies are consumed.
             self.claim_all_oopsies()
-            # Start counting having the negative points as the initial value and
-            # increase it until points_counter >= star_points.
+            # Start counting having the negative points as the initial value
+            # and increase it until points_counter >= star_points.
             points_counter = 0
             points_counter -= self.oopsy_points
             # Now iterate over smileys marking all as claimed until a star
