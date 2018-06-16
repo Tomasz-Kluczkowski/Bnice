@@ -1,5 +1,4 @@
 from django.db import models
-from django.conf import settings
 from django.urls import reverse
 from accounts.models import Child
 
@@ -45,5 +44,3 @@ class Smiley(Action):
 
 class Oopsy(Action):
     pass
-
-
