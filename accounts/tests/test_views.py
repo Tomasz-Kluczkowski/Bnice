@@ -34,4 +34,3 @@ def test_login_view_uses_correct_template(client):
     response = client.get(reverse('accounts:login'))
     templates = response.templates
     assert templates[0].name == 'accounts/login.html'
-
