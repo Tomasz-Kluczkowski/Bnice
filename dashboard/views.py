@@ -1,7 +1,7 @@
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth import login
+# from django.contrib.auth import login
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from accounts.models import Child, User
@@ -70,7 +70,8 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         parent = self.kwargs["parent"]
         if current_user.is_parent and current_user.username == parent:
             return True
-        elif current_user.is_child and current_user.pk == int(self.kwargs["pk"]):
+        elif current_user.is_child and current_user.pk == int(
+                self.kwargs["pk"]):
             return True
         else:
             return False
