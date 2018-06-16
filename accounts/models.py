@@ -9,7 +9,8 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, null=True)
     is_parent = models.BooleanField(default=False)
     is_child = models.BooleanField(default=False)
-    profile_photo = models.ImageField(upload_to='profiles/%Y/%m/%d', blank=True)
+    profile_photo = models.ImageField(upload_to='profiles/%Y/%m/%d',
+                                      blank=True)
 
     def __str__(self):
         return self.username
