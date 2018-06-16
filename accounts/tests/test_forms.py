@@ -1,6 +1,6 @@
 import pytest
 
-from accounts.models import User, Child
+from accounts.models import Child
 from accounts.forms import UserCreateForm, ChildCreateForm
 
 
