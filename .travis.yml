@@ -1,10 +1,30 @@
-language:
-  python
+#language:
+#  python
+#python:
+#  - "3.6"
+#install:
+#  pip install tox-travis
+#script:
+#  - coverage erase
+#  - pytest --cov
+#
+#after_success:
+#  coveralls
+
+language: python
 python:
-  - "3.6"
+- "3.6"
+# setup environment
+env:
+- DJANGO_VERSION=2.0.3
+- DJANGO_SETTINGS_MODULE='Bnice.test_settings'
+# install dependencies
 install:
-  pip install tox-travis
+- pip install -r requirements.txt
+# run test scripts
 script:
-  tox
+  - coverage erase
+  - pytest --cov
+# run coveralls after successful tests
 after_success:
-  coveralls
+- coveralls
