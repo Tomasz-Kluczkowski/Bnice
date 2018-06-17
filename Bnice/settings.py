@@ -88,7 +88,7 @@ STATICFILES_FINDERS = (
 
 STATIC_PRECOMPILER_COMPILERS = (
     ('static_precompiler.compilers.SCSS', {
-        "load_paths": [os.path.join(BASE_DIR, "assets", "sass")],
+        "load_paths": [os.path.join(BASE_DIR, "assets", "_sass")],
         "precision": 8,
         "output_style": "compressed",
     }),
