@@ -109,3 +109,4 @@ venv.bak/
 /assets/.sass-cache/
 /_SOURCES/
 /media/
+/static/
