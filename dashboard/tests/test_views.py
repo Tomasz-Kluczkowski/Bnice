@@ -1,5 +1,5 @@
 import pytest
-from accounts.models import User
+from accounts.models import User, Child
 
 # from dashboard.views import DashboardPage
 # from django.urls import reverse
@@ -20,12 +20,14 @@ def test_dashboard_page_parent_with_no_child(client, parent_user_password):
 
 
 def test_dashboard_page_parent_with_child(client, parent_user_password,
-                                          child):
-    """Test logging to dashboard page with a child added."""
+                                          child, alt_child):
+    """Test logging to dashboard page with a child added.
+    Confirms only child who's parent is logged in is in the child_list."""
     username = 'tom_k'
     password = 'password'
     client.login(username=username, password=password)
     response = client.get('/dashboard/')
+    assert Child.objects.count() == 2
     assert response.status_code == 200
     assert len(response.context['child_list']) == 1
     assert response.context['child_list'][0] == child
@@ -34,7 +36,8 @@ def test_dashboard_page_parent_with_child(client, parent_user_password,
 def test_dashboard_page_with_not_matching_user_child(client,
                                                      alt_parent_user_password,
                                                      child):
-    """Tests if child_list restricts children by checking parent."""
+    """Tests if get_queryset restricts children in child_list by checking
+    parent."""
     username = 'johny_c'
     password = 'password'
     client.login(username=username, password=password)
@@ -44,8 +47,9 @@ def test_dashboard_page_with_not_matching_user_child(client,
     assert len(response.context['child_list']) == 0
 
 
-def test_dashboard_page_child_logged_in(client, child_user, child):
-    """Test logging to dashboard page with a child added."""
+def test_dashboard_page_child_logged_in(client, child_user, child, alt_child):
+    """Test logging to dashboard page as a child user. child_list should
+    contain only the logged in child user."""
     username = 'nat_k'
     password = 'password'
     user = child_user
@@ -53,6 +57,7 @@ def test_dashboard_page_child_logged_in(client, child_user, child):
     user.save()
     client.login(username=username, password=password)
     response = client.get('/dashboard/')
+    assert Child.objects.count() == 2
     assert response.status_code == 200
     assert len(response.context['child_list']) == 1
     assert response.context['child_list'][0] == child
