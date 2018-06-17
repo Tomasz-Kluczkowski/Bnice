@@ -1,4 +1,5 @@
 # B.Nice
+[![Build Status](https://travis-ci.org/Tomasz-Kluczkowski/Bnice.svg?branch=master)](https://travis-ci.org/Tomasz-Kluczkowski/Bnice)
 
 More You, Less Chores - Get your child to help you at home
 
