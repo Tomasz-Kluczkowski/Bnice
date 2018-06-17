@@ -37,15 +37,33 @@ def alt_parent_user_password(db):
 @pytest.fixture()
 def child_user(db):
     """Creates a child website user."""
-    child_user = UserFactory(username='nat_k', name='Natalie',
-                             email='nat@dot.pl', is_parent=False,
-                             is_child=True, profile_photo='')
-    return child_user
+    user = UserFactory(username='nat_k', name='Natalie',
+                       email='nat@dot.pl', is_parent=False,
+                       is_child=True, profile_photo='')
+    return user
+
+
+@pytest.fixture()
+def alt_child_user(db):
+    """Creates alternate child website user."""
+    user = UserFactory(username='sophie_m', name='Sophie',
+                       email='sm@dot.pl', is_parent=False,
+                       is_child=True, profile_photo='')
+    return user
 
 
 @pytest.fixture()
 def child(db, child_user, parent_user):
     """Creates a Child object in the database."""
     child_obj = ChildFactory(user=child_user, parent=parent_user,
+                             star_points=15)
+    return child_obj
+
+
+@pytest.fixture()
+def alt_child(db, alt_child_user, alt_parent_user_password):
+    """Creates a Child object with an alt parent."""
+    child_obj = ChildFactory(user=alt_child_user,
+                             parent=alt_parent_user_password,
                              star_points=15)
     return child_obj
