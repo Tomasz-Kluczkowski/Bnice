@@ -12,6 +12,7 @@ before_script:
   - gem install sass
 # run test scripts
 script:
+  - python manage.py migrate
   - python manage.py compilestatic
   - coverage erase
   - pytest --cov
