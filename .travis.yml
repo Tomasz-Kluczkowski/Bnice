@@ -7,8 +7,12 @@ env:
 # install dependencies
 install:
   - pip install -r requirements.txt
+# Get sass ready
+before_script:
+  - gem install sass
 # run test scripts
 script:
+  - python manage.py compilestatic
   - coverage erase
   - pytest --cov
 # run coveralls after successful tests
