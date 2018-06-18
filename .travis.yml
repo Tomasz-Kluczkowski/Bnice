@@ -13,7 +13,6 @@ before_script:
 # run test scripts
 script:
   - python manage.py migrate
-  - python manage.py compilestatic
   - coverage erase
   - pytest --cov
 # run coveralls after successful tests
