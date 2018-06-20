@@ -139,6 +139,24 @@ def test_child_detail_view_child_logged_in(client, child_user_password,
     assert response.context['oopsies'][0] == oopsy_custom_description
 
 
+def test_child_detail_view_test_func_parent(client, child,
+                                            parent_user_password):
+    """Test test_func when trying to access other user's child data when logged
+    in as a parent."""
+    username = 'tom_k'
+    password = 'password'
+    client.login(username=username, password=password)
+    response = client.get('/dashboard/child/detail/jeffrey/gonzo/1')
+    assert response.status_code == 302
 
 
+def test_child_detail_view_test_func_child(client, child,
+                                           child_user_password):
+    """Test test_func when trying to access other child's data when logged in
+    as a child."""
+    username = 'nat_k'
+    password = 'password'
+    client.login(username=username, password=password)
+    response = client.get('/dashboard/child/detail/jeffrey/gonzo/2')
+    assert response.status_code == 302
 
