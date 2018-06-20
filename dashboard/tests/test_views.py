@@ -7,6 +7,8 @@ from accounts.models import User, Child
 # Mark all tests as requiring database.
 pytestmark = pytest.mark.django_db
 
+# Tests of DashBoardPage view.
+
 
 def test_dashboard_page_parent_with_no_child(client, parent_user_password):
     """Test logging to dashboard page with no children added."""
@@ -61,3 +63,15 @@ def test_dashboard_page_child_logged_in(client, child_user, child, alt_child):
     assert response.status_code == 200
     assert len(response.context['child_list']) == 1
     assert response.context['child_list'][0] == child
+
+
+# Tests of CreateChildPage view.
+
+def test_create_child_page_view(client, parent_user_password):
+    assert User.objects.count() == 1
+    username = 'tom_k'
+    password = 'password'
+    client.login(username=username, password=password)
+    response = client.get('/dashboard/add/child/')
+    assert response.status_code == 200
+
