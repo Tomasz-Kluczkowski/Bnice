@@ -89,6 +89,8 @@ def test_create_child_page_view(client, parent_user):
 # Tests of ChildDetail view.
 
 def test_child_detail_view(client, child, parent_user_password):
+    """Confirm view is properly displayed for a logged in parent user who's
+    child we want to see."""
     username = 'tom_k'
     password = 'password'
     assert User.objects.count() == 2
@@ -98,4 +100,45 @@ def test_child_detail_view(client, child, parent_user_password):
     assert response.status_code == 200
     templates = response.templates
     assert templates[0].name == 'dashboard/child_detail.html'
+
+
+def test_child_detail_view_context_data(client, child, parent_user_password,
+                                        smiley_custom_description,
+                                        oopsy_custom_description):
+    """Confirm correct context data is set for the view if parent user is
+    logged in."""
+    username = 'tom_k'
+    password = 'password'
+    assert User.objects.count() == 2
+    assert Child.objects.count() == 1
+    client.login(username=username, password=password)
+    response = client.get('/dashboard/child/detail/tom_k/nat_k/1')
+    assert response.status_code == 200
+    assert len(response.context['smileys']) == 1
+    assert len(response.context['oopsies']) == 1
+    assert response.context['smileys'][0] == smiley_custom_description
+    assert response.context['oopsies'][0] == oopsy_custom_description
+
+
+def test_child_detail_view_child_logged_in(client, child_user_password,
+                                           smiley_custom_description,
+                                           oopsy_custom_description):
+    """Confirm correct context data is set for the view if child user is
+    logged in."""
+    username = 'nat_k'
+    password = 'password'
+    assert User.objects.count() == 2
+    assert Child.objects.count() == 1
+    client.login(username=username, password=password)
+    response = client.get('/dashboard/child/detail/tom_k/nat_k/1')
+    assert response.status_code == 200
+    assert response.context['parent'] == 'tom_k'
+    assert len(response.context['smileys']) == 1
+    assert len(response.context['oopsies']) == 1
+    assert response.context['smileys'][0] == smiley_custom_description
+    assert response.context['oopsies'][0] == oopsy_custom_description
+
+
+
+
 
