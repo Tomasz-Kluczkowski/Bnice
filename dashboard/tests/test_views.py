@@ -67,11 +67,17 @@ def test_dashboard_page_child_logged_in(client, child_user, child, alt_child):
 
 # Tests of CreateChildPage view.
 
-def test_create_child_page_view(client, parent_user_password):
-    assert User.objects.count() == 1
+def test_create_child_page_view(client, parent_user):
     username = 'tom_k'
     password = 'password'
+    user = parent_user
+    user.set_password(password)
+    user.save()
+    assert User.objects.count() == 1
     client.login(username=username, password=password)
     response = client.get('/dashboard/add/child/')
     assert response.status_code == 200
+    # Comfirm initial value for parent is passed using get_initial method.
+    form = response.context['form']
+    assert form.current_user == user
 
