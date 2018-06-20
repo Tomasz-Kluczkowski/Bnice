@@ -159,4 +159,3 @@ def test_child_detail_view_test_func_child(client, child,
     client.login(username=username, password=password)
     response = client.get('/dashboard/child/detail/jeffrey/gonzo/2')
     assert response.status_code == 302
-
