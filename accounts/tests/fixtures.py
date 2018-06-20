@@ -67,3 +67,4 @@ def alt_child(db, alt_child_user, alt_parent_user_password):
                              parent=alt_parent_user_password,
                              star_points=15)
     return child_obj
+

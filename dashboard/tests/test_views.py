@@ -19,6 +19,8 @@ def test_dashboard_page_parent_with_no_child(client, parent_user_password):
     response = client.get('/dashboard/')
     assert response.status_code == 200
     assert len(response.context['child_list']) == 0
+    templates = response.templates
+    assert templates[0].name == 'dashboard/dashboard.html'
 
 
 def test_dashboard_page_parent_with_child(client, parent_user_password,
@@ -80,4 +82,20 @@ def test_create_child_page_view(client, parent_user):
     # Comfirm initial value for parent is passed using get_initial method.
     form = response.context['form']
     assert form.current_user == user
+    templates = response.templates
+    assert templates[0].name == 'dashboard/add_child.html'
+
+
+# Tests of ChildDetail view.
+
+def test_child_detail_view(client, child, parent_user_password):
+    username = 'tom_k'
+    password = 'password'
+    assert User.objects.count() == 2
+    assert Child.objects.count() == 1
+    client.login(username=username, password=password)
+    response = client.get('/dashboard/child/detail/tom_k/nat_k/1')
+    assert response.status_code == 200
+    templates = response.templates
+    assert templates[0].name == 'dashboard/child_detail.html'
 
