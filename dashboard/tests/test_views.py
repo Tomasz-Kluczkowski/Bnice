@@ -163,5 +163,9 @@ def test_add_action_view_context(client, child, alt_child,
     assert response.context['child'] == child
 
 
-# def test_add_action_test_func(client, parent_user_password):
-#     """"""
+def test_add_action_test_func(client, parent_user_password):
+    """Test test_func when trying to access other user's child data when logged
+    in as a parent."""
+    user_logger(client, 'tom_k')
+    response = client.get('/dashboard/child/add_smiley/jeffrey/nat_k/1')
+    assert response.status_code == 302
