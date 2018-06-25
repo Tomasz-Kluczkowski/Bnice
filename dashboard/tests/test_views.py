@@ -84,6 +84,8 @@ def test_create_child_page_view(client, parent_user):
 
 
 # Tests of ChildDetail view.
+    """Confirm children of the parent user logged in get passed as context
+    data."""
 
 def test_child_detail_view(client, child, parent_user_password):
     """Confirm view is properly displayed for a logged in parent user who's
@@ -147,10 +149,19 @@ def test_child_detail_view_test_func_child(client, child,
     response = client.get('/dashboard/child/detail/jeffrey/gonzo/2')
     assert response.status_code == 302
 
-#
-# # Tests of AddAction view.
-#
-# def test_add_action_view_context(clinet, child, parent_user_password):
-#     """Confirm children of the parent user logged in get passed as context
-#     data."""
 
+# Tests of AddAction view.
+
+def test_add_action_view_context(client, child, alt_child,
+                                 parent_user_password):
+    """Confirm only children of the parent user logged in get passed as context
+    data. (alt_child should be filtered out)."""
+    user_logger(client, 'tom_k')
+    response = client.get('/dashboard/child/add_smiley/tom_k/nat_k/1')
+    assert response.status_code == 200
+    assert Child.objects.count() == 2
+    assert response.context['child'] == child
+
+
+# def test_add_action_test_func(client, parent_user_password):
+#     """"""
