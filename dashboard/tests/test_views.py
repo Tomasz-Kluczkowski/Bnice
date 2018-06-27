@@ -282,6 +282,15 @@ def test_get_request(client, parent_user_password):
     assert templates[0].name == 'dashboard/user_update.html'
 
 
+def test_test_func_redirects(client, child_user_password, parent_user_password):
+    """Confirm test_func redirects to login when updating other user's
+    profile."""
+    user_logger(client, 'nat_k')
+    response = client.get('/dashboard/user/update/2')
+    assert response.status_code == 302
+    assert response.url == '/accounts/login/?next=/dashboard/user/update/2'
+
+
 def test_updating_user_data(client, parent_user):
     password = 'password'
     form_data = {'username': 'test_username',
@@ -327,4 +336,7 @@ def test_updating_child_data(client, child_user):
     assert user.username == 'test_username'
     assert user.name == 'test_name'
     assert user.email == 'testemail@email.com'
+
+
+# Test ChildDelete view.
 
