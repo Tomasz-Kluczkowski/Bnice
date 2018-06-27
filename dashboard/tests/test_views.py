@@ -83,10 +83,10 @@ def test_create_child_page_view(client, parent_user):
     templates = response.templates
     assert templates[0].name == 'dashboard/add_child.html'
 
-
-# Tests of ChildDetail view.
+    # Tests of ChildDetail view.
     """Confirm children of the parent user logged in get passed as context
     data."""
+
 
 def test_child_detail_view(client, child, parent_user_password):
     """Confirm view is properly displayed for a logged in parent user who's
@@ -271,4 +271,60 @@ def test_form_valid_oopsy_custom_description(client, child, parent_user):
     assert oopsy.description == 'Testing'
     assert oopsy.points == 5
 
+
+# Tests for UserUpdate view.
+
+def test_get_request(client, parent_user_password):
+    user_logger(client, 'tom_k')
+    response = client.get('/dashboard/user/update/1')
+    assert response.status_code == 200
+    templates = response.templates
+    assert templates[0].name == 'dashboard/user_update.html'
+
+
+def test_updating_user_data(client, parent_user):
+    password = 'password'
+    form_data = {'username': 'test_username',
+                 'email': 'testemail@email.com'}
+    user = parent_user
+    user.set_password(password)
+    user.save()
+    user_logger(client, 'tom_k')
+    assert User.objects.count() == 1
+    response = client.post('/dashboard/user/update/1', form_data)
+    assert response.status_code == 302
+    assert response.url == '/dashboard/'
+    user.refresh_from_db()
+    assert user.username == 'test_username'
+    assert user.email == 'testemail@email.com'
+
+# Tests for ChildUpdate view.
+
+
+def test_get_context_data(client, child, child_user_password):
+    user_logger(client, 'nat_k')
+    response = client.get('/dashboard/child/update/1')
+    assert response.context['parent'] == 'tom_k'
+    assert response.status_code == 200
+    templates = response.templates
+    assert templates[0].name == 'dashboard/user_update.html'
+
+
+def test_updating_child_data(client, child_user):
+    password = 'password'
+    form_data = {'username': 'test_username',
+                 'name': 'test_name',
+                 'email': 'testemail@email.com'}
+    user = child_user
+    user.set_password(password)
+    user.save()
+    user_logger(client, 'nat_k')
+    assert User.objects.count() == 1
+    response = client.post('/dashboard/child/update/1', form_data)
+    assert response.status_code == 302
+    assert response.url == '/dashboard/'
+    user.refresh_from_db()
+    assert user.username == 'test_username'
+    assert user.name == 'test_name'
+    assert user.email == 'testemail@email.com'
 
