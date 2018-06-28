@@ -192,123 +192,118 @@ class TestChildDetail:
 
 # Tests of AddAction view.
 
-def test_add_action_view_context(client, child, alt_child,
-                                 parent_user_password):
-    """Confirm only children of the parent user logged in get passed as context
-    data. (alt_child should be filtered out)."""
-    user_logger(client, 'tom_k')
-    response = client.get('/dashboard/child/add_smiley/tom_k/nat_k/1')
-    assert response.status_code == 200
-    assert Child.objects.count() == 2
-    assert response.context['child'] == child
+class TestAddAction:
 
+    def test_add_action_view_context(self, client, child, alt_child,
+                                     parent_user_password):
+        """Confirm only children of the parent user logged in get passed as context
+        data. (alt_child should be filtered out)."""
+        user_logger(client, 'tom_k')
+        response = client.get('/dashboard/child/add_smiley/tom_k/nat_k/1')
+        assert response.status_code == 200
+        assert Child.objects.count() == 2
+        assert response.context['child'] == child
 
-def test_add_action_test_func(client, parent_user_password):
-    """Test test_func when trying to access other user's child data when logged
-    in as a parent."""
-    user_logger(client, 'tom_k')
-    response = client.get('/dashboard/child/add_smiley/jeffrey/nat_k/1')
-    assert response.status_code == 302
+    def test_add_action_test_func(self, client, parent_user_password):
+        """Test test_func when trying to access other user's child data when logged
+        in as a parent."""
+        user_logger(client, 'tom_k')
+        response = client.get('/dashboard/child/add_smiley/jeffrey/nat_k/1')
+        assert response.status_code == 302
 
+    def test_form_valid_smiley(self, client, child, parent_user):
+        """Confirm Smiley object gets attributes owner and earned_on added
+        when form is valid."""
+        password = 'password'
+        form_data = {'description': 'Folded washing',
+                     'new_description': '',
+                     'points': 5}
+        user = parent_user
+        user.set_password(password)
+        user.save()
+        user_logger(client, 'tom_k')
+        response = client.post('/dashboard/child/add_smiley/tom_k/nat_k/1',
+                               form_data)
+        assert response.status_code == 302
+        assert response.url == '/dashboard/child/detail/tom_k/nat_k/1'
+        assert Smiley.objects.count() == 1
+        smiley = Smiley.objects.last()
+        assert smiley.owner == child
+        assert smiley.claimed is False
+        assert smiley.points_remaining == 0
+        assert smiley.description == 'Folded washing'
+        assert smiley.points == 5
 
-def test_form_valid_smiley(client, child, parent_user):
-    """Confirm Smiley object gets attributes owner and earned_on added
-    when form is valid."""
-    password = 'password'
-    form_data = {'description': 'Folded washing',
-                 'new_description': '',
-                 'points': 5}
-    user = parent_user
-    user.set_password(password)
-    user.save()
-    user_logger(client, 'tom_k')
-    response = client.post('/dashboard/child/add_smiley/tom_k/nat_k/1',
-                           form_data)
+    def test_form_valid_smiley_custom_description(self, client,
+                                                  child, parent_user):
+        """Confirm Smiley object gets attributes owner and earned_on added
+        when form is valid."""
+        password = 'password'
+        form_data = {'description': 'Add new',
+                     'new_description': 'Testing',
+                     'points': 5}
+        user = parent_user
+        user.set_password(password)
+        user.save()
+        user_logger(client, 'tom_k')
+        response = client.post('/dashboard/child/add_smiley/tom_k/nat_k/1',
+                               form_data)
+        assert response.status_code == 302
+        assert response.url == '/dashboard/child/detail/tom_k/nat_k/1'
+        assert Smiley.objects.count() == 1
+        smiley = Smiley.objects.last()
+        assert smiley.owner == child
+        assert smiley.claimed is False
+        assert smiley.points_remaining == 0
+        assert smiley.description == 'Testing'
+        assert smiley.points == 5
 
-    assert response.status_code == 302
-    assert response.url == '/dashboard/child/detail/tom_k/nat_k/1'
-    assert Smiley.objects.count() == 1
-    smiley = Smiley.objects.last()
-    assert smiley.owner == child
-    assert smiley.claimed is False
-    assert smiley.points_remaining == 0
-    assert smiley.description == 'Folded washing'
-    assert smiley.points == 5
+    def test_form_valid_oopsy(self, client, child, parent_user):
+        """Confirm Oopsy object gets attributes owner and earned_on added
+        when form is valid."""
+        password = 'password'
+        form_data = {'description': 'Was lying',
+                     'new_description': '',
+                     'points': 5}
+        user = parent_user
+        user.set_password(password)
+        user.save()
+        user_logger(client, 'tom_k')
+        response = client.post('/dashboard/child/add_oopsy/tom_k/nat_k/1',
+                               form_data)
+        assert response.status_code == 302
+        assert response.url == '/dashboard/child/detail/tom_k/nat_k/1'
+        assert Oopsy.objects.count() == 1
+        oopsy = Oopsy.objects.last()
+        assert oopsy.owner == child
+        assert oopsy.claimed is False
+        assert oopsy.points_remaining == 0
+        assert oopsy.description == 'Was lying'
+        assert oopsy.points == 5
 
-
-def test_form_valid_smiley_custom_description(client, child, parent_user):
-    """Confirm Smiley object gets attributes owner and earned_on added
-    when form is valid."""
-    password = 'password'
-    form_data = {'description': 'Add new',
-                 'new_description': 'Testing',
-                 'points': 5}
-    user = parent_user
-    user.set_password(password)
-    user.save()
-    user_logger(client, 'tom_k')
-    response = client.post('/dashboard/child/add_smiley/tom_k/nat_k/1',
-                           form_data)
-
-    assert response.status_code == 302
-    assert response.url == '/dashboard/child/detail/tom_k/nat_k/1'
-    assert Smiley.objects.count() == 1
-    smiley = Smiley.objects.last()
-    assert smiley.owner == child
-    assert smiley.claimed is False
-    assert smiley.points_remaining == 0
-    assert smiley.description == 'Testing'
-    assert smiley.points == 5
-
-
-def test_form_valid_oopsy(client, child, parent_user):
-    """Confirm Oopsy object gets attributes owner and earned_on added
-    when form is valid."""
-    password = 'password'
-    form_data = {'description': 'Was lying',
-                 'new_description': '',
-                 'points': 5}
-    user = parent_user
-    user.set_password(password)
-    user.save()
-    user_logger(client, 'tom_k')
-    response = client.post('/dashboard/child/add_oopsy/tom_k/nat_k/1',
-                           form_data)
-
-    assert response.status_code == 302
-    assert response.url == '/dashboard/child/detail/tom_k/nat_k/1'
-    assert Oopsy.objects.count() == 1
-    oopsy = Oopsy.objects.last()
-    assert oopsy.owner == child
-    assert oopsy.claimed is False
-    assert oopsy.points_remaining == 0
-    assert oopsy.description == 'Was lying'
-    assert oopsy.points == 5
-
-
-def test_form_valid_oopsy_custom_description(client, child, parent_user):
-    """Confirm Oopsy object gets attributes owner and earned_on added
-    when form is valid."""
-    password = 'password'
-    form_data = {'description': 'Add new',
-                 'new_description': 'Testing',
-                 'points': 5}
-    user = parent_user
-    user.set_password(password)
-    user.save()
-    user_logger(client, 'tom_k')
-    response = client.post('/dashboard/child/add_oopsy/tom_k/nat_k/1',
-                           form_data)
-
-    assert response.status_code == 302
-    assert response.url == '/dashboard/child/detail/tom_k/nat_k/1'
-    assert Oopsy.objects.count() == 1
-    oopsy = Oopsy.objects.last()
-    assert oopsy.owner == child
-    assert oopsy.claimed is False
-    assert oopsy.points_remaining == 0
-    assert oopsy.description == 'Testing'
-    assert oopsy.points == 5
+    def test_form_valid_oopsy_custom_description(self, client, child,
+                                                 parent_user):
+        """Confirm Oopsy object gets attributes owner and earned_on added
+        when form is valid."""
+        password = 'password'
+        form_data = {'description': 'Add new',
+                     'new_description': 'Testing',
+                     'points': 5}
+        user = parent_user
+        user.set_password(password)
+        user.save()
+        user_logger(client, 'tom_k')
+        response = client.post('/dashboard/child/add_oopsy/tom_k/nat_k/1',
+                               form_data)
+        assert response.status_code == 302
+        assert response.url == '/dashboard/child/detail/tom_k/nat_k/1'
+        assert Oopsy.objects.count() == 1
+        oopsy = Oopsy.objects.last()
+        assert oopsy.owner == child
+        assert oopsy.claimed is False
+        assert oopsy.points_remaining == 0
+        assert oopsy.description == 'Testing'
+        assert oopsy.points == 5
 
 
 # Tests for UserUpdate view.
