@@ -126,68 +126,68 @@ class TestCreateChildPage:
 
 # Tests of ChildDetail view.
 
+class TestChildDetail:
 
-def test_child_detail_view(client, child, parent_user_password):
-    """Confirm view is properly displayed for a logged in parent user who's
-    child we want to see."""
-    user_logger(client, 'tom_k')
-    assert User.objects.count() == 2
-    assert Child.objects.count() == 1
-    response = client.get('/dashboard/child/detail/tom_k/nat_k/1')
-    assert response.status_code == 200
-    templates = response.templates
-    assert templates[0].name == 'dashboard/child_detail.html'
+    def test_http_get_with_correct_parent(self, client,
+                                          child, parent_user_password):
+        """Confirm view is properly displayed for a logged in parent user who's
+        child we want to see."""
+        user_logger(client, 'tom_k')
+        assert User.objects.count() == 2
+        assert Child.objects.count() == 1
+        response = client.get('/dashboard/child/detail/tom_k/nat_k/1')
+        assert response.status_code == 200
+        templates = response.templates
+        assert templates[0].name == 'dashboard/child_detail.html'
 
+    def test_get_context_data_parent_user(self, client, child,
+                                          parent_user_password,
+                                          smiley_custom_description,
+                                          oopsy_custom_description):
+        """Confirm correct context data is set for the view if parent user is
+        logged in."""
+        user_logger(client, 'tom_k')
+        assert User.objects.count() == 2
+        assert Child.objects.count() == 1
+        response = client.get('/dashboard/child/detail/tom_k/nat_k/1')
+        assert response.status_code == 200
+        assert len(response.context['smileys']) == 1
+        assert len(response.context['oopsies']) == 1
+        assert response.context['smileys'][0] == smiley_custom_description
+        assert response.context['oopsies'][0] == oopsy_custom_description
 
-def test_child_detail_view_context_data(client, child, parent_user_password,
-                                        smiley_custom_description,
-                                        oopsy_custom_description):
-    """Confirm correct context data is set for the view if parent user is
-    logged in."""
-    user_logger(client, 'tom_k')
-    assert User.objects.count() == 2
-    assert Child.objects.count() == 1
-    response = client.get('/dashboard/child/detail/tom_k/nat_k/1')
-    assert response.status_code == 200
-    assert len(response.context['smileys']) == 1
-    assert len(response.context['oopsies']) == 1
-    assert response.context['smileys'][0] == smiley_custom_description
-    assert response.context['oopsies'][0] == oopsy_custom_description
+    def test_get_context_data_child_user(self, client,
+                                         child_user_password,
+                                         smiley_custom_description,
+                                         oopsy_custom_description):
+        """Confirm correct context data is set for the view if child user is
+        logged in."""
+        user_logger(client, 'nat_k')
+        assert User.objects.count() == 2
+        assert Child.objects.count() == 1
+        response = client.get('/dashboard/child/detail/tom_k/nat_k/1')
+        assert response.status_code == 200
+        assert response.context['parent'] == 'tom_k'
+        assert len(response.context['smileys']) == 1
+        assert len(response.context['oopsies']) == 1
+        assert response.context['smileys'][0] == smiley_custom_description
+        assert response.context['oopsies'][0] == oopsy_custom_description
 
+    def test_test_func_redirects_parent_user(self, client, child,
+                                             parent_user_password):
+        """Test test_func redirects when trying to access other user's child
+        data when logged in as a parent."""
+        user_logger(client, 'tom_k')
+        response = client.get('/dashboard/child/detail/jeffrey/gonzo/1')
+        assert response.status_code == 302
 
-def test_child_detail_view_child_logged_in(client, child_user_password,
-                                           smiley_custom_description,
-                                           oopsy_custom_description):
-    """Confirm correct context data is set for the view if child user is
-    logged in."""
-    user_logger(client, 'nat_k')
-    assert User.objects.count() == 2
-    assert Child.objects.count() == 1
-    response = client.get('/dashboard/child/detail/tom_k/nat_k/1')
-    assert response.status_code == 200
-    assert response.context['parent'] == 'tom_k'
-    assert len(response.context['smileys']) == 1
-    assert len(response.context['oopsies']) == 1
-    assert response.context['smileys'][0] == smiley_custom_description
-    assert response.context['oopsies'][0] == oopsy_custom_description
-
-
-def test_child_detail_view_test_func_parent(client, child,
-                                            parent_user_password):
-    """Test test_func when trying to access other user's child data when logged
-    in as a parent."""
-    user_logger(client, 'tom_k')
-    response = client.get('/dashboard/child/detail/jeffrey/gonzo/1')
-    assert response.status_code == 302
-
-
-def test_child_detail_view_test_func_child(client, child,
-                                           child_user_password):
-    """Test test_func when trying to access other child's data when logged in
-    as a child."""
-    user_logger(client, 'nat_k')
-    response = client.get('/dashboard/child/detail/jeffrey/gonzo/2')
-    assert response.status_code == 302
+    def test_test_func_redirects_child_user(self, client, child,
+                                            child_user_password):
+        """Test test_func redirects when trying to access other child's data
+        when logged in as a child."""
+        user_logger(client, 'nat_k')
+        response = client.get('/dashboard/child/detail/jeffrey/gonzo/2')
+        assert response.status_code == 302
 
 
 # Tests of AddAction view.
