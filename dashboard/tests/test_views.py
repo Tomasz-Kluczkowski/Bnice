@@ -282,7 +282,8 @@ def test_get_request(client, parent_user_password):
     assert templates[0].name == 'dashboard/user_update.html'
 
 
-def test_test_func_redirects(client, child_user_password, parent_user_password):
+def test_test_func_redirects(client, child_user_password,
+                             parent_user_password):
     """Confirm test_func redirects to login when updating other user's
     profile."""
     user_logger(client, 'nat_k')
@@ -306,6 +307,7 @@ def test_updating_user_data(client, parent_user):
     user.refresh_from_db()
     assert user.username == 'test_username'
     assert user.email == 'testemail@email.com'
+
 
 # Tests for ChildUpdate view.
 
@@ -340,3 +342,66 @@ def test_updating_child_data(client, child_user):
 
 # Test ChildDelete view.
 
+def test_get_request_correct_parent(client, child, parent_user_password):
+    """Confirm child delete page accessible to parent user of child to be
+    deleted.
+    """
+    user_logger(client, 'tom_k')
+    response = client.get('/dashboard/child/delete/1/')
+    assert response.status_code == 200
+    templates = response.templates
+    assert templates[0].name == 'dashboard/child_delete.html'
+
+
+def test_get_request_incorrect_parent(client, child, alt_parent_user_password):
+    """Confirm child delete page inaccessible to user who is not a parent of
+    the child to be deleted.
+    """
+    user_logger(client, 'johny_c')
+    response = client.get('/dashboard/child/delete/1/')
+    assert response.status_code == 302
+    assert response.url == '/accounts/login/?next=/dashboard/child/delete/1/'
+
+
+def test_post_request_deletes_child(client, child, parent_user_password):
+    """Confirm submitting form deletes the child object from the database and
+    redirects to dashboard view.
+    """
+    user_logger(client, 'tom_k')
+    assert Child.objects.count() == 1
+    response = client.post('/dashboard/child/delete/1/')
+    assert response.status_code == 302
+    assert response.url == '/dashboard/'
+    assert Child.objects.count() == 0
+
+
+# Test ActionDeleteBase using its child classes.
+
+# Test SmileyDelete view.
+
+class TestSmileyDelete:
+
+    def test_http_get_correct_parent(self, client, child,
+                                     smiley_custom_description,
+                                     parent_user_password):
+        """Confirm view is accessible by parent of the child which Smiley we are
+        deleting.
+        """
+        user_logger(client, 'tom_k')
+        response = client.get('/dashboard/child/delete_smiley/1')
+        assert response.status_code == 200
+        templates = response.templates
+        assert templates[0].name == 'dashboard/smiley_delete.html'
+        assert response.context['smiley'] == smiley_custom_description
+
+    def test_http_get_incorrect_parent(self, client, child,
+                                       smiley_custom_description,
+                                       alt_parent_user_password):
+        """Confirm view is accessible by parent of the child which Smiley we are
+        deleting.
+        """
+        user_logger(client, 'johny_c')
+        response = client.get('/dashboard/child/delete_smiley/1')
+        assert response.status_code == 302
+        assert response.url == ('/accounts/login/?next=/dashboard/'
+                                'child/delete_smiley/1')
