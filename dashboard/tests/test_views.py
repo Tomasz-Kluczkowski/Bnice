@@ -2,7 +2,6 @@ import pytest
 from accounts.models import User, Child
 from dashboard.models import Smiley, Oopsy
 
-# from dashboard.views import DashboardPage
 # from django.urls import reverse
 
 # Mark all tests as requiring database.
@@ -84,25 +83,48 @@ class TestDashboardPage:
 
 
 # Tests of CreateChildPage view.
+class TestCreateChildPage:
 
-def test_create_child_page_view(client, parent_user):
-    password = 'password'
-    user = parent_user
-    user.set_password(password)
-    user.save()
-    user_logger(client, 'tom_k')
-    assert User.objects.count() == 1
-    response = client.get('/dashboard/add/child/')
-    assert response.status_code == 200
-    # Comfirm initial value for parent is passed using get_initial method.
-    form = response.context['form']
-    assert form.current_user == user
-    templates = response.templates
-    assert templates[0].name == 'dashboard/add_child.html'
+    def test_http_get(self, client, parent_user):
+        password = 'password'
+        user = parent_user
+        user.set_password(password)
+        user.save()
+        user_logger(client, 'tom_k')
+        assert User.objects.count() == 1
+        response = client.get('/dashboard/add/child/')
+        assert response.status_code == 200
+        # Confirm initial value for parent is passed using get_initial method.
+        form = response.context['form']
+        assert form.current_user == user
+        templates = response.templates
+        assert templates[0].name == 'dashboard/add_child.html'
 
-    # Tests of ChildDetail view.
-    """Confirm children of the parent user logged in get passed as context
-    data."""
+    def test_http_post(self, client, parent_user):
+        form_data = {'username': 'kid',
+                     'name': 'lili',
+                     'email': 'lili@gmail.com',
+                     'star_points': 20,
+                     'password1': 'new_pass',
+                     'password2': 'new_pass'}
+        password = 'password'
+        user = parent_user
+        user.set_password(password)
+        user.save()
+        user_logger(client, 'tom_k')
+        response = client.post('/dashboard/add/child/', form_data)
+        assert response.status_code == 302
+        assert response.url == '/dashboard/'
+        assert Child.objects.count() == 1
+        child = Child.objects.last()
+        assert child.user.username == 'kid'
+        assert child.user.name == 'lili'
+        assert child.user.email == 'lili@gmail.com'
+        assert child.parent == parent_user
+        assert child.star_points == 20
+
+
+# Tests of ChildDetail view.
 
 
 def test_child_detail_view(client, child, parent_user_password):
