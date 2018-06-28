@@ -1,5 +1,5 @@
 # B.Nice
-[![Build Status](https://travis-ci.org/Tomasz-Kluczkowski/Bnice.svg?branch=master)](https://travis-ci.org/Tomasz-Kluczkowski/Bnice) [![Coverage Status](https://coveralls.io/repos/github/Tomasz-Kluczkowski/Bnice/badge.svg?branch=master)](https://coveralls.io/github/Tomasz-Kluczkowski/Bnice?branch=master)
+[![Build Status](https://travis-ci.org/Tomasz-Kluczkowski/Bnice.svg?branch=master)](https://travis-ci.org/Tomasz-Kluczkowski/Bnice) [![Coverage Status](https://coveralls.io/repos/github/Tomasz-Kluczkowski/Bnice/badge.svg?branch=master&service=github)](https://coveralls.io/github/Tomasz-Kluczkowski/Bnice?branch=master)
 
 More You, Less Chores - Get your child to help you at home
 
