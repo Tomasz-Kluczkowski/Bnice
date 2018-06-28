@@ -194,24 +194,24 @@ class TestChildDetail:
 
 class TestAddAction:
 
-    def test_add_action_view_context(self, client, child, alt_child,
-                                     parent_user_password):
-        """Confirm only children of the parent user logged in get passed as context
-        data. (alt_child should be filtered out)."""
+    def test_get_context_data(self, client, child, alt_child,
+                              parent_user_password):
+        """Confirm only children of the parent user logged in get passed as
+        context data. (alt_child should be filtered out)."""
         user_logger(client, 'tom_k')
         response = client.get('/dashboard/child/add_smiley/tom_k/nat_k/1')
         assert response.status_code == 200
         assert Child.objects.count() == 2
         assert response.context['child'] == child
 
-    def test_add_action_test_func(self, client, parent_user_password):
-        """Test test_func when trying to access other user's child data when logged
-        in as a parent."""
+    def test_test_func_redirects(self, client, parent_user_password):
+        """Test test_func when trying to access other user's child data when
+        logged in as a parent."""
         user_logger(client, 'tom_k')
         response = client.get('/dashboard/child/add_smiley/jeffrey/nat_k/1')
         assert response.status_code == 302
 
-    def test_form_valid_smiley(self, client, child, parent_user):
+    def test_http_post_smiley(self, client, child, parent_user):
         """Confirm Smiley object gets attributes owner and earned_on added
         when form is valid."""
         password = 'password'
@@ -234,10 +234,10 @@ class TestAddAction:
         assert smiley.description == 'Folded washing'
         assert smiley.points == 5
 
-    def test_form_valid_smiley_custom_description(self, client,
-                                                  child, parent_user):
+    def test_http_post_smiley_custom_description(self, client,
+                                                 child, parent_user):
         """Confirm Smiley object gets attributes owner and earned_on added
-        when form is valid."""
+        when form is valid and new description overrides description field."""
         password = 'password'
         form_data = {'description': 'Add new',
                      'new_description': 'Testing',
@@ -258,7 +258,7 @@ class TestAddAction:
         assert smiley.description == 'Testing'
         assert smiley.points == 5
 
-    def test_form_valid_oopsy(self, client, child, parent_user):
+    def test_http_post_oopsy(self, client, child, parent_user):
         """Confirm Oopsy object gets attributes owner and earned_on added
         when form is valid."""
         password = 'password'
@@ -281,10 +281,10 @@ class TestAddAction:
         assert oopsy.description == 'Was lying'
         assert oopsy.points == 5
 
-    def test_form_valid_oopsy_custom_description(self, client, child,
-                                                 parent_user):
+    def test_http_post_oopsy_custom_description(self, client, child,
+                                                parent_user):
         """Confirm Oopsy object gets attributes owner and earned_on added
-        when form is valid."""
+        when form is valid and new description overrides description field."""
         password = 'password'
         form_data = {'description': 'Add new',
                      'new_description': 'Testing',
