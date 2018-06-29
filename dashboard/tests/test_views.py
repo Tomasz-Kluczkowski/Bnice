@@ -346,33 +346,36 @@ class TestUserUpdate:
 
 # Tests for ChildUpdate view.
 
+class TestChildUpdate:
 
-def test_get_context_data(client, child, child_user_password):
-    user_logger(client, 'nat_k')
-    response = client.get('/dashboard/child/update/1')
-    assert response.context['parent'] == 'tom_k'
-    assert response.status_code == 200
-    templates = response.templates
-    assert templates[0].name == 'dashboard/user_update.html'
+    def test_get_context_data(self, client, child, child_user_password):
+        """Confirm user currently logged in is set as parent in the context
+        data"""
+        user_logger(client, 'nat_k')
+        response = client.get('/dashboard/child/update/1')
+        assert response.context['parent'] == 'tom_k'
+        assert response.status_code == 200
+        templates = response.templates
+        assert templates[0].name == 'dashboard/user_update.html'
 
-
-def test_updating_child_data(client, child_user):
-    password = 'password'
-    form_data = {'username': 'test_username',
-                 'name': 'test_name',
-                 'email': 'testemail@email.com'}
-    user = child_user
-    user.set_password(password)
-    user.save()
-    user_logger(client, 'nat_k')
-    assert User.objects.count() == 1
-    response = client.post('/dashboard/child/update/1', form_data)
-    assert response.status_code == 302
-    assert response.url == '/dashboard/'
-    user.refresh_from_db()
-    assert user.username == 'test_username'
-    assert user.name == 'test_name'
-    assert user.email == 'testemail@email.com'
+    def test_updating_child_data(self, client, child_user):
+        """Confirm child user data is modified and saved in the database."""
+        password = 'password'
+        form_data = {'username': 'test_username',
+                     'name': 'test_name',
+                     'email': 'testemail@email.com'}
+        user = child_user
+        user.set_password(password)
+        user.save()
+        user_logger(client, 'nat_k')
+        assert User.objects.count() == 1
+        response = client.post('/dashboard/child/update/1', form_data)
+        assert response.status_code == 302
+        assert response.url == '/dashboard/'
+        user.refresh_from_db()
+        assert user.username == 'test_username'
+        assert user.name == 'test_name'
+        assert user.email == 'testemail@email.com'
 
 
 # Test ChildDelete view.
