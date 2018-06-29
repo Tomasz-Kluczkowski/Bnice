@@ -308,39 +308,40 @@ class TestAddAction:
 
 # Tests for UserUpdate view.
 
-def test_get_request(client, parent_user_password):
-    user_logger(client, 'tom_k')
-    response = client.get('/dashboard/user/update/1')
-    assert response.status_code == 200
-    templates = response.templates
-    assert templates[0].name == 'dashboard/user_update.html'
+class TestUserUpdate:
 
+    def test_http_get(self, client, parent_user_password):
+        user_logger(client, 'tom_k')
+        response = client.get('/dashboard/user/update/1')
+        assert response.status_code == 200
+        templates = response.templates
+        assert templates[0].name == 'dashboard/user_update.html'
 
-def test_test_func_redirects(client, child_user_password,
-                             parent_user_password):
-    """Confirm test_func redirects to login when updating other user's
-    profile."""
-    user_logger(client, 'nat_k')
-    response = client.get('/dashboard/user/update/2')
-    assert response.status_code == 302
-    assert response.url == '/accounts/login/?next=/dashboard/user/update/2'
+    def test_test_func_redirects(self, client, child_user_password,
+                                 parent_user_password):
+        """Confirm test_func redirects to login when trying to update other user's
+        profile."""
+        user_logger(client, 'nat_k')
+        response = client.get('/dashboard/user/update/2')
+        assert response.status_code == 302
+        assert response.url == '/accounts/login/?next=/dashboard/user/update/2'
 
-
-def test_updating_user_data(client, parent_user):
-    password = 'password'
-    form_data = {'username': 'test_username',
-                 'email': 'testemail@email.com'}
-    user = parent_user
-    user.set_password(password)
-    user.save()
-    user_logger(client, 'tom_k')
-    assert User.objects.count() == 1
-    response = client.post('/dashboard/user/update/1', form_data)
-    assert response.status_code == 302
-    assert response.url == '/dashboard/'
-    user.refresh_from_db()
-    assert user.username == 'test_username'
-    assert user.email == 'testemail@email.com'
+    def test_updating_user_data(self, client, parent_user):
+        """Confirm user data is modified and saved in the database."""
+        password = 'password'
+        form_data = {'username': 'test_username',
+                     'email': 'testemail@email.com'}
+        user = parent_user
+        user.set_password(password)
+        user.save()
+        user_logger(client, 'tom_k')
+        assert User.objects.count() == 1
+        response = client.post('/dashboard/user/update/1', form_data)
+        assert response.status_code == 302
+        assert response.url == '/dashboard/'
+        user.refresh_from_db()
+        assert user.username == 'test_username'
+        assert user.email == 'testemail@email.com'
 
 
 # Tests for ChildUpdate view.
