@@ -1,6 +1,8 @@
 import pytest
 from django.utils import timezone
 
+from dashboard.models import Smiley, Oopsy
+from dashboard.services import StarAwarding
 from dashboard.forms import AddSmileyForm, AddOopsyForm
 from dashboard.tests.factories import SmileyFactory, OopsyFactory
 
@@ -46,6 +48,20 @@ def smiley_custom_description(child):
                                   points=5)
     custom_smiley.save()
     return custom_smiley
+
+
+@pytest.fixture
+def claimed_smiley_no_remaining_points(child):
+    """Return a Smiley object which was already claimed and has remaining
+    points at 0."""
+    smiley = SmileyFactory(owner=child,
+                           earned_on=timezone.now(),
+                           description="Removed rubbish",
+                           points=5,
+                           claimed=True,
+                           points_remaining=0)
+    smiley.save()
+    return smiley
 
 
 @pytest.fixture
@@ -106,6 +122,20 @@ def oopsy_custom_description(child):
 
 
 @pytest.fixture
+def claimed_oopsy_no_remaining_points(child):
+    """Return an Oopsy object which was already claimed and has remaining
+    points at 0."""
+    oopsy = OopsyFactory(owner=child,
+                         earned_on=timezone.now(),
+                         description="Was rude",
+                         points=5,
+                         claimed=True,
+                         points_remaining=0)
+    oopsy.save()
+    return oopsy
+
+
+@pytest.fixture
 def oopsies_with_same_description(child):
     """Create 5 Oopsy objects with the same description."""
     for i in range(5):
@@ -114,3 +144,16 @@ def oopsies_with_same_description(child):
                                     description='Was rude',
                                     points=5)
         custom_oopsy.save()
+
+
+# StarAwarding fixtures.
+
+
+@pytest.fixture
+def star_awarding_base(smiley_custom_description,
+                       oopsy_custom_description):
+    """Create base star_awarding object."""
+    smiley_qs = Smiley.objects.filter(pk=1)
+    oopsy_qs = Oopsy.objects.filter(pk=1)
+    star_awarding = StarAwarding(smiley_qs, oopsy_qs, 15)
+    return star_awarding
