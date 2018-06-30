@@ -1,4 +1,5 @@
-from Bnice.common_settings import *
+from Bnice.common_settings import *  # noqa
+import os
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -15,8 +16,8 @@ DEBUG = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # noqa
     }
 }
 
-INSTALLED_APPS.append('debug_toolbar')
+INSTALLED_APPS.append('debug_toolbar')  # noqa
