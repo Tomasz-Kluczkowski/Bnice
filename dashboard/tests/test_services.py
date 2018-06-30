@@ -77,3 +77,100 @@ class TestStarAwarding:
         claimed_oopsies = Oopsy.objects.filter(claimed=True)
         assert claimed_oopsies.count() == 5
 
+    # Test award_star - all possibilities
+    # Case 1
+    # No oopsies, smileys match exactly star_points required, no remaining
+    # points after star is awarded.
+    # Case 2
+    # With oopsy giving negative score, smileys match exactly start_points
+    # required.
+    # Case 3
+    # No oopsies. Last smiley has too many points and some go as remaining.
+    # Case 4
+    # With oopsy, last smiley has too many points and some will be remaining.
+    # Case 5
+    # Enough smiley points to award multiple stars.
+    def test_award_star_only_smileys_no_remaining_points(
+            self, smileys_with_same_description):
+        """Confirm all smileys are consumed and no points remain."""
+        smileys = Smiley.objects.all()
+        # Create an empty oopsy queryset.
+        oopsy = Oopsy.objects.all()
+        star_awarding = StarAwarding(smileys, oopsy, 25)
+        star_awarding.award_star()
+        smileys = Smiley.objects.filter(claimed=True, points_remaining=0)
+        assert smileys.count() == 5
+        assert Smiley.objects.filter(star_awarded=True).count() == 1
+
+    def test_award_star_no_remaining_points(
+            self, smileys_with_same_description, oopsy_custom_description):
+        """Confirm all smileys are consumed and no points remain and oopsy
+        reduces points."""
+        smileys = Smiley.objects.all()
+        oopsy = Oopsy.objects.all()
+        star_awarding = StarAwarding(smileys, oopsy, 20)
+        star_awarding.award_star()
+        smileys = Smiley.objects.filter(claimed=True, points_remaining=0)
+        assert smileys.count() == 5
+        assert Smiley.objects.filter(star_awarded=True).count() == 1
+
+    def test_award_star_only_smileys_with_remaining_points(
+            self, smileys_with_same_description):
+        """Confirm all smileys are consumed and points remain."""
+        smileys = Smiley.objects.all()
+        # Create an empty oopsy queryset.
+        oopsy = Oopsy.objects.all()
+        star_awarding = StarAwarding(smileys, oopsy, 24)
+        star_awarding.award_star()
+        smileys_no_remaining = Smiley.objects.filter(claimed=True,
+                                                     points_remaining=0)
+        assert smileys_no_remaining.count() == 4
+        smiley_with_remaining = Smiley.objects.filter(claimed=True,
+                                                      points_remaining=1)
+        assert smiley_with_remaining.count() == 1
+        assert Smiley.objects.filter(star_awarded=True).count() == 1
+
+    def test_award_star_with_remaining_points(
+            self, smileys_with_same_description, oopsy_custom_description):
+        """Confirm all smileys are consumed and points remain and oopsy points
+        are negative."""
+        smileys = Smiley.objects.all()
+        oopsy = Oopsy.objects.all()
+        star_awarding = StarAwarding(smileys, oopsy, 19)
+        star_awarding.award_star()
+        smileys_no_remaining = Smiley.objects.filter(claimed=True,
+                                                     points_remaining=0)
+        assert smileys_no_remaining.count() == 4
+        smiley_with_remaining = Smiley.objects.filter(claimed=True,
+                                                      points_remaining=1)
+        assert smiley_with_remaining.count() == 1
+        assert Smiley.objects.filter(star_awarded=True).count() == 1
+
+    def test_award_star_multiple_stars(self, smileys_with_same_description,
+                                       oopsy_custom_description):
+        """Confirm multiple stars are correctly awarded."""
+        smileys = Smiley.objects.all()
+        oopsy = Oopsy.objects.all()
+        star_awarding = StarAwarding(smileys, oopsy, 9)
+        star_awarding.award_star()
+        smileys_no_remaining = Smiley.objects.filter(claimed=True,
+                                                     points_remaining=0)
+        assert smileys_no_remaining.count() == 3
+        smiley_with_remaining = Smiley.objects.filter(claimed=True,
+                                                      points_remaining__gt=0)
+        assert smiley_with_remaining.count() == 2
+        assert Smiley.objects.filter(star_awarded=True).count() == 2
+
+    def test_award_star_multiple_stars_use_all(self, smileys_with_same_description):
+        """Confirm multiple stars are correctly awarded."""
+        smileys = Smiley.objects.all()
+        oopsy = Oopsy.objects.all()
+        star_awarding = StarAwarding(smileys, oopsy, 8)
+        star_awarding.award_star()
+        smileys_no_remaining = Smiley.objects.filter(claimed=True,
+                                                     points_remaining=0)
+        assert smileys_no_remaining.count() == 4
+        smiley_with_remaining = Smiley.objects.filter(claimed=True,
+                                                      points_remaining=1)
+        assert smiley_with_remaining.count() == 1
+        assert Smiley.objects.filter(star_awarded=True).count() == 3
