@@ -423,8 +423,7 @@ class TestSmileyDelete:
                                      smiley_custom_description,
                                      parent_user_password):
         """Confirm view is accessible by parent of the child which Smiley we are
-        deleting.
-        """
+        deleting."""
         user_logger(client, 'tom_k')
         response = client.get('/dashboard/child/delete_smiley/1')
         assert response.status_code == 200
@@ -435,11 +434,101 @@ class TestSmileyDelete:
     def test_http_get_incorrect_parent(self, client, child,
                                        smiley_custom_description,
                                        alt_parent_user_password):
-        """Confirm view is accessible by parent of the child which Smiley we are
-        deleting.
-        """
+        """Confirm view is accessible by parent of the child which Smiley we
+        are deleting."""
         user_logger(client, 'johny_c')
         response = client.get('/dashboard/child/delete_smiley/1')
         assert response.status_code == 302
         assert response.url == ('/accounts/login/?next=/dashboard/'
                                 'child/delete_smiley/1')
+
+    def test_http_post_deletes_smiley(self, client, child,
+                                      smiley_custom_description,
+                                      parent_user_password):
+        """Confirm submitting form deletes the smiley object from the database
+        and redirects to correct child detail view."""
+        user_logger(client, 'tom_k')
+        assert Smiley.objects.count() == 1
+        response = client.post('/dashboard/child/delete_smiley/1')
+        assert response.status_code == 302
+        assert response.url == '/dashboard/child/detail/tom_k/nat_k/1'
+        assert Smiley.objects.count() == 0
+
+
+# Test OopsyDelete view.
+
+class TestOopsyDelete:
+
+    def test_http_get_correct_parent(self, client, child,
+                                     oopsy_custom_description,
+                                     parent_user_password):
+        """Confirm view is accessible by parent of the child which Oopsy we are
+        deleting."""
+        user_logger(client, 'tom_k')
+        response = client.get('/dashboard/child/delete_oopsy/1')
+        assert response.status_code == 200
+        templates = response.templates
+        assert templates[0].name == 'dashboard/oopsy_delete.html'
+        assert response.context['oopsy'] == oopsy_custom_description
+
+    def test_http_get_incorrect_parent(self, client, child,
+                                       oopsy_custom_description,
+                                       alt_parent_user_password):
+        """Confirm view is accessible by parent of the child which Oopsy we are
+        deleting."""
+        user_logger(client, 'johny_c')
+        response = client.get('/dashboard/child/delete_oopsy/1')
+        assert response.status_code == 302
+        assert response.url == ('/accounts/login/?next=/dashboard/'
+                                'child/delete_oopsy/1')
+
+    def test_http_post_deletes_oopsy(self, client, child,
+                                      oopsy_custom_description,
+                                      parent_user_password):
+        """Confirm submitting form deletes the oopsy object from the database
+        and redirects to correct child detail view."""
+        user_logger(client, 'tom_k')
+        assert Oopsy.objects.count() == 1
+        response = client.post('/dashboard/child/delete_oopsy/1')
+        assert response.status_code == 302
+        assert response.url == '/dashboard/child/detail/tom_k/nat_k/1'
+        assert Oopsy.objects.count() == 0
+
+
+# Tests for ActionUpdateBase and its child classes.
+# Test SmileyUpdate
+
+class TestSmileyUpdate:
+
+    def test_http_get(self, client, parent_user_password):
+        user_logger(client, 'tom_k')
+        response = client.get('/dashboard/user/update/1')
+        assert response.status_code == 200
+        templates = response.templates
+        assert templates[0].name == 'dashboard/user_update.html'
+
+    def test_test_func_redirects(self, client, child_user_password,
+                                 parent_user_password):
+        """Confirm test_func redirects to login when trying to update other user's
+        profile."""
+        user_logger(client, 'nat_k')
+        response = client.get('/dashboard/user/update/2')
+        assert response.status_code == 302
+        assert response.url == '/accounts/login/?next=/dashboard/user/update/2'
+
+    def test_updating_user_data(self, client, parent_user):
+        """Confirm user data is modified and saved in the database."""
+        password = 'password'
+        form_data = {'username': 'test_username',
+                     'email': 'testemail@email.com'}
+        user = parent_user
+        user.set_password(password)
+        user.save()
+        user_logger(client, 'tom_k')
+        assert User.objects.count() == 1
+        response = client.post('/dashboard/user/update/1', form_data)
+        assert response.status_code == 302
+        assert response.url == '/dashboard/'
+        user.refresh_from_db()
+        assert user.username == 'test_username'
+        assert user.email == 'testemail@email.com'
