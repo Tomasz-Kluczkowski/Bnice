@@ -226,7 +226,7 @@ class OopsyDelete(ActionDeleteBase):
     template_name = 'dashboard/oopsy_delete.html'
 
 
-class ActionUpdateBase(LoginRequiredMixin, UpdateView):
+class ActionUpdateBase(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """Base class for updating unclaimed smiley and oopsy objects.
     Do not use on its own."""
 
@@ -248,6 +248,22 @@ class ActionUpdateBase(LoginRequiredMixin, UpdateView):
                        kwargs={'parent': parent,
                                'child_username': child_username,
                                'pk': child.pk})
+
+    def test_func(self):
+        """Allow access only to logged in parent user who is parent
+        of the child who's action we are updating.
+
+        Returns
+        -------
+            Bool
+        """
+        current_user = self.request.user
+        action = self.get_object()
+        parent = action.owner.parent.username
+        if current_user.is_parent and current_user.username == parent:
+            return True
+        else:
+            return False
 
 
 class SmileyUpdate(ActionUpdateBase):
