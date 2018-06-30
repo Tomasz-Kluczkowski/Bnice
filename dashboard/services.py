@@ -51,7 +51,7 @@ class StarAwarding:
         -------
             None
         """
-        self.smiley_points = self.get_sum_action_points(self.smileys)
+        self.smiley_points = self.get_sum_action_points(self.smileys.all())
 
     def update_oopsy_points(self):
         """Renews sum of oopsy_points.
@@ -60,7 +60,7 @@ class StarAwarding:
         -------
             None
         """
-        self.oopsy_points = self.get_sum_action_points(self.oopsies)
+        self.oopsy_points = self.get_sum_action_points(self.oopsies.all())
 
     def update_total_points(self):
         """Renews total_points.
@@ -131,6 +131,8 @@ class StarAwarding:
         -------
             None
         """
+        # Iterate as long as there is more than one smiley with remaining
+        # points.
         # Confirm that we can award a star.
         if self.total_points >= self.star_points:
             # Make sure all oopsies are consumed.
@@ -161,7 +163,6 @@ class StarAwarding:
                     if points_counter > 0:
                         smiley.points_remaining = points_counter
                     smiley.save()
-                    self.update_total_points()
                     # After awarding a star abort if sum of points is too
                     # little to award another star.
                     if self.total_points < self.star_points:
