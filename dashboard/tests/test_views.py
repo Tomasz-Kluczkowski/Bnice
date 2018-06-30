@@ -380,37 +380,38 @@ class TestChildUpdate:
 
 # Test ChildDelete view.
 
-def test_get_request_correct_parent(client, child, parent_user_password):
-    """Confirm child delete page accessible to parent user of child to be
-    deleted.
-    """
-    user_logger(client, 'tom_k')
-    response = client.get('/dashboard/child/delete/1/')
-    assert response.status_code == 200
-    templates = response.templates
-    assert templates[0].name == 'dashboard/child_delete.html'
+class TestChildDelete:
 
+    def test_http_get_correct_parent(self, client, child,
+                                     parent_user_password):
+        """Confirm child delete page accessible to parent user of child to be
+        deleted."""
+        user_logger(client, 'tom_k')
+        response = client.get('/dashboard/child/delete/1/')
+        assert response.status_code == 200
+        templates = response.templates
+        assert templates[0].name == 'dashboard/child_delete.html'
 
-def test_get_request_incorrect_parent(client, child, alt_parent_user_password):
-    """Confirm child delete page inaccessible to user who is not a parent of
-    the child to be deleted.
-    """
-    user_logger(client, 'johny_c')
-    response = client.get('/dashboard/child/delete/1/')
-    assert response.status_code == 302
-    assert response.url == '/accounts/login/?next=/dashboard/child/delete/1/'
+    def test_http_get_incorrect_parent(self, client, child,
+                                       alt_parent_user_password):
+        """Confirm child delete page inaccessible to user who is not a parent
+        of the child to be deleted."""
+        user_logger(client, 'johny_c')
+        response = client.get('/dashboard/child/delete/1/')
+        assert response.status_code == 302
+        assert response.url == ('/accounts/login/?next=/'
+                                'dashboard/child/delete/1/')
 
-
-def test_post_request_deletes_child(client, child, parent_user_password):
-    """Confirm submitting form deletes the child object from the database and
-    redirects to dashboard view.
-    """
-    user_logger(client, 'tom_k')
-    assert Child.objects.count() == 1
-    response = client.post('/dashboard/child/delete/1/')
-    assert response.status_code == 302
-    assert response.url == '/dashboard/'
-    assert Child.objects.count() == 0
+    def test_http_post_deletes_child(self, client, child,
+                                     parent_user_password):
+        """Confirm submitting form deletes the child object from the database and
+        redirects to dashboard view."""
+        user_logger(client, 'tom_k')
+        assert Child.objects.count() == 1
+        response = client.post('/dashboard/child/delete/1/')
+        assert response.status_code == 302
+        assert response.url == '/dashboard/'
+        assert Child.objects.count() == 0
 
 
 # Test ActionDeleteBase using its child classes.
