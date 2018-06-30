@@ -117,7 +117,7 @@ class StarAwarding:
         -------
             None
         """
-        self.oopsies.update(claimed=True, points_remaining=0)
+        self.oopsies.update(claimed=True)
         for oopsy in self.oopsies:
             oopsy.save()
 

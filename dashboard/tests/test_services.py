@@ -33,7 +33,7 @@ class TestStarAwarding:
 
     # Test get_sum_action_points - all possibilities
 
-    def test_get_sum_action_points_with_claimed_smiley_no_remaining_points(
+    def test_get_sum_action_points_claimed_smiley_no_remaining_points(
             self, claimed_smiley_no_remaining_points,
             smileys_with_same_description, oopsy_custom_description):
         """Confirm claimed smiley with no remaining points is not counted
@@ -44,7 +44,7 @@ class TestStarAwarding:
         star_awarding = StarAwarding(smileys, oopsy, 15)
         assert star_awarding.get_sum_action_points(smileys) == 25
 
-    def test_get_sum_action_points_with_claimed_oopsy_no_remaining_points(
+    def test_get_sum_action_points_claimed_oopsy_no_remaining_points(
             self, claimed_oopsy_no_remaining_points,
             oopsies_with_same_description, smiley_custom_description):
         """Confirm claimed oopsy with no remaining points is not counted
@@ -54,3 +54,26 @@ class TestStarAwarding:
         assert oopsies.count() == 6
         star_awarding = StarAwarding(smiley, oopsies, 15)
         assert star_awarding.get_sum_action_points(oopsies) == 25
+
+    def test_get_sum_action_points_claimed_smiley_remaining_points(
+            self, claimed_smiley_remaining_points,
+            smileys_with_same_description, oopsy_custom_description):
+        """Confirm remaining points from claimed smiley are counted towards
+        total points."""
+        smileys = Smiley.objects.all()
+        oopsy = Oopsy.objects.filter(pk=1)
+        assert smileys.count() == 6
+        star_awarding = StarAwarding(smileys, oopsy, 15)
+        assert star_awarding.get_sum_action_points(smileys) == 26
+
+    def test_claim_all_oopsies(self, oopsies_with_same_description,
+                               smiley_custom_description):
+        """Confirm claim_all_oopsies updates status of all oopsies to
+        claimed."""
+        smiley = Smiley.objects.filter(pk=1)
+        oopsies = Oopsy.objects.all()
+        star_awarding = StarAwarding(smiley, oopsies, 15)
+        star_awarding.claim_all_oopsies()
+        claimed_oopsies = Oopsy.objects.filter(claimed=True)
+        assert claimed_oopsies.count() == 5
+

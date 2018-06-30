@@ -65,6 +65,20 @@ def claimed_smiley_no_remaining_points(child):
 
 
 @pytest.fixture
+def claimed_smiley_remaining_points(child):
+    """Return a Smiley object which was already claimed and has remaining
+    points at 1."""
+    smiley = SmileyFactory(owner=child,
+                           earned_on=timezone.now(),
+                           description="Removed rubbish",
+                           points=5,
+                           claimed=True,
+                           points_remaining=1)
+    smiley.save()
+    return smiley
+
+
+@pytest.fixture
 def smileys_with_same_description(child):
     # Create 5 Smiley objects with the same description.
     for i in range(5):
