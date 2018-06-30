@@ -194,24 +194,24 @@ class TestChildDetail:
 
 class TestAddAction:
 
-    def test_add_action_view_context(self, client, child, alt_child,
-                                     parent_user_password):
-        """Confirm only children of the parent user logged in get passed as context
-        data. (alt_child should be filtered out)."""
+    def test_get_context_data(self, client, child, alt_child,
+                              parent_user_password):
+        """Confirm only children of the parent user logged in get passed as
+        context data. (alt_child should be filtered out)."""
         user_logger(client, 'tom_k')
         response = client.get('/dashboard/child/add_smiley/tom_k/nat_k/1')
         assert response.status_code == 200
         assert Child.objects.count() == 2
         assert response.context['child'] == child
 
-    def test_add_action_test_func(self, client, parent_user_password):
-        """Test test_func when trying to access other user's child data when logged
-        in as a parent."""
+    def test_test_func_redirects(self, client, parent_user_password):
+        """Test test_func when trying to access other user's child data when
+        logged in as a parent."""
         user_logger(client, 'tom_k')
         response = client.get('/dashboard/child/add_smiley/jeffrey/nat_k/1')
         assert response.status_code == 302
 
-    def test_form_valid_smiley(self, client, child, parent_user):
+    def test_http_post_smiley(self, client, child, parent_user):
         """Confirm Smiley object gets attributes owner and earned_on added
         when form is valid."""
         password = 'password'
@@ -234,10 +234,10 @@ class TestAddAction:
         assert smiley.description == 'Folded washing'
         assert smiley.points == 5
 
-    def test_form_valid_smiley_custom_description(self, client,
-                                                  child, parent_user):
+    def test_http_post_smiley_custom_description(self, client,
+                                                 child, parent_user):
         """Confirm Smiley object gets attributes owner and earned_on added
-        when form is valid."""
+        when form is valid and new description overrides description field."""
         password = 'password'
         form_data = {'description': 'Add new',
                      'new_description': 'Testing',
@@ -258,7 +258,7 @@ class TestAddAction:
         assert smiley.description == 'Testing'
         assert smiley.points == 5
 
-    def test_form_valid_oopsy(self, client, child, parent_user):
+    def test_http_post_oopsy(self, client, child, parent_user):
         """Confirm Oopsy object gets attributes owner and earned_on added
         when form is valid."""
         password = 'password'
@@ -281,10 +281,10 @@ class TestAddAction:
         assert oopsy.description == 'Was lying'
         assert oopsy.points == 5
 
-    def test_form_valid_oopsy_custom_description(self, client, child,
-                                                 parent_user):
+    def test_http_post_oopsy_custom_description(self, client, child,
+                                                parent_user):
         """Confirm Oopsy object gets attributes owner and earned_on added
-        when form is valid."""
+        when form is valid and new description overrides description field."""
         password = 'password'
         form_data = {'description': 'Add new',
                      'new_description': 'Testing',
@@ -308,105 +308,110 @@ class TestAddAction:
 
 # Tests for UserUpdate view.
 
-def test_get_request(client, parent_user_password):
-    user_logger(client, 'tom_k')
-    response = client.get('/dashboard/user/update/1')
-    assert response.status_code == 200
-    templates = response.templates
-    assert templates[0].name == 'dashboard/user_update.html'
+class TestUserUpdate:
 
+    def test_http_get(self, client, parent_user_password):
+        user_logger(client, 'tom_k')
+        response = client.get('/dashboard/user/update/1')
+        assert response.status_code == 200
+        templates = response.templates
+        assert templates[0].name == 'dashboard/user_update.html'
 
-def test_test_func_redirects(client, child_user_password,
-                             parent_user_password):
-    """Confirm test_func redirects to login when updating other user's
-    profile."""
-    user_logger(client, 'nat_k')
-    response = client.get('/dashboard/user/update/2')
-    assert response.status_code == 302
-    assert response.url == '/accounts/login/?next=/dashboard/user/update/2'
+    def test_test_func_redirects(self, client, child_user_password,
+                                 parent_user_password):
+        """Confirm test_func redirects to login when trying to update other user's
+        profile."""
+        user_logger(client, 'nat_k')
+        response = client.get('/dashboard/user/update/2')
+        assert response.status_code == 302
+        assert response.url == '/accounts/login/?next=/dashboard/user/update/2'
 
-
-def test_updating_user_data(client, parent_user):
-    password = 'password'
-    form_data = {'username': 'test_username',
-                 'email': 'testemail@email.com'}
-    user = parent_user
-    user.set_password(password)
-    user.save()
-    user_logger(client, 'tom_k')
-    assert User.objects.count() == 1
-    response = client.post('/dashboard/user/update/1', form_data)
-    assert response.status_code == 302
-    assert response.url == '/dashboard/'
-    user.refresh_from_db()
-    assert user.username == 'test_username'
-    assert user.email == 'testemail@email.com'
+    def test_updating_user_data(self, client, parent_user):
+        """Confirm user data is modified and saved in the database."""
+        password = 'password'
+        form_data = {'username': 'test_username',
+                     'email': 'testemail@email.com'}
+        user = parent_user
+        user.set_password(password)
+        user.save()
+        user_logger(client, 'tom_k')
+        assert User.objects.count() == 1
+        response = client.post('/dashboard/user/update/1', form_data)
+        assert response.status_code == 302
+        assert response.url == '/dashboard/'
+        user.refresh_from_db()
+        assert user.username == 'test_username'
+        assert user.email == 'testemail@email.com'
 
 
 # Tests for ChildUpdate view.
 
+class TestChildUpdate:
 
-def test_get_context_data(client, child, child_user_password):
-    user_logger(client, 'nat_k')
-    response = client.get('/dashboard/child/update/1')
-    assert response.context['parent'] == 'tom_k'
-    assert response.status_code == 200
-    templates = response.templates
-    assert templates[0].name == 'dashboard/user_update.html'
+    def test_get_context_data(self, client, child, child_user_password):
+        """Confirm user currently logged in is set as parent in the context
+        data"""
+        user_logger(client, 'nat_k')
+        response = client.get('/dashboard/child/update/1')
+        assert response.context['parent'] == 'tom_k'
+        assert response.status_code == 200
+        templates = response.templates
+        assert templates[0].name == 'dashboard/user_update.html'
 
-
-def test_updating_child_data(client, child_user):
-    password = 'password'
-    form_data = {'username': 'test_username',
-                 'name': 'test_name',
-                 'email': 'testemail@email.com'}
-    user = child_user
-    user.set_password(password)
-    user.save()
-    user_logger(client, 'nat_k')
-    assert User.objects.count() == 1
-    response = client.post('/dashboard/child/update/1', form_data)
-    assert response.status_code == 302
-    assert response.url == '/dashboard/'
-    user.refresh_from_db()
-    assert user.username == 'test_username'
-    assert user.name == 'test_name'
-    assert user.email == 'testemail@email.com'
+    def test_updating_child_data(self, client, child_user):
+        """Confirm child user data is modified and saved in the database."""
+        password = 'password'
+        form_data = {'username': 'test_username',
+                     'name': 'test_name',
+                     'email': 'testemail@email.com'}
+        user = child_user
+        user.set_password(password)
+        user.save()
+        user_logger(client, 'nat_k')
+        assert User.objects.count() == 1
+        response = client.post('/dashboard/child/update/1', form_data)
+        assert response.status_code == 302
+        assert response.url == '/dashboard/'
+        user.refresh_from_db()
+        assert user.username == 'test_username'
+        assert user.name == 'test_name'
+        assert user.email == 'testemail@email.com'
 
 
 # Test ChildDelete view.
 
-def test_get_request_correct_parent(client, child, parent_user_password):
-    """Confirm child delete page accessible to parent user of child to be
-    deleted.
-    """
-    user_logger(client, 'tom_k')
-    response = client.get('/dashboard/child/delete/1/')
-    assert response.status_code == 200
-    templates = response.templates
-    assert templates[0].name == 'dashboard/child_delete.html'
+class TestChildDelete:
 
+    def test_http_get_correct_parent(self, client, child,
+                                     parent_user_password):
+        """Confirm child delete page accessible to parent user of child to be
+        deleted."""
+        user_logger(client, 'tom_k')
+        response = client.get('/dashboard/child/delete/1/')
+        assert response.status_code == 200
+        templates = response.templates
+        assert templates[0].name == 'dashboard/child_delete.html'
 
-def test_get_request_incorrect_parent(client, child, alt_parent_user_password):
-    """Confirm child delete page inaccessible to user who is not a parent of
-    the child to be deleted.
-    """
-    user_logger(client, 'johny_c')
-    response = client.get('/dashboard/child/delete/1/')
-    assert response.status_code == 302
-    assert response.url == '/accounts/login/?next=/dashboard/child/delete/1/'
+    def test_http_get_incorrect_parent(self, client, child,
+                                       alt_parent_user_password):
+        """Confirm child delete page inaccessible to user who is not a parent
+        of the child to be deleted."""
+        user_logger(client, 'johny_c')
+        response = client.get('/dashboard/child/delete/1/')
+        assert response.status_code == 302
+        assert response.url == ('/accounts/login/?next=/'
+                                'dashboard/child/delete/1/')
 
-
-def test_post_request_deletes_child(client, child, parent_user_password):
-    """Confirm submitting form deletes the child object from the database and
-    redirects to dashboard view.
-    """
-    user_logger(client, 'tom_k')
-    assert Child.objects.count() == 1
-    response = client.post('/dashboard/child/delete/1/')
-    assert response.status_code == 302
-    assert response.url == '/dashboard/'
-    assert Child.objects.count() == 0
+    def test_http_post_deletes_child(self, client, child,
+                                     parent_user_password):
+        """Confirm submitting form deletes the child object from the database and
+        redirects to dashboard view."""
+        user_logger(client, 'tom_k')
+        assert Child.objects.count() == 1
+        response = client.post('/dashboard/child/delete/1/')
+        assert response.status_code == 302
+        assert response.url == '/dashboard/'
+        assert Child.objects.count() == 0
 
 
 # Test ActionDeleteBase using its child classes.
