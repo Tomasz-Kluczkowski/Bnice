@@ -13,7 +13,7 @@ DEBUG = False
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
+ALLOWED_HOSTS = ['.herokuapp.com']
 DATABASES = {
     'default': dj_database_url.config(
         default=config('DATABASE_URL')
