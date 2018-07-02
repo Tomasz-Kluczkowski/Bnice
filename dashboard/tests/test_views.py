@@ -483,8 +483,8 @@ class TestOopsyDelete:
                                 'child/delete_oopsy/1')
 
     def test_http_post_deletes_oopsy(self, client, child,
-                                      oopsy_custom_description,
-                                      parent_user_password):
+                                     oopsy_custom_description,
+                                     parent_user_password):
         """Confirm submitting form deletes the oopsy object from the database
         and redirects to correct child detail view."""
         user_logger(client, 'tom_k')
@@ -570,7 +570,7 @@ class TestOopsyUpdate:
                                 'update_oopsy/1')
 
     def test_updating_oopsy_data(self, client, oopsy_custom_description,
-                                  parent_user_password):
+                                 parent_user_password):
         """Confirm Oopsy data is modified and saved in the database."""
         form_data = {'description': 'a new description',
                      'points': 1}

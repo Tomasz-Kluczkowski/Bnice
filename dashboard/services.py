@@ -135,7 +135,6 @@ class StarAwarding:
         # points_counter until we get to the last smiley in queryset where if
         # points_counter is > 0 we have to save it on that last smiley object.
         points_counter = 0
-        last_smiley_ix = self.smileys.count() - 1
         # Confirm that we can award a star.
         if self.total_points >= self.star_points:
             # Make sure all oopsies are consumed.
