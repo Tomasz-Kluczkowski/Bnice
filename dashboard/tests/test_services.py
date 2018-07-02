@@ -1,5 +1,6 @@
 import pytest
 
+from django.db.models import Sum
 from dashboard.models import Smiley, Oopsy
 from dashboard.services import StarAwarding
 
@@ -101,6 +102,8 @@ class TestStarAwarding:
         smileys = Smiley.objects.filter(claimed=True, points_remaining=0)
         assert smileys.count() == 5
         assert Smiley.objects.filter(star_awarded=True).count() == 1
+        remaining_points = smileys.aggregate(Sum('points_remaining'))
+        assert remaining_points['points_remaining__sum'] == 0
 
     def test_award_star_no_remaining_points(
             self, smileys_with_same_description, oopsy_custom_description):
@@ -113,6 +116,8 @@ class TestStarAwarding:
         smileys = Smiley.objects.filter(claimed=True, points_remaining=0)
         assert smileys.count() == 5
         assert Smiley.objects.filter(star_awarded=True).count() == 1
+        remaining_points = smileys.aggregate(Sum('points_remaining'))
+        assert remaining_points['points_remaining__sum'] == 0
 
     def test_award_star_only_smileys_with_remaining_points(
             self, smileys_with_same_description):
@@ -129,6 +134,8 @@ class TestStarAwarding:
                                                       points_remaining=1)
         assert smiley_with_remaining.count() == 1
         assert Smiley.objects.filter(star_awarded=True).count() == 1
+        remaining_points = smileys.aggregate(Sum('points_remaining'))
+        assert remaining_points['points_remaining__sum'] == 1
 
     def test_award_star_with_remaining_points(
             self, smileys_with_same_description, oopsy_custom_description):
@@ -145,6 +152,8 @@ class TestStarAwarding:
                                                       points_remaining=1)
         assert smiley_with_remaining.count() == 1
         assert Smiley.objects.filter(star_awarded=True).count() == 1
+        remaining_points = smileys.aggregate(Sum('points_remaining'))
+        assert remaining_points['points_remaining__sum'] == 1
 
     def test_award_star_multiple_stars(self, smileys_with_same_description,
                                        oopsy_custom_description):
@@ -155,11 +164,13 @@ class TestStarAwarding:
         star_awarding.award_star()
         smileys_no_remaining = Smiley.objects.filter(claimed=True,
                                                      points_remaining=0)
-        assert smileys_no_remaining.count() == 3
+        assert smileys_no_remaining.count() == 4
         smiley_with_remaining = Smiley.objects.filter(claimed=True,
                                                       points_remaining__gt=0)
-        assert smiley_with_remaining.count() == 2
+        assert smiley_with_remaining.count() == 1
         assert Smiley.objects.filter(star_awarded=True).count() == 2
+        remaining_points = smileys.aggregate(Sum('points_remaining'))
+        assert remaining_points['points_remaining__sum'] == 2
 
     def test_award_star_multiple_stars_use_all(self, smileys_with_same_description):
         """Confirm multiple stars are correctly awarded."""
@@ -169,8 +180,10 @@ class TestStarAwarding:
         star_awarding.award_star()
         smileys_no_remaining = Smiley.objects.filter(claimed=True,
                                                      points_remaining=0)
-        # assert smileys_no_remaining.count() == 4
+        assert smileys_no_remaining.count() == 4
         smiley_with_remaining = Smiley.objects.filter(claimed=True,
                                                       points_remaining__gt=0)
         assert smiley_with_remaining.count() == 1
         assert Smiley.objects.filter(star_awarded=True).count() == 3
+        remaining_points = smileys.aggregate(Sum('points_remaining'))
+        assert remaining_points['points_remaining__sum'] == 1

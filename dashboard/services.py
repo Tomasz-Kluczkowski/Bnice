@@ -51,7 +51,7 @@ class StarAwarding:
         -------
             None
         """
-        self.smiley_points = self.get_sum_action_points(self.smileys.all())
+        self.smiley_points = self.get_sum_action_points(self.smileys)
 
     def update_oopsy_points(self):
         """Renews sum of oopsy_points.
@@ -60,7 +60,7 @@ class StarAwarding:
         -------
             None
         """
-        self.oopsy_points = self.get_sum_action_points(self.oopsies.all())
+        self.oopsy_points = self.get_sum_action_points(self.oopsies)
 
     def update_total_points(self):
         """Renews total_points.
@@ -131,19 +131,21 @@ class StarAwarding:
         -------
             None
         """
-        # Iterate as long as there is more than one smiley with remaining
-        # points.
+        # Any remaining points should be saved in memory first as
+        # points_counter until we get to the last smiley in queryset where if
+        # points_counter is > 0 we have to save it on that last smiley object.
+        points_counter = 0
+        last_smiley_ix = self.smileys.count() - 1
         # Confirm that we can award a star.
         if self.total_points >= self.star_points:
             # Make sure all oopsies are consumed.
             self.claim_all_oopsies()
             # Start counting having the negative points as the initial value
             # and increase it until points_counter >= star_points.
-            points_counter = 0
             points_counter -= self.oopsy_points
             # Now iterate over smileys marking all as claimed until a star
             # is earned.
-            for smiley in self.smileys:
+            for ix, smiley in enumerate(self.smileys):
                 # For smileys that were completely consumed skip.
                 if smiley.claimed and smiley.points_remaining == 0:
                     continue
@@ -151,23 +153,22 @@ class StarAwarding:
                 elif not smiley.claimed:
                     points_counter += smiley.points
                 # Always add any remaining points and set claimed to True
-                #  no matter if smiley was claimed or not.
+                # no matter if smiley was claimed or not.
                 points_counter += smiley.points_remaining
                 smiley.points_remaining = 0
                 smiley.claimed = True
                 # Check if star can be awarded.
                 if points_counter >= self.star_points:
                     smiley.star_awarded = True
-                    # Save any remainder points on the last smiley.
+                    # Remaining points will be stored on points_counter until
+                    # we reach the last item in the iteration.
                     points_counter = points_counter - self.star_points
-                    if points_counter > 0:
+                    # If we are on the last smiley save remaining points on it.
+                    if ix == last_smiley_ix and points_counter > 0:
                         smiley.points_remaining = points_counter
-                    smiley.save()
-                    self.update_total_points()
-                    # print('total points after calling update_total_points:',
-                    #       self.total_points)
-                    # After awarding a star abort if sum of points is too
-                    # little to award another star.
-                    if self.total_points < self.star_points:
-                        break
                 smiley.save()
+                self.update_total_points()
+                # After awarding a star abort if sum of points is too
+                # little to award another star.
+                if self.total_points + points_counter < self.star_points:
+                    break
