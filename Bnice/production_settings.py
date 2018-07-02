@@ -14,7 +14,7 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-ALLOWED_HOSTS = ['.herokuapp.com']
+ALLOWED_HOSTS = ['b-nice.herokuapp.com']
 DATABASES = {
     'default': dj_database_url.config(
         default=config('DATABASE_URL')
