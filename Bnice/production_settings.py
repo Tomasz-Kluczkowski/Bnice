@@ -1,6 +1,6 @@
 from Bnice.common_settings import *  # noqa
 from decouple import config
-import os
+import dj_database_url
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -15,8 +15,7 @@ DEBUG = False
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # noqa
-    }
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
 }
