@@ -172,15 +172,19 @@ class TestStarAwarding:
         remaining_points = smileys.aggregate(Sum('points_remaining'))
         assert remaining_points['points_remaining__sum'] == 2
 
-    def test_award_star_multiple_stars_use_all(self, smileys_with_same_description):
+    def test_award_star_multiple_stars_use_all(
+            self, claimed_smiley_no_remaining_points,
+            smileys_with_same_description):
         """Confirm multiple stars are correctly awarded."""
         smileys = Smiley.objects.all()
+        assert smileys.count() == 6
         oopsy = Oopsy.objects.all()
         star_awarding = StarAwarding(smileys, oopsy, 8)
+        assert star_awarding.get_sum_action_points(smileys) == 25
         star_awarding.award_star()
         smileys_no_remaining = Smiley.objects.filter(claimed=True,
                                                      points_remaining=0)
-        assert smileys_no_remaining.count() == 4
+        assert smileys_no_remaining.count() == 5
         smiley_with_remaining = Smiley.objects.filter(claimed=True,
                                                       points_remaining__gt=0)
         assert smiley_with_remaining.count() == 1

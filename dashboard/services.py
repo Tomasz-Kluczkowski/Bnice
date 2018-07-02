@@ -145,7 +145,7 @@ class StarAwarding:
             points_counter -= self.oopsy_points
             # Now iterate over smileys marking all as claimed until a star
             # is earned.
-            for ix, smiley in enumerate(self.smileys):
+            for smiley in self.smileys:
                 # For smileys that were completely consumed skip.
                 if smiley.claimed and smiley.points_remaining == 0:
                     continue
@@ -160,15 +160,14 @@ class StarAwarding:
                 # Check if star can be awarded.
                 if points_counter >= self.star_points:
                     smiley.star_awarded = True
-                    # Remaining points will be stored on points_counter until
-                    # we reach the last item in the iteration.
                     points_counter = points_counter - self.star_points
-                    # If we are on the last smiley save remaining points on it.
-                    if ix == last_smiley_ix and points_counter > 0:
-                        smiley.points_remaining = points_counter
                 smiley.save()
                 self.update_total_points()
                 # After awarding a star abort if sum of points is too
                 # little to award another star.
                 if self.total_points + points_counter < self.star_points:
+                    # Save remaining points on the last smiley accessed before
+                    # terminating the loop early.
+                    smiley.points_remaining = points_counter
+                    smiley.save()
                     break
