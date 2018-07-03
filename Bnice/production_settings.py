@@ -9,9 +9,8 @@ import dj_database_url
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 ALLOWED_HOSTS = ['b-nice.herokuapp.com']
