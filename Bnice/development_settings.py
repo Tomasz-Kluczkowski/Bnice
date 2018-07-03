@@ -21,4 +21,4 @@ DATABASES = {
 }
 
 INSTALLED_APPS.append('debug_toolbar')  # noqa
-MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')  # noqa
