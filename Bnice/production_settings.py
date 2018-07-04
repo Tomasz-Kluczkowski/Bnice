@@ -9,7 +9,7 @@ import dj_database_url
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config('DEBUG', default=True, cast=bool)
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
