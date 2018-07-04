@@ -29,7 +29,7 @@
 </head>
 <body class="d-flex flex-column">
 <a href="#" id="toTopButton"><i class="fas fa-angle-up"></i></a>
-<nav class="navigation navbar navbar-expand-sm navbar-dark fixed-top">
+<nav class="navigation navbar navbar-expand-md navbar-dark fixed-top">
         <a class="navigation__brand-link navbar-brand" href="{% url 'core:home' %}">
             <img class="navigation__brand-img"
                  src="{% static 'core/images/logo/Bnice_logo_1744x484px.png' %}"
@@ -62,15 +62,15 @@
                 {% endif %}
                 {% if user.is_authenticated %}
 {#                    Content to be displayed on small screens in the navbar #}
-                        <li class="nav-item d-sm-none">
+                        <li class="nav-item d-md-none">
                             <a class="navigation__link nav-link"
                                href="{% url 'dashboard:dashboard' %}">Dashboard</a>
                         </li>
-                    <li class="nav-item d-sm-none">
+                    <li class="nav-item d-md-none">
                         <a class="navigation__link nav-link" href="{% url 'accounts:logout' %}">Log Out</a>
                     </li>
 {#                    Content to be displayed only on large screens in dropdown menu #}
-                    <li class="nav-item dropdown d-none d-sm-block">
+                    <li class="nav-item dropdown d-none d-md-block">
                         <a class="nav-link dropdown-toggle" href=""
                            id="navbarDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true"
