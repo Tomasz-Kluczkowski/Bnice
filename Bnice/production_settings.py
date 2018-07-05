@@ -20,3 +20,4 @@ DATABASES = {
         default=config('DATABASE_URL')
     )
 }
+INSTALLED_APPS.append('storages')  # noqa
