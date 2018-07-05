@@ -13,7 +13,8 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-ALLOWED_HOSTS = ['b-nice.herokuapp.com']
+ALLOWED_HOSTS = ['b-nice-staging.herokuapp.com',
+                 'b-nice.herokuapp.com']
 DATABASES = {
     'default': dj_database_url.config(
         default=config('DATABASE_URL')
