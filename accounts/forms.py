@@ -96,4 +96,14 @@ class ChildUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Child
-        fields = ('star_points',)
+        fields = ('star_points', )
+
+
+class UserUpdateForm(forms.ModelForm):
+    """
+
+    """
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'name', 'profile_photo')

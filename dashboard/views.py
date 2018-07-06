@@ -4,8 +4,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # from django.contrib.auth import login
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
+from django.http import HttpResponseRedirect
 from accounts.models import Child, User
-from accounts.forms import ChildCreateForm, ChildUpdateForm
+from accounts.forms import ChildCreateForm, ChildUpdateForm, UserUpdateForm
 from dashboard.models import Smiley, Oopsy
 from dashboard.forms import AddSmileyForm, AddOopsyForm
 from dashboard.services import StarAwarding
@@ -136,10 +137,11 @@ class UserUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class ChildUpdate(LoginRequiredMixin, UpdateView):
     model = User
+    form_class = UserUpdateForm
     child_form_class = ChildUpdateForm
-    fields = ('username', 'name', 'email', 'profile_photo',)
+    # fields = ('username', 'name', 'email', 'profile_photo',)
     template_name = 'dashboard/child_update.html'
-    success_url = reverse_lazy('dashboard:dashboard')
+    success_url = reverse_lazy('dashboard:dashboard') # Change here to child_detail url with necessary parameters.
 
     def get_context_data(self, **kwargs):
         child = Child.objects.get(user__pk=self.object.pk)
@@ -148,23 +150,27 @@ class ChildUpdate(LoginRequiredMixin, UpdateView):
             initial={'star_points': child.star_points})
         return super().get_context_data(**kwargs)
 
-    # def post(self, request, *args, **kwargs):
-    #     self.object = self.get_object()
-    #     form = self.form_class(request.POST)
-    #     form2 = self.second_form_class(request.POST)
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        print(type(self.object))
+        user_form = self.form_class(request.POST, instance=self.object)
+        child_form = self.child_form_class(request.POST) # Add instance of the child object here
     #
-    #     if form.is_valid() and form2.is_valid():
-    #         userdata = form.save(commit=False)
-    #         # used to set the password, but no longer necesarry
-    #         userdata.save()
-    #         employeedata = form2.save(commit=False)
-    #         employeedata.user = userdata
-    #         employeedata.save()
-    #         messages.success(self.request, 'Settings saved successfully')
-    #         return HttpResponseRedirect(self.get_success_url())
-    #     else:
-    #         return self.render_to_response(
-    #             self.get_context_data(form=form, form2=form2))
+        if user_form.is_valid() and child_form.is_valid():
+            print('both forms valid')
+            userdata = user_form.save(commit=False)
+    #         # # used to set the password, but no longer necesarry
+            userdata.save()
+    #         # childdata = form2.save(commit=False)
+    #         # childdata.user = userdata
+    #         # childdata.save()
+    #         # messages.success(self.request, 'Settings saved successfully')
+    #         return reverse_lazy('dashboard:dashboard')
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            return self.render_to_response(
+                self.get_context_data(form=user_form, child_form=child_form))
+            # return self.form_invalid(**{'form': form})
 
 
 class ChildDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
