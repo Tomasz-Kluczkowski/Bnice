@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from accounts.models import Child, User
-from accounts.forms import ChildCreateForm
+from accounts.forms import ChildCreateForm, ChildUpdateForm
 from dashboard.models import Smiley, Oopsy
 from dashboard.forms import AddSmileyForm, AddOopsyForm
 from dashboard.services import StarAwarding
@@ -136,14 +136,35 @@ class UserUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class ChildUpdate(LoginRequiredMixin, UpdateView):
     model = User
-    fields = ('username', 'name', 'email', 'profile_photo')
-    template_name = 'dashboard/user_update.html'
+    child_form_class = ChildUpdateForm
+    fields = ('username', 'name', 'email', 'profile_photo',)
+    template_name = 'dashboard/child_update.html'
     success_url = reverse_lazy('dashboard:dashboard')
 
     def get_context_data(self, **kwargs):
-        kwargs['parent'] = Child.objects.get(
-            user__pk=self.object.pk).parent.username
+        child = Child.objects.get(user__pk=self.object.pk)
+        kwargs['parent'] = child.parent.username
+        kwargs['child_form'] = self.child_form_class(
+            initial={'star_points': child.star_points})
         return super().get_context_data(**kwargs)
+
+    # def post(self, request, *args, **kwargs):
+    #     self.object = self.get_object()
+    #     form = self.form_class(request.POST)
+    #     form2 = self.second_form_class(request.POST)
+    #
+    #     if form.is_valid() and form2.is_valid():
+    #         userdata = form.save(commit=False)
+    #         # used to set the password, but no longer necesarry
+    #         userdata.save()
+    #         employeedata = form2.save(commit=False)
+    #         employeedata.user = userdata
+    #         employeedata.save()
+    #         messages.success(self.request, 'Settings saved successfully')
+    #         return HttpResponseRedirect(self.get_success_url())
+    #     else:
+    #         return self.render_to_response(
+    #             self.get_context_data(form=form, form2=form2))
 
 
 class ChildDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

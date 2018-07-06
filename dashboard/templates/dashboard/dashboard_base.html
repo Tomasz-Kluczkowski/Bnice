@@ -11,10 +11,10 @@
                         <div class="dashboard__user-panel col-sm-4 col-lg-3 col-xl-2">
                             <div class="row">
                                 <div class="col-12 text-center">
-                                    <a href="{% url 'dashboard:user_update' pk=user.pk %}">
-                                        {% if user.profile_photo %}
+                                    <a href="{% url 'dashboard:user_update' pk=request.user.pk %}">
+                                        {% if request.user.profile_photo %}
                                             <img class="dashboard__profile-photo"
-                                                 src="{{ user.profile_photo.url }}"
+                                                 src="{{ request.user.profile_photo.url }}"
                                                  alt="User Profile Photo">
                                         {% else %}
                                             <img class="dashboard__profile-photo"
@@ -35,7 +35,7 @@
                                 </div>
                             </div>
                             <hr>
-                            {% if user.is_child %}
+                            {% if request.user.is_child %}
                                 <div class="row">
                                     <div class="col-3 col-sm-12 text-center">
                                         <a class="btn btn-dark ui-button"
@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
                             {% endif %}
-                            {% if user.is_authenticated and user.is_parent or user.is_superuser %}
+                            {% if request.user.is_authenticated and request.user.is_parent or request.user.is_superuser %}
                                 <div class="row">
                                     <div class="col-3 col-sm-12 text-center">
                                         <a class="btn btn-dark ui-button"
@@ -61,7 +61,7 @@
                                         </a>
                                     </div>
                                     {#Show Add Smiley / Oopsy when in child detail view. #}
-                                    {% if "dashboard/child/" in request.path %}
+                                    {% if "dashboard/child/detail" in request.path %}
                                         <div class="col-3 col-sm-12 text-center">
                                             <a class="btn btn-dark ui-button"
                                                href="{% url 'dashboard:smiley_add' parent=child.parent.username child_username=child.user.username pk=child.pk %}">

@@ -25,19 +25,21 @@
                 <div class="row">
                     {% for child in child_list %}
                         <div class="col-lg-4 col-md-6 d-flex dashboard__card card">
-                            {% if child.user.profile_photo %}
-                                <div class="dashboard__card-img-container text-center">
-                                    <img class="dashboard__profile-photo card-img-top"
-                                         src="{{ child.user.profile_photo.url }}"
-                                         alt="Child profile photo">
-                                </div>
-                            {% else %}
-                                <div class="dashboard__card-img-container text-center">
-                                    <img class="dashboard__profile-photo card-img-top"
-                                         src="{% static 'dashboard/images/avatar_500x500px.png' %}"
-                                         alt="Child avatar">
-                                </div>
-                            {% endif %}
+                            <a href="{% url 'dashboard:child_update' pk=child.user.pk %}">
+                                {% if child.user.profile_photo %}
+                                    <div class="dashboard__card-img-container text-center">
+                                        <img class="dashboard__profile-photo card-img-top"
+                                             src="{{ child.user.profile_photo.url }}"
+                                             alt="Child profile photo">
+                                    </div>
+                                {% else %}
+                                    <div class="dashboard__card-img-container text-center">
+                                        <img class="dashboard__profile-photo card-img-top"
+                                             src="{% static 'dashboard/images/avatar_500x500px.png' %}"
+                                             alt="Child avatar">
+                                    </div>
+                                {% endif %}
+                            </a>
                             <div class="card-body p-0">
                                 <div class="row">
                                     <div class="col-12 text-center">

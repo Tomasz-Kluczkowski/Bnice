@@ -87,3 +87,13 @@ class ChildCreateForm(UserCreationForm):
         Child.objects.create(user=user, parent=self.current_user,
                              star_points=self.star_points)
         return user
+
+
+class ChildUpdateForm(forms.ModelForm):
+    """
+
+    """
+
+    class Meta:
+        model = Child
+        fields = ('star_points',)

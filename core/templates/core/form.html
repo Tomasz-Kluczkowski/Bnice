@@ -9,6 +9,9 @@
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% bootstrap_form form layout="horizontal" size="small" label_class="form-label col-md-3" %}
+                {% if child_form %}
+                    {% bootstrap_form child_form layout="horizontal" size="small" label_class="form-label col-md-3" %}
+                {% endif %}
                 {% if form.non_field_errors and request.path == "/accounts/login/" %}
                     <div class="invalid-feedback d-block">The username and password do not match.</div>
                 {% endif %}
