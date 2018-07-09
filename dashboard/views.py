@@ -135,7 +135,7 @@ class UserUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return False
 
 
-class ChildUpdate(LoginRequiredMixin, UpdateView):
+class ChildUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = User
     form_class = UserUpdateForm
     child_form_class = ChildUpdateForm
@@ -168,6 +168,23 @@ class ChildUpdate(LoginRequiredMixin, UpdateView):
         else:
             return self.render_to_response(
                 self.get_context_data(form=user_form, child_form=child_form))
+
+    def test_func(self):
+        """Allow access only to logged in parent users who match child to be
+        updated parent.
+
+        Returns
+        -------
+            Bool
+        """
+        current_user = self.request.user
+        child_user = self.get_object()
+        child = Child.objects.get(user=child_user)
+        parent = child.parent.username
+        if current_user.is_parent and current_user.username == parent:
+            return True
+        else:
+            return False
 
 
 class ChildDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

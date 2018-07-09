@@ -348,34 +348,67 @@ class TestUserUpdate:
 
 class TestChildUpdate:
 
-    def test_get_context_data(self, client, child, child_user_password):
+    def test_test_func_redirects(self, client, alt_parent_user_password,
+                                 child_user, child):
+        """Confirm test_func redirects to login when trying to update other
+        parent's child."""
+        user_logger(client, 'johny_c')
+        response = client.get('/dashboard/child/update/2')
+        assert response.status_code == 302
+        assert response.url == ('/accounts/login/?next=/'
+                                'dashboard/child/update/2')
+
+    def test_get_context_data(self, client, child, child_user,
+                              parent_user_password):
         """Confirm user currently logged in is set as parent in the context
         data"""
-        user_logger(client, 'nat_k')
+        user_logger(client, 'tom_k')
         response = client.get('/dashboard/child/update/1')
         assert response.context['parent'] == 'tom_k'
         assert response.status_code == 200
         templates = response.templates
-        assert templates[0].name == 'dashboard/user_update.html'
+        assert templates[0].name == 'dashboard/child_update.html'
 
-    def test_updating_child_data(self, client, child_user):
+    def test_updating_child_data(self, client, parent_user, child_user, child):
         """Confirm child user data is modified and saved in the database."""
         password = 'password'
         form_data = {'username': 'test_username',
                      'name': 'test_name',
-                     'email': 'testemail@email.com'}
-        user = child_user
+                     'email': 'testemail@email.com',
+                     'star_points': 12}
+        user = parent_user
         user.set_password(password)
         user.save()
-        user_logger(client, 'nat_k')
-        assert User.objects.count() == 1
-        response = client.post('/dashboard/child/update/1', form_data)
+        user_logger(client, 'tom_k')
+        response = client.post('/dashboard/child/update/2', form_data)
         assert response.status_code == 302
-        assert response.url == '/dashboard/'
-        user.refresh_from_db()
-        assert user.username == 'test_username'
-        assert user.name == 'test_name'
-        assert user.email == 'testemail@email.com'
+        assert response.url == '/dashboard/child/detail/tom_k/test_username/2'
+        child_user.refresh_from_db()
+        child.refresh_from_db()
+        assert child_user.username == 'test_username'
+        assert child_user.name == 'test_name'
+        assert child_user.email == 'testemail@email.com'
+        assert child.star_points == 12
+
+    def test_updating_child__invalid_data(self, client, parent_user,
+                                          child_user, child):
+        """Confirm child user is requested to correct errors if invalid data
+        in forms."""
+        password = 'password'
+        form_data = {'username': 'test_username!!!!',
+                     'name': 'test_name',
+                     'email': 'testemail@email.com',
+                     'star_points': 12}
+        user = parent_user
+        user.set_password(password)
+        user.save()
+        user_logger(client, 'tom_k')
+        response = client.post('/dashboard/child/update/2', form_data)
+        assert response.status_code == 200
+        assert ('Enter a valid username. '
+                'This value may contain only'
+                ' letters, numbers, and'
+                ' @/./+/-/_ characters.') in response.content.decode()
 
 
 # Test ChildDelete view.
