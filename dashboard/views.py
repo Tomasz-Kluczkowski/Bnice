@@ -139,9 +139,10 @@ class ChildUpdate(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserUpdateForm
     child_form_class = ChildUpdateForm
-    # fields = ('username', 'name', 'email', 'profile_photo',)
     template_name = 'dashboard/child_update.html'
-    success_url = reverse_lazy('dashboard:dashboard') # Change here to child_detail url with necessary parameters.
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('dashboard:child_detail', **kwargs)
 
     def get_context_data(self, **kwargs):
         child = Child.objects.get(user__pk=self.object.pk)
@@ -152,25 +153,21 @@ class ChildUpdate(LoginRequiredMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        print(type(self.object))
+        child = Child.objects.get(user__pk=self.object.pk)
         user_form = self.form_class(request.POST, instance=self.object)
-        child_form = self.child_form_class(request.POST) # Add instance of the child object here
-    #
+        child_form = self.child_form_class(request.POST, instance=child)
         if user_form.is_valid() and child_form.is_valid():
-            print('both forms valid')
-            userdata = user_form.save(commit=False)
-    #         # # used to set the password, but no longer necesarry
-            userdata.save()
-    #         # childdata = form2.save(commit=False)
-    #         # childdata.user = userdata
-    #         # childdata.save()
-    #         # messages.success(self.request, 'Settings saved successfully')
-    #         return reverse_lazy('dashboard:dashboard')
-            return HttpResponseRedirect(self.get_success_url())
+            user_data = user_form.save(commit=False)
+            user_data.save()
+            child_data = child_form.save(commit=False)
+            child_data.save()
+            return HttpResponseRedirect(self.get_success_url(
+                kwargs={'parent': child.parent.username,
+                        'child_username': child.user.username,
+                        'pk': child.user.pk}))
         else:
             return self.render_to_response(
                 self.get_context_data(form=user_form, child_form=child_form))
-            # return self.form_invalid(**{'form': form})
 
 
 class ChildDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
