@@ -1,9 +1,9 @@
 {% load bootstrap4 %}
 <div class="form-container container">
     <div class="row">
-{#        <div class="col-md-6">#}
-{#            <h1 class="form__section-title">{{ title }}</h1>#}
-{#        </div>#}
+        <div class="col-md-6">
+            <h1 class="form__section-title">{{ title }}</h1>
+        </div>
         <div class="col-md-12">
             {% bootstrap_messages %}
             <form method="post" enctype="multipart/form-data">
@@ -19,7 +19,8 @@
                     <div class="col-12 text-center">
                         {% buttons %}
                             <button type="submit" class="form-button btn btn-success">
-                                {{ title }}
+{#                                {{ title }}#}
+                                Submit
                             </button>
                         {% endbuttons %}
                     </div>
