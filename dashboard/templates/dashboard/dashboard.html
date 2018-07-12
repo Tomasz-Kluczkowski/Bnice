@@ -21,66 +21,66 @@
         {% endif %}
         {% block form %}
         {% endblock %}
-            {% if child_list %}
-                <div class="row">
-                    {% for child in child_list %}
-                        <div class="col-lg-4 col-md-6 d-flex dashboard__card card">
-                            <a href="{% url 'dashboard:child_update' pk=child.user.pk %}">
-                                {% if child.user.profile_photo %}
-                                    <div class="dashboard__card-img-container text-center">
-                                        <img class="dashboard__profile-photo card-img-top"
-                                             src="{{ child.user.profile_photo.url }}"
-                                             alt="Child profile photo">
-                                    </div>
-                                {% else %}
-                                    <div class="dashboard__card-img-container text-center">
-                                        <img class="dashboard__profile-photo card-img-top"
-                                             src="{% static 'dashboard/images/avatar_500x500px.png' %}"
-                                             alt="Child avatar">
-                                    </div>
-                                {% endif %}
-                            </a>
-                            <div class="card-body p-0">
-                                <div class="row">
-                                    <div class="col-12 text-center">
-                                        <a class="dashboard__card-title card-title"
-                                           href="{% url 'dashboard:child_detail' parent=child.parent.username child_username=child.user.username pk=child.pk %}">
-                                           {{ child.user.name }}
-                                        </a>
-                                    </div>
+        {% if child_list %}
+            <div class="row">
+                {% for child in child_list %}
+                    <div class="col-lg-4 col-md-6 d-flex dashboard__card card">
+                        <a href="{% url 'dashboard:child_update' pk=child.user.pk %}">
+                            {% if child.user.profile_photo %}
+                                <div class="dashboard__card-img-container text-center">
+                                    <img class="dashboard__profile-photo card-img-top"
+                                         src="{{ child.user.profile_photo.url }}"
+                                         alt="Child profile photo">
                                 </div>
-                            </div>
-                            <hr>
-                            {%  if user.is_parent %}
-                                <div class="row">
-                                    <div class="col-12 text-center">
-                                        <a class="btn btn-danger form-button-small"
-                                           href="{% url 'dashboard:child_delete' pk=child.pk %}">
-                                                <i class="fas fa-user-slash"></i>
-                                        </a>
-                                    </div>
+                            {% else %}
+                                <div class="dashboard__card-img-container text-center">
+                                    <img class="dashboard__profile-photo card-img-top"
+                                         src="{% static 'dashboard/images/avatar_500x500px.png' %}"
+                                         alt="Child avatar">
                                 </div>
                             {% endif %}
+                        </a>
+                        <div class="card-body p-0">
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <a class="dashboard__card-title card-title"
+                                       href="{% url 'dashboard:child_detail' parent=child.parent.username child_username=child.user.username pk=child.pk %}">
+                                       {{ child.user.name }}
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                    {% endfor %}
-                </div>
-            {% elif request.path == "/dashboard/" %}
-                <div class="row">
-                    <div class="col-12 my-auto">
-                        <div class="alert alert-info alert-dismissible fade show"
-                             role="alert">
-                            You have no children added.
-                            Please use "Add Child" option in the User Panel to
-                            get started.
-                            <button type="button"
-                                    class="close"
-                                    data-dismiss="alert"
-                                    aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
+                        <hr>
+                        {%  if user.is_parent %}
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <a class="btn btn-danger form-button-small"
+                                       href="{% url 'dashboard:child_delete' pk=child.pk %}">
+                                            <i class="fas fa-user-slash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% elif request.path == "/dashboard/" %}
+            <div class="row">
+                <div class="col-12 my-auto">
+                    <div class="alert alert-info alert-dismissible fade show"
+                         role="alert">
+                        You have no children added.
+                        Please use "Add Child" option in the User Panel to
+                        get started.
+                        <button type="button"
+                                class="close"
+                                data-dismiss="alert"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                 </div>
-            {% endif %}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
