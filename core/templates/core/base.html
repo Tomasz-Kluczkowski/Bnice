@@ -1,20 +1,19 @@
 <!DOCTYPE html>
-{% load static %}
 {% load compile_static %}
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
           content="B.Nice - share family chores to have more time for fun.">
+    <title>B.Nice</title>
+    <link rel="stylesheet" href="{% static 'scss/main.scss'|compile %}"/>
+    <link rel="stylesheet" href="{% static 'core/fontawesome-all.css' %}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Cabin+Sketch" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:300" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-    <title>B.Nice</title>
-    <link rel="stylesheet" href="{% static 'scss/main.scss'|compile %}"/>
-    <link rel="stylesheet" href="{% static 'core/fontawesome-all.css' %}"/>
-
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'core/site_icon/apple-touch-icon.png' %}"/>
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'core/site_icon/favicon-32x32.png' %}"/>
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'core/site_icon/favicon-16x16.png' %}"/>

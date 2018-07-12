@@ -1,7 +1,7 @@
 {% extends "dashboard/dashboard.html" %}
 {% load static %}
 {% block form %}
-    <div>
+    <div class="dashboard__action-form">
         {%  if "add_oopsy" in request.path %}
             {% include "core/form.html" with title="Add Oopsy" %}
         {% else %}
