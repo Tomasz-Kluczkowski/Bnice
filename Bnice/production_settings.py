@@ -37,4 +37,3 @@ STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 
 DEFAULT_FILE_STORAGE = 'Bnice.storage_backends.MediaStorage'  # Media uploads
-STATIC_PRECOMPILER_DISABLE_AUTO_COMPILE = True
