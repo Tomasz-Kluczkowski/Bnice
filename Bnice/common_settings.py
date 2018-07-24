@@ -85,6 +85,7 @@ STATICFILES_FINDERS = (
     'static_precompiler.finders.StaticPrecompilerFinder',
 )
 
+STATIC_PRECOMPILER_OUTPUT_DIR = 'core/css'
 STATIC_PRECOMPILER_COMPILERS = (
     ('static_precompiler.compilers.SCSS', {
         "load_paths": [os.path.join(BASE_DIR, "assets", "_sass")],
