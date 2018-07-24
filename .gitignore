@@ -105,7 +105,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 .idea/
-/assets/.sass-cache/
 /_SOURCES/
 /media/
 /static/
+.sass-cache/
