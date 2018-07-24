@@ -46,6 +46,10 @@ body {
   margin-bottom: 0.5rem;
 }
 
+.form-group a {
+  word-break: break-all;
+}
+
 .form-control {
   @include title-font;
   font-weight: bold;
