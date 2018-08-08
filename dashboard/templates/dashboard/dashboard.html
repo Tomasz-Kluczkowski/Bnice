@@ -44,7 +44,7 @@
                             <div class="row">
                                 <div class="col-12 text-center">
                                     <a class="dashboard__card-title card-title"
-                                       href="{% url 'dashboard:child_detail' parent=child.parent.username child_username=child.user.username pk=child.pk %}">
+                                       href="{% url 'dashboard:child_detail' pk=child.pk %}">
                                        {{ child.user.name }}
                                     </a>
                                 </div>

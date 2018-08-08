@@ -31,7 +31,6 @@ urlpatterns = [
     path('child/delete/<int:pk>/', ChildDelete.as_view(), name='child_delete'),
     path(r'^child/<int:pk>/',
          ChildDetail.as_view(), name="child_detail"),
-
     re_path(
         r'^child/add_smiley/(?P<parent>[\w.@+-]+)/'
         r'(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',

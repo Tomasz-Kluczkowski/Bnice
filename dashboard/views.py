@@ -162,9 +162,7 @@ class ChildUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             child_data = child_form.save(commit=False)
             child_data.save()
             return HttpResponseRedirect(self.get_success_url(
-                kwargs={'parent': child.parent.username,
-                        'child_username': child.user.username,
-                        'pk': child.user.pk}))
+                kwargs={'pk': child.user.pk}))
         else:
             return self.render_to_response(
                 self.get_context_data(form=user_form, child_form=child_form))
