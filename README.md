@@ -97,5 +97,3 @@ This is useful when testing behaviour of site on mobiles / tablets etc to confir
 - Your child can edit their profile (well not the star points / password for obvious reasons)
 - Add smileys and oopsies :) when they deserve them.
 - Give details of the child account if you wish so to your kid so they can view their progress!
-
-
