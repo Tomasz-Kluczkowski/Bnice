@@ -26,7 +26,7 @@ urlpatterns = [
     path('add/child/', CreateChildPage.as_view(), name="child_add"),
     path('user/update/<int:pk>/', UserUpdate.as_view(),
          name="user_update"),
-    path('child/update/<int:pk>', ChildUpdate.as_view(),
+    path('child/update/<int:pk>/', ChildUpdate.as_view(),
          name="child_update"),
     path('child/delete/<int:pk>/', ChildDelete.as_view(), name='child_delete'),
     re_path(
