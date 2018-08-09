@@ -29,7 +29,7 @@ urlpatterns = [
     path('child/update/<int:pk>/', ChildUpdate.as_view(),
          name="child_update"),
     path('child/delete/<int:pk>/', ChildDelete.as_view(), name='child_delete'),
-    path(r'^child/<int:pk>/',
+    path('child/detail/<int:pk>/',
          ChildDetail.as_view(), name="child_detail"),
     re_path(
         r'^child/add_smiley/(?P<parent>[\w.@+-]+)/'

@@ -47,8 +47,8 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     template_name = "dashboard/child_detail.html"
 
     def get_context_data(self, **kwargs):
-        child = self.get_object()
-        current_user = self.request.user
+        child = self.child
+        current_user = self.current_user
         if current_user.is_child:
             kwargs['parent'] = child.parent.username
         kwargs['smileys'] = child.smiley_set.all()
@@ -67,11 +67,13 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         -------
             Bool
         """
-        current_user = self.request.user
-        parent = self.kwargs["parent"]
-        if current_user.is_parent and current_user.username == parent:
+        self.current_user = self.request.user
+        self.child = Child.objects.filter(
+            pk=self.kwargs['pk']).select_related('parent')[0]
+        parent = self.child.parent.username
+        if self.current_user.is_parent and self.current_user.username == parent:
             return True
-        elif current_user.is_child and current_user.pk == int(
+        elif self.current_user.is_child and self.current_user.pk == int(
                 self.kwargs["pk"]):
             return True
         else:
