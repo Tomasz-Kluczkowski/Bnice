@@ -83,12 +83,13 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 class AddAction(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def get_context_data(self, **kwargs):
-        kwargs['child'] = Child.objects.get(pk=self.kwargs["pk"])
         return super().get_context_data(**kwargs)
 
     def test_func(self):
+        child = Child.objects.filter(
+            pk=self.kwargs['pk']).select_related('parent')[0]
         current_user = self.request.user
-        parent = self.kwargs["parent"]
+        parent = child.parent.username
         if current_user.is_parent and current_user.username == parent:
             return True
         else:

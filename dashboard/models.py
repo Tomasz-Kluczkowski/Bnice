@@ -26,10 +26,8 @@ class Action(models.Model):
 
     def get_absolute_url(self):
         return reverse(
-            "dashboard:child_detail",
+            "dashboard:child-detail",
             kwargs={
-                "parent": self.owner.parent,
-                "child_username": self.owner.user.username,
                 "pk": self.owner.pk,
             }
         )
