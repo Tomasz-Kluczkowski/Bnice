@@ -23,7 +23,7 @@ app_name = "dashboard"
 
 urlpatterns = [
     path('', DashboardPage.as_view(), name="dashboard"),
-    path('add/child/', CreateChildPage.as_view(), name="child_add"),
+    path('child/new/', CreateChildPage.as_view(), name="child-create"),
     path('user/update/<int:pk>/', UserUpdate.as_view(),
          name="user_update"),
     path('child/update/<int:pk>/', ChildUpdate.as_view(),
