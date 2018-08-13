@@ -67,7 +67,7 @@
 {#                                    {% if "dashboard/child/<int:pk>/" in request.path or "dashboard/child/add_" in request.path %}#}
                                         <div class="col-3 col-sm-12 text-center">
                                             <a class="btn btn-dark ui-button"
-                                               href="{% url 'dashboard:smiley_add' parent=child.parent.username child_username=child.user.username pk=child.pk %}">
+                                               href="{% url 'dashboard:smiley-create' pk=child.pk %}">
                                                 <i class="fas fa-thumbs-up"></i>
                                             </a>
                                         </div>

@@ -23,16 +23,14 @@ app_name = "dashboard"
 
 urlpatterns = [
     path('', DashboardPage.as_view(), name="dashboard"),
+    path('child/<int:pk>/',
+         ChildDetail.as_view(), name="child-detail"),
     path('child/new/', CreateChildPage.as_view(), name="child-create"),
     path('child/<int:pk>/edit', ChildUpdate.as_view(),
          name="child-update"),
     path('child/<int:pk>/delete/', ChildDelete.as_view(), name='child-delete'),
-    path('child/<int:pk>/',
-         ChildDetail.as_view(), name="child-detail"),
-    re_path(
-        r'^child/add_smiley/(?P<parent>[\w.@+-]+)/'
-        r'(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
-        AddSmiley.as_view(), name="smiley_add"),
+    path('child/<int:pk>/smiley/new/', AddSmiley.as_view(),
+         name="smiley-create"),
     path('child/delete_smiley/<int:pk>', SmileyDelete.as_view(),
          name='smiley_delete'),
     path('child/update_smiley/<int:pk>', SmileyUpdate.as_view(),
