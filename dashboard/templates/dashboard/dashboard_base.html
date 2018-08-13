@@ -60,8 +60,11 @@
                                             <i class="fas fa-user-plus"></i>
                                         </a>
                                     </div>
-                                    {#Show Add Smiley / Oopsy when in child detail view. #}
-                                    {% if "dashboard/child/detail" in request.path or "dashboard/child/add_" in request.path %}
+                                    {#Show Add Smiley / Oopsy when in child detail view and add smiley/oopsy view. #}
+                                    {% url 'dashboard:child-detail' pk=child.pk as child_detail_url %}
+                                    {% if child_detail_url in request.path %}
+{#                                    {% if the_url or "dashboard/child/add_" in request.path %}#}
+{#                                    {% if "dashboard/child/<int:pk>/" in request.path or "dashboard/child/add_" in request.path %}#}
                                         <div class="col-3 col-sm-12 text-center">
                                             <a class="btn btn-dark ui-button"
                                                href="{% url 'dashboard:smiley_add' parent=child.parent.username child_username=child.user.username pk=child.pk %}">
