@@ -2,7 +2,7 @@
 {% load static %}
 {% block display_panel %}
     <div class="dashboard__display-panel col-sm-8 col-lg-9 col-xl-10 mr-auto">
-        {% if request.path == "/dashboard/add_child/" %}
+        {% if request.path == "/dashboard/child/new/" %}
             <div class="row">
                 <div class="col-12 my-auto">
                     <div class="alert alert-info alert-dismissible fade show"
@@ -25,7 +25,7 @@
             <div class="row">
                 {% for child in child_list %}
                     <div class="col-lg-4 col-md-6 d-flex dashboard__card card">
-                        <a href="{% url 'dashboard:child_update' pk=child.user.pk %}">
+                        <a href="{% url 'dashboard:child-update' pk=child.user.pk %}">
                             {% if child.user.profile_photo %}
                                 <div class="dashboard__card-img-container text-center">
                                     <img class="dashboard__profile-photo card-img-top"

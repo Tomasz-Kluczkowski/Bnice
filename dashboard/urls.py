@@ -24,10 +24,8 @@ app_name = "dashboard"
 urlpatterns = [
     path('', DashboardPage.as_view(), name="dashboard"),
     path('child/new/', CreateChildPage.as_view(), name="child-create"),
-    path('user/update/<int:pk>/', UserUpdate.as_view(),
-         name="user_update"),
-    path('child/update/<int:pk>/', ChildUpdate.as_view(),
-         name="child_update"),
+    path('child/<int:pk>/edit', ChildUpdate.as_view(),
+         name="child-update"),
     path('child/delete/<int:pk>/', ChildDelete.as_view(), name='child_delete'),
     path('child/detail/<int:pk>/',
          ChildDetail.as_view(), name="child_detail"),
@@ -48,4 +46,6 @@ urlpatterns = [
          name='oopsy_delete'),
     path('child/update_oopsy/<int:pk>', OopsyUpdate.as_view(),
          name='oopsy_update'),
+    path('user/update/<int:pk>/', UserUpdate.as_view(),
+         name="user_update"),
 ]
