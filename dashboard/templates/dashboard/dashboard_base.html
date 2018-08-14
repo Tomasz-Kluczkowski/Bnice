@@ -60,7 +60,6 @@
                                             <i class="fas fa-user-plus"></i>
                                         </a>
                                     </div>
-                                    {#Show Add Smiley / Oopsy when in child detail view  #}
                                     {% url 'dashboard:child-detail' pk=child.pk as child_detail_url %}
                                     {% if child_detail_url %}
                                         <div class="col-3 col-sm-12 text-center">
@@ -69,13 +68,12 @@
                                                 <i class="fas fa-thumbs-up"></i>
                                             </a>
                                         </div>
-
-{#                                        <div class="col-3 col-sm-12 text-center">#}
-{#                                            <a class="btn btn-dark ui-button"#}
-{#                                               href="{% url 'dashboard:oopsy_add' parent=child.parent.username child_username=child.user.username pk=child.pk %}">#}
-{#                                                <i class="fas fa-thumbs-down"></i>#}
-{#                                            </a>#}
-{#                                        </div>#}
+                                        <div class="col-3 col-sm-12 text-center">
+                                            <a class="btn btn-dark ui-button"
+                                               href="{% url 'dashboard:oopsy-create' pk=child.pk %}">
+                                                <i class="fas fa-thumbs-down"></i>
+                                            </a>
+                                        </div>
                                     {% endif %}
                                 </div>
                             {% endif %}
