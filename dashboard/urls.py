@@ -35,15 +35,12 @@ urlpatterns = [
          name='smiley_delete'),
     path('child/update_smiley/<int:pk>', SmileyUpdate.as_view(),
          name='smiley_update'),
-
-    re_path(
-        r'^child/add_oopsy/(?P<parent>[\w.@+-]+)/'
-        r'(?P<child_username>[\w.@+-]+)/(?P<pk>\d+)$',
-        AddOopsy.as_view(), name="oopsy_add"),
+    path('child/<int:pk>/oopsy/new/', AddOopsy.as_view(), name="oopsy-create"),
     path('child/delete_oopsy/<int:pk>', OopsyDelete.as_view(),
          name='oopsy_delete'),
     path('child/update_oopsy/<int:pk>', OopsyUpdate.as_view(),
          name='oopsy_update'),
+
     path('user/update/<int:pk>/', UserUpdate.as_view(),
          name="user_update"),
 ]
