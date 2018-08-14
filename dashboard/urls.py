@@ -39,8 +39,8 @@ urlpatterns = [
     path('child/<int:pk>/oopsy/new/', AddOopsy.as_view(), name="oopsy-create"),
     path('child/<int:child_pk>/oopsy/<int:pk>/delete/', OopsyDelete.as_view(),
          name='oopsy-delete'),
-    path('child/update_oopsy/<int:pk>', OopsyUpdate.as_view(),
-         name='oopsy_update'),
+    path('child/<int:child_pk>/oopsy/<int:pk>/edit/', OopsyUpdate.as_view(),
+         name='oopsy-update'),
 
     path('user/update/<int:pk>/', UserUpdate.as_view(),
          name="user_update"),
