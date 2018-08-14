@@ -35,7 +35,7 @@
                     {% if not action.claimed %}
                         <a class="btn btn-danger form-button-min"
                         {% if action|get_model_name == "Smiley" %}
-                           href="{% url 'dashboard:smiley_delete' pk=action.pk %}">
+                           href="{% url 'dashboard:smiley-delete' pk=action.pk child_pk=child.pk %}">
                         {% else %}
                            href="{% url 'dashboard:oopsy_delete' pk=action.pk %}">
                         {% endif %}
