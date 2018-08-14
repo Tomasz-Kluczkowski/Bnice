@@ -278,13 +278,8 @@ class ActionUpdateBase(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         action = self.object
         child = action.owner
-        child_username = child.user.username
-        parent = action.owner.parent.username
-
-        return reverse('dashboard:child_detail',
-                       kwargs={'parent': parent,
-                               'child_username': child_username,
-                               'pk': child.pk})
+        return reverse('dashboard:child-detail',
+                       kwargs={'pk': child.pk})
 
     def test_func(self):
         """Allow access only to logged in parent user who is parent
