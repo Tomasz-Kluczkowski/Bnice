@@ -37,8 +37,8 @@ urlpatterns = [
     path('child/update_smiley/<int:pk>', SmileyUpdate.as_view(),
          name='smiley_update'),
     path('child/<int:pk>/oopsy/new/', AddOopsy.as_view(), name="oopsy-create"),
-    path('child/delete_oopsy/<int:pk>', OopsyDelete.as_view(),
-         name='oopsy_delete'),
+    path('child/<int:child_pk>/oopsy/<int:pk>/delete/', OopsyDelete.as_view(),
+         name='oopsy-delete'),
     path('child/update_oopsy/<int:pk>', OopsyUpdate.as_view(),
          name='oopsy_update'),
 
