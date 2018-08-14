@@ -71,7 +71,8 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         self.child = Child.objects.filter(
             pk=self.kwargs['pk']).select_related('parent')[0]
         parent = self.child.parent.username
-        if self.current_user.is_parent and self.current_user.username == parent:
+        if (self.current_user.is_parent and
+                self.current_user.username == parent):
             return True
         elif self.current_user.is_child and self.current_user.pk == int(
                 self.kwargs["pk"]):
