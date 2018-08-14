@@ -45,7 +45,7 @@
                         {% if action|get_model_name == "Smiley" %}
                            href="{% url 'dashboard:smiley-update' pk=action.pk child_pk=child.pk %}">
                         {% else %}
-                           href="{% url 'dashboard:oopsy_update' pk=action.pk %}">
+                           href="{% url 'dashboard:oopsy-update' pk=action.pk child_pk=child.pk %}">
                         {% endif %}
                             <i class="far fa-edit"></i>
                         </a>

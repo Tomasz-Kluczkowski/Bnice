@@ -41,7 +41,6 @@ urlpatterns = [
          name='oopsy-delete'),
     path('child/<int:child_pk>/oopsy/<int:pk>/edit/', OopsyUpdate.as_view(),
          name='oopsy-update'),
-
     path('user/update/<int:pk>/', UserUpdate.as_view(),
          name="user_update"),
 ]
