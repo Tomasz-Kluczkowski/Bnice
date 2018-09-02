@@ -112,7 +112,7 @@ class TestCreateChildPage:
         user.set_password(password)
         user.save()
         user_logger(client, 'tom_k')
-        response = client.post('/dashboard/add/child/', form_data)
+        response = client.post('/dashboard/child/new/', form_data)
         assert response.status_code == 302
         assert response.url == '/dashboard/'
         assert Child.objects.count() == 1
