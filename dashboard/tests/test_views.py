@@ -168,7 +168,8 @@ class TestChildDetail:
         user_logger(client, 'nat_k')
         assert User.objects.count() == 2
         assert Child.objects.count() == 1
-        response = client.get('/dashboard/child/detail/tom_k/nat_k/1')
+        response = client.get(reverse('dashboard:child-detail',
+                                      kwargs={'pk': 1}))
         assert response.status_code == 200
         assert response.context['parent'] == 'tom_k'
         assert len(response.context['smileys']) == 1
