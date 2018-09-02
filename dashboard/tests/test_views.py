@@ -178,10 +178,10 @@ class TestChildDetail:
         assert response.context['oopsies'][0] == oopsy_custom_description
 
     def test_test_func_redirects_parent_user(self, client, child,
-                                             parent_user_password):
+                                             alt_parent_user_password):
         """Test test_func redirects when trying to access other user's child
         data when logged in as a parent."""
-        user_logger(client, 'tom_k')
+        user_logger(client, 'johny_c')
         response = client.get(reverse('dashboard:child-detail',
                                       kwargs={'pk': 1}))
         assert response.status_code == 302
