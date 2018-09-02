@@ -201,11 +201,12 @@ class TestChildDetail:
 
 class TestAddAction:
 
-    def test_test_func_redirects(self, client, parent_user_password):
+    def test_test_func_redirects(self, client, child, alt_parent_user_password):
         """Test test_func when trying to access other user's child data when
         logged in as a parent."""
-        user_logger(client, 'tom_k')
-        response = client.get('/dashboard/child/add_smiley/jeffrey/nat_k/1')
+        user_logger(client, 'johny_c')
+        response = client.get(reverse('dashboard:smiley-create',
+                                      kwargs={'pk': 1}))
         assert response.status_code == 302
 
     def test_http_post_smiley(self, client, child, parent_user):
