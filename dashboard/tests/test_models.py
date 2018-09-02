@@ -7,7 +7,7 @@ def test_smiley_reverse(smiley_custom_description):
 def test_oopsy_reverse(oopsy_custom_description):
     """Confirm correct reverse url."""
     oopsy = oopsy_custom_description
-    assert oopsy.get_absolute_url() == '/dashboard/child/detail/tom_k/nat_k/1'
+    assert oopsy.get_absolute_url() == '/dashboard/child/1/'
 
 
 def test_smiley_str(smiley_custom_description):
