@@ -17,6 +17,7 @@ def parent_user_password(db, parent_user):
     user = parent_user
     user.set_password('password')
     user.save()
+    return user
 
 
 @pytest.fixture()
@@ -32,6 +33,7 @@ def alt_parent_user_password(db):
                        is_child=False, profile_photo='')
     user.set_password('password')
     user.save()
+    return user
 
 
 @pytest.fixture()
@@ -46,9 +48,11 @@ def child_user(db):
 @pytest.fixture()
 def child_user_password(db, child_user):
     """Creates a child website user with a password."""
+    print('in fixture')
     user = child_user
     user.set_password('password')
     user.save()
+    return user
 
 
 @pytest.fixture()

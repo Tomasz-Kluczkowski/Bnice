@@ -186,8 +186,8 @@ class TestChildDetail:
                                       kwargs={'pk': 1}))
         assert response.status_code == 302
 
-    def test_test_func_redirects_child_user(self, client, child,
-                                            child_user_password):
+    def test_test_func_redirects_child_user(self, client, child_user_password,
+                                            alt_child):
         """Test test_func redirects when trying to access other child's data
         when logged in as a child."""
         user_logger(client, 'nat_k')
