@@ -27,9 +27,7 @@ class Action(models.Model):
     def get_absolute_url(self):
         return reverse(
             "dashboard:child-detail",
-            kwargs={
-                "pk": self.owner.pk,
-            }
+            kwargs={"pk": self.owner.pk}
         )
 
     def __str__(self):
