@@ -201,16 +201,6 @@ class TestChildDetail:
 
 class TestAddAction:
 
-    def test_get_context_data(self, client, child, alt_child,
-                              parent_user_password):
-        """Confirm only children of the parent user logged in get passed as
-        context data. (alt_child should be filtered out)."""
-        user_logger(client, 'tom_k')
-        response = client.get('/dashboard/child/add_smiley/tom_k/nat_k/1')
-        assert response.status_code == 200
-        assert Child.objects.count() == 2
-        assert response.context['child'] == child
-
     def test_test_func_redirects(self, client, parent_user_password):
         """Test test_func when trying to access other user's child data when
         logged in as a parent."""

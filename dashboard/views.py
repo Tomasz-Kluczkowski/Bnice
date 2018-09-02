@@ -83,9 +83,6 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
 class AddAction(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
-    def get_context_data(self, **kwargs):
-        return super().get_context_data(**kwargs)
-
     def test_func(self):
         child = Child.objects.filter(
             pk=self.kwargs['pk']).select_related('parent')[0]
