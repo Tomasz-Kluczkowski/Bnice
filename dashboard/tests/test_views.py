@@ -92,7 +92,7 @@ class TestCreateChildPage:
         user.save()
         user_logger(client, 'tom_k')
         assert User.objects.count() == 1
-        response = client.get('/dashboard/add/child/')
+        response = client.get('/dashboard/child/new/')
         assert response.status_code == 200
         # Confirm initial value for parent is passed using get_initial method.
         form = response.context['form']
