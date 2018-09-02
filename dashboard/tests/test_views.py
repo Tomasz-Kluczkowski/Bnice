@@ -209,21 +209,19 @@ class TestAddAction:
                                       kwargs={'pk': 1}))
         assert response.status_code == 302
 
-    def test_http_post_smiley(self, client, child, parent_user):
+    def test_http_post_smiley(self, client, child, parent_user_password):
         """Confirm Smiley object gets attributes owner and earned_on added
         when form is valid."""
-        password = 'password'
         form_data = {'description': 'Folded washing',
                      'new_description': '',
                      'points': 5}
-        user = parent_user
-        user.set_password(password)
-        user.save()
         user_logger(client, 'tom_k')
-        response = client.post('/dashboard/child/add_smiley/tom_k/nat_k/1',
+        response = client.post(reverse('dashboard:smiley-create',
+                                       kwargs={'pk': 1}),
                                form_data)
         assert response.status_code == 302
-        assert response.url == '/dashboard/child/detail/tom_k/nat_k/1'
+        assert response.url == reverse('dashboard:child-detail',
+                                       kwargs={'pk': 1})
         assert Smiley.objects.count() == 1
         smiley = Smiley.objects.last()
         assert smiley.owner == child
