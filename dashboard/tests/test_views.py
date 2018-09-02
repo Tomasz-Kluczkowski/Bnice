@@ -1,4 +1,6 @@
 import pytest
+from django.urls import reverse
+
 from accounts.models import User, Child
 from dashboard.models import Smiley, Oopsy
 
@@ -135,7 +137,8 @@ class TestChildDetail:
         user_logger(client, 'tom_k')
         assert User.objects.count() == 2
         assert Child.objects.count() == 1
-        response = client.get('/dashboard/child/detail/tom_k/nat_k/1')
+        response = client.get(reverse('dashboard:child-detail',
+                                      kwargs={'pk': 1}))
         assert response.status_code == 200
         templates = response.templates
         assert templates[0].name == 'dashboard/child_detail.html'
