@@ -252,21 +252,19 @@ class TestAddAction:
         assert smiley.description == 'Testing'
         assert smiley.points == 5
 
-    def test_http_post_oopsy(self, client, child, parent_user):
+    def test_http_post_oopsy(self, client, child, parent_user_password):
         """Confirm Oopsy object gets attributes owner and earned_on added
         when form is valid."""
-        password = 'password'
         form_data = {'description': 'Was lying',
                      'new_description': '',
                      'points': 5}
-        user = parent_user
-        user.set_password(password)
-        user.save()
         user_logger(client, 'tom_k')
-        response = client.post('/dashboard/child/add_oopsy/tom_k/nat_k/1',
+        response = client.post(reverse('dashboard:oopsy-create',
+                                       kwargs={'pk': 1}),
                                form_data)
         assert response.status_code == 302
-        assert response.url == '/dashboard/child/detail/tom_k/nat_k/1'
+        assert response.url == reverse('dashboard:child-detail',
+                                       kwargs={'pk': 1})
         assert Oopsy.objects.count() == 1
         oopsy = Oopsy.objects.last()
         assert oopsy.owner == child
@@ -276,21 +274,19 @@ class TestAddAction:
         assert oopsy.points == 5
 
     def test_http_post_oopsy_custom_description(self, client, child,
-                                                parent_user):
+                                                parent_user_password):
         """Confirm Oopsy object gets attributes owner and earned_on added
         when form is valid and new description overrides description field."""
-        password = 'password'
         form_data = {'description': 'Add new',
                      'new_description': 'Testing',
                      'points': 5}
-        user = parent_user
-        user.set_password(password)
-        user.save()
         user_logger(client, 'tom_k')
-        response = client.post('/dashboard/child/add_oopsy/tom_k/nat_k/1',
+        response = client.post(reverse('dashboard:oopsy-create',
+                                       kwargs={'pk': 1}),
                                form_data)
         assert response.status_code == 302
-        assert response.url == '/dashboard/child/detail/tom_k/nat_k/1'
+        assert response.url == reverse('dashboard:child-detail',
+                                       kwargs={'pk': 1})
         assert Oopsy.objects.count() == 1
         oopsy = Oopsy.objects.last()
         assert oopsy.owner == child
