@@ -181,7 +181,8 @@ class TestChildDetail:
         """Test test_func redirects when trying to access other user's child
         data when logged in as a parent."""
         user_logger(client, 'tom_k')
-        response = client.get('/dashboard/child/detail/jeffrey/gonzo/1')
+        response = client.get(reverse('dashboard:child-detail',
+                                      kwargs={'pk': 1}))
         assert response.status_code == 302
 
     def test_test_func_redirects_child_user(self, client, child,
