@@ -30,12 +30,8 @@ class Child(models.Model):
 
     def get_absolute_url(self):
         return reverse(
-            "dashboard:child_detail",
-            kwargs={
-                "parent": self.parent.username,
-                "child_username": self.user.username,
-                "pk": self.pk
-            }
+            "dashboard:child-detail",
+            kwargs={"pk": self.pk}
         )
 
     def __str__(self):

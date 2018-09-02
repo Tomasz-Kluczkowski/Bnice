@@ -21,9 +21,7 @@ def test_child_model(parent_user, child_user):
     assert isinstance(child, Child)
     assert child.__str__() == child.user.username
     assert child.get_absolute_url() == (
-        '/dashboard/child/detail/{0}/{1}/{2}'.format(parent_user.username,
-                                                     child_user.username,
-                                                     child.pk))
+        '/dashboard/child/{0}/'.format(child.pk))
     assert User.objects.count() == 2
     assert child.user.username == 'nat_k'
     assert child.user.name == 'Natalie'
