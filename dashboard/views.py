@@ -143,7 +143,7 @@ class ChildUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'dashboard/child_update.html'
 
     def get_success_url(self, **kwargs):
-        return reverse_lazy('dashboard:child_detail', **kwargs)
+        return reverse_lazy('dashboard:child-detail', **kwargs)
 
     def get_context_data(self, **kwargs):
         child = Child.objects.get(user__pk=self.object.pk)

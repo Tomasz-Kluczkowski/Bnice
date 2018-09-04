@@ -344,36 +344,36 @@ class TestChildUpdate:
         """Confirm test_func redirects to login when trying to update other
         parent's child."""
         user_logger(client, 'johny_c')
-        response = client.get('/dashboard/child/update/2/')
+        response = client.get(reverse('dashboard:child-update',
+                                      kwargs={'pk': 2}))
         assert response.status_code == 302
         assert response.url == ('/accounts/login/?next=/'
-                                'dashboard/child/update/2/')
+                                'dashboard/child/2/edit/')
 
     def test_get_context_data(self, client, child, child_user,
                               parent_user_password):
         """Confirm user currently logged in is set as parent in the context
         data"""
         user_logger(client, 'tom_k')
-        response = client.get('/dashboard/child/update/1/')
+        response = client.get(reverse('dashboard:child-update',
+                                      kwargs={'pk': 1}))
         assert response.context['parent'] == 'tom_k'
         assert response.status_code == 200
         templates = response.templates
         assert templates[0].name == 'dashboard/child_update.html'
 
-    def test_updating_child_data(self, client, parent_user, child_user, child):
+    def test_updating_child_data(self, client, parent_user_password,
+                                 child_user, child):
         """Confirm child user data is modified and saved in the database."""
-        password = 'password'
         form_data = {'username': 'test_username',
                      'name': 'test_name',
                      'email': 'testemail@email.com',
                      'star_points': 12}
-        user = parent_user
-        user.set_password(password)
-        user.save()
         user_logger(client, 'tom_k')
-        response = client.post('/dashboard/child/update/2/', form_data)
+        response = client.post(reverse('dashboard:child-update',
+                                       kwargs={'pk': 2}), form_data)
         assert response.status_code == 302
-        assert response.url == '/dashboard/child/detail/tom_k/test_username/2'
+        assert response.url == '/dashboard/child/2/'
         child_user.refresh_from_db()
         child.refresh_from_db()
         assert child_user.username == 'test_username'

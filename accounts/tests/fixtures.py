@@ -48,7 +48,6 @@ def child_user(db):
 @pytest.fixture()
 def child_user_password(db, child_user):
     """Creates a child website user with a password."""
-    print('in fixture')
     user = child_user
     user.set_password('password')
     user.save()
