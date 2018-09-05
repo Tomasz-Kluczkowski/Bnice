@@ -201,7 +201,8 @@ class TestChildDetail:
 
 class TestAddAction:
 
-    def test_test_func_redirects(self, client, child, alt_parent_user_password):
+    def test_test_func_redirects(self, client, child,
+                                 alt_parent_user_password):
         """Test test_func when trying to access other user's child data when
         logged in as a parent."""
         user_logger(client, 'johny_c')
