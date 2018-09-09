@@ -37,7 +37,7 @@ class TestDashboardPage:
         """Test logging to dashboard page with no children added."""
         assert User.objects.count() == 1
         user_logger(client, 'tom_k')
-        response = client.get('/dashboard/')
+        response = client.get(reverse('dashboard:dashboard'))
         assert response.status_code == 200
         assert len(response.context['child_list']) == 0
         templates = response.templates
@@ -50,7 +50,7 @@ class TestDashboardPage:
         Confirms that only child who's parent is logged in is in the
         child_list context data."""
         user_logger(client, 'tom_k')
-        response = client.get('/dashboard/')
+        response = client.get(reverse('dashboard:dashboard'))
         assert Child.objects.count() == 2
         assert response.status_code == 200
         assert len(response.context['child_list']) == 1
@@ -62,20 +62,16 @@ class TestDashboardPage:
         """Tests if get_queryset restricts children in child_list by checking
         parent."""
         user_logger(client, 'johny_c')
-        response = client.get('/dashboard/')
+        response = client.get(reverse('dashboard:dashboard'))
         assert response.status_code == 200
         # Since child has different parent it should not be added to
         # the queryset.
         assert len(response.context['child_list']) == 0
 
-    def test_queryset_with_child_logged_in(self, client, child_user, child,
-                                           alt_child):
+    def test_queryset_with_child_logged_in(self, client, child_user_password,
+                                           child, alt_child):
         """Test logging to dashboard page as a child user. child_list should
         contain only the logged in child user."""
-        password = 'password'
-        user = child_user
-        user.set_password(password)
-        user.save()
         user_logger(client, 'nat_k')
         response = client.get('/dashboard/')
         assert Child.objects.count() == 2
@@ -87,14 +83,11 @@ class TestDashboardPage:
 # Tests of CreateChildPage view.
 class TestCreateChildPage:
 
-    def test_http_get(self, client, parent_user):
-        password = 'password'
-        user = parent_user
-        user.set_password(password)
-        user.save()
+    def test_http_get(self, client, parent_user_password):
+        user = parent_user_password
         user_logger(client, 'tom_k')
         assert User.objects.count() == 1
-        response = client.get('/dashboard/child/new/')
+        response = client.get(reverse('dashboard:child-create'))
         assert response.status_code == 200
         # Confirm initial value for parent is passed using get_initial method.
         form = response.context['form']
@@ -102,19 +95,15 @@ class TestCreateChildPage:
         templates = response.templates
         assert templates[0].name == 'dashboard/add_child.html'
 
-    def test_http_post(self, client, parent_user):
+    def test_http_post(self, client, parent_user_password):
         form_data = {'username': 'kid',
                      'name': 'lili',
                      'email': 'lili@gmail.com',
                      'star_points': 20,
                      'password1': 'new_pass',
                      'password2': 'new_pass'}
-        password = 'password'
-        user = parent_user
-        user.set_password(password)
-        user.save()
         user_logger(client, 'tom_k')
-        response = client.post('/dashboard/child/new/', form_data)
+        response = client.post(reverse('dashboard:child-create'), form_data)
         assert response.status_code == 302
         assert response.url == '/dashboard/'
         assert Child.objects.count() == 1
@@ -122,7 +111,7 @@ class TestCreateChildPage:
         assert child.user.username == 'kid'
         assert child.user.name == 'lili'
         assert child.user.email == 'lili@gmail.com'
-        assert child.parent == parent_user
+        assert child.parent == parent_user_password
         assert child.star_points == 20
 
 
@@ -303,7 +292,8 @@ class TestUserUpdate:
 
     def test_http_get(self, client, parent_user_password):
         user_logger(client, 'tom_k')
-        response = client.get('/dashboard/user/update/1/')
+        response = client.get(reverse('dashboard:user-update',
+                                      kwargs={'pk': 1}))
         assert response.status_code == 200
         templates = response.templates
         assert templates[0].name == 'dashboard/user_update.html'
@@ -313,22 +303,21 @@ class TestUserUpdate:
         """Confirm test_func redirects to login when trying to update other user's
         profile."""
         user_logger(client, 'nat_k')
-        response = client.get('/dashboard/user/update/2/')
+        response = client.get(reverse('dashboard:user-update',
+                                      kwargs={'pk': 2}))
         assert response.status_code == 302
         assert response.url == (
-            '/accounts/login/?next=/dashboard/user/update/2/')
+            '/accounts/login/?next=/dashboard/user/2/edit/')
 
-    def test_updating_user_data(self, client, parent_user):
+    def test_updating_user_data(self, client, parent_user_password):
         """Confirm user data is modified and saved in the database."""
-        password = 'password'
+        user = parent_user_password
         form_data = {'username': 'test_username',
                      'email': 'testemail@email.com'}
-        user = parent_user
-        user.set_password(password)
-        user.save()
         user_logger(client, 'tom_k')
         assert User.objects.count() == 1
-        response = client.post('/dashboard/user/update/1/', form_data)
+        response = client.post(reverse('dashboard:user-update',
+                                       kwargs={'pk': 1}), form_data)
         assert response.status_code == 302
         assert response.url == '/dashboard/'
         user.refresh_from_db()
