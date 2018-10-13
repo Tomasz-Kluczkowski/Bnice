@@ -35,15 +35,17 @@ class UserCreateForm(UserCreationForm):
 
     def save(self, commit=False):
         user = super().save(commit=False)
-        user.is_parent = True
+        user.user_type = User.TYPE_PARENT
+        # TODO Find all is_parent and is_child checks and fix them
+        # TODO Fix is_superuser converted to parent in runpyton migration
+        # TODO Add ssh keys to the project.
         user.save()
         return user
 
 
 class ChildCreateForm(UserCreationForm):
     """
-    A child user is capable of viewing only the website (atm). We may consider
-    giving them an option to edit their own profile in the future.
+    A child user form.
     """
 
     star_points = forms.IntegerField(initial=15, required=True)
@@ -82,7 +84,7 @@ class ChildCreateForm(UserCreationForm):
     @transaction.atomic
     def save(self, commit=False):
         user = super().save(commit=False)
-        user.is_child = True
+        user.user_type = User.TYPE_CHILD
         user.save()
         Child.objects.create(user=user, parent=self.current_user,
                              star_points=self.star_points)
