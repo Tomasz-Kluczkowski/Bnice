@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
                             {% endif %}
-                            {% if request.user.is_authenticated and request.user.is_parent or request.user.is_superuser %}
+                            {% if request.user.is_authenticated and request.user.is_parent or request.user.is_administrator %}
                                 <div class="row">
                                     <div class="col-3 col-sm-12 text-center">
                                         <a class="btn btn-dark ui-button"
