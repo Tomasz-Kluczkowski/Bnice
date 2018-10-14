@@ -22,7 +22,7 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
-    def is_admininstrator(self):
+    def is_administrator(self):
         return self.user_type == self.TYPE_ADMIN
 
     def is_parent(self):
