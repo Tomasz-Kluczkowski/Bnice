@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+python manage.py migrate --noinput
 echo Compiling scss...
 python manage.py compilestatic
 echo Finished Compiling scss...
