@@ -36,9 +36,6 @@ class UserCreateForm(UserCreationForm):
     def save(self, commit=False):
         user = super().save(commit=False)
         user.user_type = User.TYPE_PARENT
-        # TODO Find all is_parent and is_child checks and fix them
-        # TODO Fix is_superuser converted to parent in runpyton migration
-        # TODO Add ssh keys to the project.
         user.save()
         return user
 

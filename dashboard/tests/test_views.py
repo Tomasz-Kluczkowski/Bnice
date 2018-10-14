@@ -167,6 +167,16 @@ class TestChildDetail:
         assert response.context['smileys'][0] == smiley_custom_description
         assert response.context['oopsies'][0] == oopsy_custom_description
 
+    def test_no_edit_delete_action_for_child_user(self, client,
+                                                  child_user_password,
+                                                  smiley_custom_description,
+                                                  oopsy_custom_description):
+        """Confirm child user unable to add/edit/delete their actions."""
+        user_logger(client, 'nat_k')
+        response = client.get(reverse('dashboard:child-detail',
+                                      kwargs={'pk': 1}))
+        print(response.content.decode())
+
     def test_test_func_redirects_parent_user(self, client, child,
                                              alt_parent_user_password):
         """Test test_func redirects when trying to access other user's child
