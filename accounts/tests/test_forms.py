@@ -1,6 +1,6 @@
 import pytest
 
-from accounts.models import Child
+from accounts.models import Child, User
 from accounts.forms import UserCreateForm, ChildCreateForm
 
 
@@ -25,8 +25,7 @@ def test_user_create_form():
     assert user.email == 'tom@dot.pl'
     assert user.profile_photo == ''
     # Confirm is_parent is appropriately set in save method.
-    assert user.is_parent is True
-    assert user.is_child is False
+    assert user.user_type == User.TYPE_PARENT
 
 
 @pytest.mark.django_db
@@ -55,8 +54,7 @@ def test_child_create_form(parent_user):
     assert child_user.name == 'Natalie'
     assert child_user.profile_photo == ''
     # Confirm is_child is appropriately set in save method.
-    assert child_user.is_parent is False
-    assert child_user.is_child is True
+    assert child_user.user_type == User.TYPE_CHILD
     child = Child.objects.get(user=child_user)
     # Confirm a new child object is created when a child user is saved.
     assert child.star_points == 10

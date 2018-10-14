@@ -1,13 +1,19 @@
 import pytest
+
+from accounts.models import User
 from accounts.tests.factories import UserFactory, ChildFactory
 
 
 @pytest.fixture()
 def parent_user(db):
     """Creates a parent website user."""
-    user = UserFactory(username='tom_k', name='Tom',
-                       email='tom@dot.pl', is_parent=True,
-                       is_child=False, profile_photo='')
+    user = UserFactory(
+        username='tom_k',
+        name='Tom',
+        email='tom@dot.pl',
+        user_type=User.TYPE_PARENT,
+        profile_photo=''
+    )
     return user
 
 
@@ -28,9 +34,13 @@ def alt_parent_user_password(db):
     of currently logged in parent are shown in views.
     """
 
-    user = UserFactory(username='johny_c', name='Johny',
-                       email='johny@dot.pl', is_parent=True,
-                       is_child=False, profile_photo='')
+    user = UserFactory(
+        username='johny_c',
+        name='Johny',
+        email='johny@dot.pl',
+        user_type=User.TYPE_PARENT,
+        profile_photo=''
+    )
     user.set_password('password')
     user.save()
     return user
@@ -39,9 +49,13 @@ def alt_parent_user_password(db):
 @pytest.fixture()
 def child_user(db):
     """Creates a child website user."""
-    user = UserFactory(username='nat_k', name='Natalie',
-                       email='nat@dot.pl', is_parent=False,
-                       is_child=True, profile_photo='')
+    user = UserFactory(
+        username='nat_k',
+        name='Natalie',
+        email='nat@dot.pl',
+        user_type=User.TYPE_CHILD,
+        profile_photo=''
+    )
     return user
 
 
@@ -57,9 +71,13 @@ def child_user_password(db, child_user):
 @pytest.fixture()
 def alt_child_user(db):
     """Creates alternate child website user."""
-    user = UserFactory(username='sophie_m', name='Sophie',
-                       email='sm@dot.pl', is_parent=False,
-                       is_child=True, profile_photo='')
+    user = UserFactory(
+        username='sophie_m',
+        name='Sophie',
+        email='sm@dot.pl',
+        user_type=User.TYPE_CHILD,
+        profile_photo=''
+    )
     return user
 
 

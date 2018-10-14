@@ -3,4 +3,5 @@ exclude =
     *migrations*
     .tox/
     env/
+    venv/
 max-line-length = 79

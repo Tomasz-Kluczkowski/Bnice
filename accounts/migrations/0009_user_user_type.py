@@ -9,17 +9,17 @@ def move_to_user_type(apps, schema_editor):
         apps
         .get_model('accounts', 'User')
         .objects
-        .filter(is_active=True)
+        .all()
     )
     for user in existing_users:
-        if user.is_parent:
+        if user.is_superuser:
+            user.user_type = User.TYPE_ADMIN
+            user.save()
+        elif user.is_parent:
             user.user_type = User.TYPE_PARENT
             user.save()
         elif user.is_child:
             user.user_type = User.TYPE_CHILD
-            user.save()
-        elif user.is_superuser:
-            user.user_type = User.TYPE_ADMIN
             user.save()
 
 

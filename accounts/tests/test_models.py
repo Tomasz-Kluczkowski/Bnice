@@ -11,8 +11,7 @@ def test_user_model(parent_user):
     assert parent_user.name == 'Tom'
     assert parent_user.email == 'tom@dot.pl'
     assert parent_user.profile_photo == ''
-    assert parent_user.is_parent is True
-    assert parent_user.is_child is False
+    assert parent_user.user_type == User.TYPE_PARENT
 
 
 @pytest.mark.django_db
@@ -26,7 +25,6 @@ def test_child_model(parent_user, child_user):
     assert child.user.username == 'nat_k'
     assert child.user.name == 'Natalie'
     assert child.user.email == 'nat@dot.pl'
-    assert child.user.is_parent is False
-    assert child.user.is_child is True
+    assert child.user.user_type == User.TYPE_CHILD
     assert child.star_points == 15
     assert child.parent.username == 'tom_k'

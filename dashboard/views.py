@@ -20,7 +20,7 @@ class DashboardPage(LoginRequiredMixin, ListView):
     template_name = "dashboard/dashboard.html"
 
     def get_queryset(self):
-        if self.request.user.is_child:
+        if self.request.user.is_child():
             return Child.objects.filter(
                 pk=self.request.user.pk).select_related('parent', 'user')
         else:
