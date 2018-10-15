@@ -71,10 +71,10 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         self.child = Child.objects.filter(
             pk=self.kwargs['pk']).select_related('parent')[0]
         parent = self.child.parent.username
-        if (self.current_user.is_parent and
+        if (self.current_user.is_parent() and
                 self.current_user.username == parent):
             return True
-        elif self.current_user.is_child and self.current_user.pk == int(
+        elif self.current_user.is_child() and self.current_user.pk == int(
                 self.kwargs["pk"]):
             return True
         else:
@@ -88,7 +88,7 @@ class AddAction(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             pk=self.kwargs['pk']).select_related('parent')[0]
         current_user = self.request.user
         parent = child.parent.username
-        if current_user.is_parent and current_user.username == parent:
+        if current_user.is_parent() and current_user.username == parent:
             return True
         else:
             return False
@@ -180,7 +180,7 @@ class ChildUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         child_user = self.get_object()
         child = Child.objects.get(user=child_user)
         parent = child.parent.username
-        if current_user.is_parent and current_user.username == parent:
+        if current_user.is_parent() and current_user.username == parent:
             return True
         else:
             return False
@@ -202,7 +202,7 @@ class ChildDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         current_user = self.request.user
         child = self.get_object()
         parent = child.parent.username
-        if current_user.is_parent and current_user.username == parent:
+        if current_user.is_parent() and current_user.username == parent:
             return True
         else:
             return False
@@ -241,7 +241,7 @@ class ActionDeleteBase(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         current_user = self.request.user
         action = self.get_object()
         parent = action.owner.parent.username
-        if current_user.is_parent and current_user.username == parent:
+        if current_user.is_parent() and current_user.username == parent:
             return True
         else:
             return False
@@ -290,7 +290,7 @@ class ActionUpdateBase(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         current_user = self.request.user
         action = self.get_object()
         parent = action.owner.parent.username
-        if current_user.is_parent and current_user.username == parent:
+        if current_user.is_parent() and current_user.username == parent:
             return True
         else:
             return False
