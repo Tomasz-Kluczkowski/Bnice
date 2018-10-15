@@ -177,14 +177,11 @@ class TestChildDetail:
                                       kwargs={'pk': 1}))
         print(response.content.decode())
 
-    def test_test_func_redirects_parent_user(self, client, child,
-                                             alt_parent_user_password):
-        """Test test_func redirects when trying to access other user's child
-        data when logged in as a parent."""
+    def test_test_func_redirects_parent_user(self, client, child, alt_parent_user_password):
+        """Test test_func redirects when trying to access other user's child data when logged in as a parent."""
         user_logger(client, 'johny_c')
-        response = client.get(reverse('dashboard:child-detail',
-                                      kwargs={'pk': 1}))
-        assert response.status_code == 302
+        response = client.get(reverse('dashboard:child-detail', kwargs={'pk': 1}))
+        assert response.status_code == 403
 
     def test_test_func_redirects_child_user(self, client, child_user_password,
                                             alt_child):
@@ -193,35 +190,26 @@ class TestChildDetail:
         user_logger(client, 'nat_k')
         response = client.get(reverse('dashboard:child-detail',
                                       kwargs={'pk': 2}))
-        assert response.status_code == 302
+        assert response.status_code == 403
 
 
 # Tests of AddAction view.
 
 class TestAddAction:
 
-    def test_test_func_redirects(self, client, child,
-                                 alt_parent_user_password):
-        """Test test_func when trying to access other user's child data when
-        logged in as a parent."""
+    def test_test_func_redirects(self, client, child, alt_parent_user_password):
+        """Test test_func when trying to access other user's child data when logged in as a parent."""
         user_logger(client, 'johny_c')
-        response = client.get(reverse('dashboard:smiley-create',
-                                      kwargs={'pk': 1}))
-        assert response.status_code == 302
+        response = client.get(reverse('dashboard:smiley-create', kwargs={'pk': 1}))
+        assert response.status_code == 403
 
     def test_http_post_smiley(self, client, child, parent_user_password):
-        """Confirm Smiley object gets attributes owner and earned_on added
-        when form is valid."""
-        form_data = {'description': 'Folded washing',
-                     'new_description': '',
-                     'points': 5}
+        """Confirm Smiley object gets attributes owner and earned_on added when form is valid."""
+        form_data = {'description': 'Folded washing', 'new_description': '', 'points': 5}
         user_logger(client, 'tom_k')
-        response = client.post(reverse('dashboard:smiley-create',
-                                       kwargs={'pk': 1}),
-                               form_data)
+        response = client.post(reverse('dashboard:smiley-create', kwargs={'pk': 1}), form_data)
         assert response.status_code == 302
-        assert response.url == reverse('dashboard:child-detail',
-                                       kwargs={'pk': 1})
+        assert response.url == reverse('dashboard:child-detail', kwargs={'pk': 1})
         assert Smiley.objects.count() == 1
         smiley = Smiley.objects.last()
         assert smiley.owner == child
@@ -302,22 +290,16 @@ class TestUserUpdate:
 
     def test_http_get(self, client, parent_user_password):
         user_logger(client, 'tom_k')
-        response = client.get(reverse('dashboard:user-update',
-                                      kwargs={'pk': 1}))
+        response = client.get(reverse('dashboard:user-update', kwargs={'pk': 1}))
         assert response.status_code == 200
         templates = response.templates
         assert templates[0].name == 'dashboard/user_update.html'
 
-    def test_test_func_redirects(self, client, child_user_password,
-                                 parent_user_password):
-        """Confirm test_func redirects to login when trying to update other user's
-        profile."""
+    def test_test_func_redirects(self, client, child_user_password, parent_user_password):
+        """Confirm test_func redirects to login when trying to update other user's profile."""
         user_logger(client, 'nat_k')
-        response = client.get(reverse('dashboard:user-update',
-                                      kwargs={'pk': 2}))
-        assert response.status_code == 302
-        assert response.url == (
-            '/accounts/login/?next=/dashboard/user/2/edit/')
+        response = client.get(reverse('dashboard:user-update', kwargs={'pk': 2}))
+        assert response.status_code == 403
 
     def test_updating_user_data(self, client, parent_user_password):
         """Confirm user data is modified and saved in the database."""
@@ -339,24 +321,16 @@ class TestUserUpdate:
 
 class TestChildUpdate:
 
-    def test_test_func_redirects(self, client, alt_parent_user_password,
-                                 child_user, child):
-        """Confirm test_func redirects to login when trying to update other
-        parent's child."""
+    def test_test_func_redirects(self, client, alt_parent_user_password, child_user, child):
+        """Confirm test_func redirects to login when trying to update other parent's child."""
         user_logger(client, 'johny_c')
-        response = client.get(reverse('dashboard:child-update',
-                                      kwargs={'pk': 2}))
-        assert response.status_code == 302
-        assert response.url == ('/accounts/login/?next=/'
-                                'dashboard/child/2/edit/')
+        response = client.get(reverse('dashboard:child-update', kwargs={'pk': 2}))
+        assert response.status_code == 403
 
-    def test_get_context_data(self, client, child, child_user,
-                              parent_user_password):
-        """Confirm user currently logged in is set as parent in the context
-        data"""
+    def test_get_context_data(self, client, child, child_user, parent_user_password):
+        """Confirm user currently logged in is set as parent in the context data"""
         user_logger(client, 'tom_k')
-        response = client.get(reverse('dashboard:child-update',
-                                      kwargs={'pk': 1}))
+        response = client.get(reverse('dashboard:child-update', kwargs={'pk': 1}))
         assert response.context['parent'] == 'tom_k'
         assert response.status_code == 200
         templates = response.templates
@@ -403,36 +377,25 @@ class TestChildUpdate:
 
 class TestChildDelete:
 
-    def test_http_get_correct_parent(self, client, child,
-                                     parent_user_password):
-        """Confirm child delete page accessible to parent user of child to be
-        deleted."""
+    def test_http_get_correct_parent(self, client, child, parent_user_password):
+        """Confirm child delete page accessible to parent user of child to be deleted."""
         user_logger(client, 'tom_k')
-        response = client.get(reverse('dashboard:child-delete',
-                                      kwargs={'pk': 1}))
+        response = client.get(reverse('dashboard:child-delete', kwargs={'pk': 1}))
         assert response.status_code == 200
         templates = response.templates
         assert templates[0].name == 'dashboard/child_delete.html'
 
-    def test_http_get_incorrect_parent(self, client, child,
-                                       alt_parent_user_password):
-        """Confirm child delete page inaccessible to user who is not a parent
-        of the child to be deleted."""
+    def test_http_get_incorrect_parent(self, client, child, alt_parent_user_password):
+        """Confirm child delete page inaccessible to user who is not a parent of the child to be deleted."""
         user_logger(client, 'johny_c')
-        response = client.get(reverse('dashboard:child-delete',
-                                      kwargs={'pk': 1}))
-        assert response.status_code == 302
-        assert response.url == ('/accounts/login/?next=/'
-                                'dashboard/child/1/delete/')
+        response = client.get(reverse('dashboard:child-delete', kwargs={'pk': 1}))
+        assert response.status_code == 403
 
-    def test_http_post_deletes_child(self, client, child,
-                                     parent_user_password):
-        """Confirm submitting form deletes the child object from the database and
-        redirects to dashboard view."""
+    def test_http_post_deletes_child(self, client, child, parent_user_password):
+        """Confirm submitting form deletes the child object from the database and redirects to dashboard view."""
         user_logger(client, 'tom_k')
         assert Child.objects.count() == 1
-        response = client.post(reverse('dashboard:child-delete',
-                                       kwargs={'pk': 1}))
+        response = client.post(reverse('dashboard:child-delete', kwargs={'pk': 1}))
         assert response.status_code == 302
         assert response.url == '/dashboard/'
         assert Child.objects.count() == 0
@@ -443,46 +406,29 @@ class TestChildDelete:
 
 class TestSmileyDelete:
 
-    def test_http_get_correct_parent(self, client, child,
-                                     smiley_custom_description,
-                                     parent_user_password):
-        """Confirm view is accessible by parent of the child which Smiley we are
-        deleting."""
+    def test_http_get_correct_parent(self, client, child, smiley_custom_description, parent_user_password):
+        """Confirm view is accessible by parent of the child which Smiley we are deleting."""
         user_logger(client, 'tom_k')
-        response = client.get(reverse('dashboard:smiley-delete',
-                                      kwargs={'child_pk': 1,
-                                              'pk': 1}))
+        response = client.get(reverse('dashboard:smiley-delete', kwargs={'child_pk': 1, 'pk': 1}))
         assert response.status_code == 200
         templates = response.templates
         assert templates[0].name == 'dashboard/smiley_delete.html'
         assert response.context['smiley'] == smiley_custom_description
 
-    def test_http_get_incorrect_parent(self, client, child,
-                                       smiley_custom_description,
-                                       alt_parent_user_password):
-        """Confirm view is accessible by parent of the child which Smiley we
-        are deleting."""
+    def test_http_get_incorrect_parent(self, client, child, smiley_custom_description, alt_parent_user_password):
+        """Confirm view is accessible by parent of the child which Smiley we are deleting."""
         user_logger(client, 'johny_c')
-        response = client.get(reverse('dashboard:smiley-delete',
-                                      kwargs={'child_pk': 1,
-                                              'pk': 1}))
-        assert response.status_code == 302
-        assert response.url == (
-            '/accounts/login/?next=/dashboard/child/1/smiley/1/delete/')
+        response = client.get(reverse('dashboard:smiley-delete', kwargs={'child_pk': 1, 'pk': 1}))
+        assert response.status_code == 403
 
-    def test_http_post_deletes_smiley(self, client, child,
-                                      smiley_custom_description,
-                                      parent_user_password):
-        """Confirm submitting form deletes the smiley object from the database
-        and redirects to correct child detail view."""
+    def test_http_post_deletes_smiley(self, client, child, smiley_custom_description, parent_user_password):
+        """Confirm submitting form deletes the smiley object from the database and redirects to correct child detail
+         view."""
         user_logger(client, 'tom_k')
         assert Smiley.objects.count() == 1
-        response = client.post(reverse('dashboard:smiley-delete',
-                                       kwargs={'child_pk': 1,
-                                               'pk': 1}))
+        response = client.post(reverse('dashboard:smiley-delete', kwargs={'child_pk': 1, 'pk': 1}))
         assert response.status_code == 302
-        assert response.url == reverse('dashboard:child-detail',
-                                       kwargs={'pk': 1})
+        assert response.url == reverse('dashboard:child-detail', kwargs={'pk': 1})
         assert Smiley.objects.count() == 0
 
 
@@ -490,46 +436,29 @@ class TestSmileyDelete:
 
 class TestOopsyDelete:
 
-    def test_http_get_correct_parent(self, client, child,
-                                     oopsy_custom_description,
-                                     parent_user_password):
-        """Confirm view is accessible by parent of the child which Oopsy we are
-        deleting."""
+    def test_http_get_correct_parent(self, client, child, oopsy_custom_description, parent_user_password):
+        """Confirm view is accessible by parent of the child which Oopsy we are deleting."""
         user_logger(client, 'tom_k')
-        response = client.get(reverse('dashboard:oopsy-delete',
-                                      kwargs={'child_pk': 1,
-                                              'pk': 1}))
+        response = client.get(reverse('dashboard:oopsy-delete', kwargs={'child_pk': 1, 'pk': 1}))
         assert response.status_code == 200
         templates = response.templates
         assert templates[0].name == 'dashboard/oopsy_delete.html'
         assert response.context['oopsy'] == oopsy_custom_description
 
-    def test_http_get_incorrect_parent(self, client, child,
-                                       oopsy_custom_description,
-                                       alt_parent_user_password):
-        """Confirm view is accessible by parent of the child which Oopsy we are
-        deleting."""
+    def test_http_get_incorrect_parent(self, client, child, oopsy_custom_description, alt_parent_user_password):
+        """Confirm view is accessible by parent of the child which Oopsy we are deleting."""
         user_logger(client, 'johny_c')
-        response = client.get(reverse('dashboard:oopsy-delete',
-                                      kwargs={'child_pk': 1,
-                                              'pk': 1}))
-        assert response.status_code == 302
-        assert response.url == ('/accounts/login/?next=/dashboard/'
-                                'child/1/oopsy/1/delete/')
+        response = client.get(reverse('dashboard:oopsy-delete', kwargs={'child_pk': 1, 'pk': 1}))
+        assert response.status_code == 403
 
-    def test_http_post_deletes_oopsy(self, client, child,
-                                     oopsy_custom_description,
-                                     parent_user_password):
-        """Confirm submitting form deletes the oopsy object from the database
-        and redirects to correct child detail view."""
+    def test_http_post_deletes_oopsy(self, client, child, oopsy_custom_description, parent_user_password):
+        """Confirm submitting form deletes the oopsy object from the database and redirects to correct child detail
+        view."""
         user_logger(client, 'tom_k')
         assert Oopsy.objects.count() == 1
-        response = client.post(reverse('dashboard:oopsy-delete',
-                                       kwargs={'child_pk': 1,
-                                               'pk': 1}))
+        response = client.post(reverse('dashboard:oopsy-delete', kwargs={'child_pk': 1, 'pk': 1}))
         assert response.status_code == 302
-        assert response.url == reverse('dashboard:child-detail',
-                                       kwargs={'pk': 1})
+        assert response.url == reverse('dashboard:child-detail', kwargs={'pk': 1})
         assert Oopsy.objects.count() == 0
 
 
@@ -557,32 +486,21 @@ class TestSmileyUpdate:
         templates = response.templates
         assert templates[0].name == 'dashboard/smiley_update.html'
 
-    def test_test_func_redirects(self, client, smiley_custom_description,
-                                 alt_parent_user_password):
-        """Confirm test_func redirects to login when trying to update smiley
-        of child of other parent."""
+    def test_test_func_redirects(self, client, smiley_custom_description, alt_parent_user_password):
+        """Confirm test_func redirects to login when trying to update smiley of child of other parent."""
         user_logger(client, 'johny_c')
-        response = client.get(reverse('dashboard:smiley-update',
-                                      kwargs={'child_pk': 1,
-                                              'pk': 1}))
-        assert response.status_code == 302
-        assert response.url == ('/accounts/login/?next=/dashboard/child/1/'
-                                'smiley/1/edit/')
+        response = client.get(reverse('dashboard:smiley-update', kwargs={'child_pk': 1, 'pk': 1}))
+        assert response.status_code == 403
 
-    def test_updating_smiley_data(self, client, smiley_custom_description,
-                                  parent_user_password):
+    def test_updating_smiley_data(self, client, smiley_custom_description, parent_user_password):
         """Confirm Smiley data is modified and saved in the database."""
-        form_data = {'description': 'a new description',
-                     'points': 1}
+        form_data = {'description': 'a new description', 'points': 1}
         user_logger(client, 'tom_k')
         assert Smiley.objects.count() == 1
-        response = client.post(reverse('dashboard:smiley-update',
-                                       kwargs={'child_pk': 1,
-                                               'pk': 1}),
+        response = client.post(reverse('dashboard:smiley-update', kwargs={'child_pk': 1, 'pk': 1}),
                                form_data)
         assert response.status_code == 302
-        assert response.url == reverse('dashboard:child-detail',
-                                       kwargs={'pk': 1})
+        assert response.url == reverse('dashboard:child-detail', kwargs={'pk': 1})
         smiley = Smiley.objects.last()
         assert smiley.description == 'a new description'
         assert smiley.points == 1
@@ -592,51 +510,34 @@ class TestSmileyUpdate:
 
 class TestOopsyUpdate:
 
-    def test_get_context_data(self, client, child, oopsy_custom_description,
-                              parent_user_password):
+    def test_get_context_data(self, client, child, oopsy_custom_description, parent_user_password):
         """Confirm correct context data is set by the view."""
         user_logger(client, 'tom_k')
-        response = client.get(reverse('dashboard:oopsy-update',
-                                      kwargs={'child_pk': 1,
-                                              'pk': 1}))
+        response = client.get(reverse('dashboard:oopsy-update', kwargs={'child_pk': 1, 'pk': 1}))
         assert response.context['child'] == child
 
-    def test_http_get(self, client, oopsy_custom_description,
-                      parent_user_password):
+    def test_http_get(self, client, oopsy_custom_description, parent_user_password):
         user_logger(client, 'tom_k')
-        response = client.get(reverse('dashboard:oopsy-update',
-                                      kwargs={'child_pk': 1,
-                                              'pk': 1}))
+        response = client.get(reverse('dashboard:oopsy-update', kwargs={'child_pk': 1, 'pk': 1}))
         assert response.status_code == 200
         templates = response.templates
         assert templates[0].name == 'dashboard/oopsy_update.html'
 
-    def test_test_func_redirects(self, client, oopsy_custom_description,
-                                 alt_parent_user_password):
+    def test_test_func_redirects(self, client, oopsy_custom_description, alt_parent_user_password):
         """Confirm test_func redirects to login when trying to update oopsy
         of child of other parent."""
         user_logger(client, 'johny_c')
-        response = client.get(reverse('dashboard:oopsy-update',
-                                      kwargs={'child_pk': 1,
-                                              'pk': 1}))
-        assert response.status_code == 302
-        assert response.url == ('/accounts/login/?next=/dashboard/child/1/'
-                                'oopsy/1/edit/')
+        response = client.get(reverse('dashboard:oopsy-update', kwargs={'child_pk': 1, 'pk': 1}))
+        assert response.status_code == 403
 
-    def test_updating_oopsy_data(self, client, oopsy_custom_description,
-                                 parent_user_password):
+    def test_updating_oopsy_data(self, client, oopsy_custom_description, parent_user_password):
         """Confirm Oopsy data is modified and saved in the database."""
-        form_data = {'description': 'a new description',
-                     'points': 1}
+        form_data = {'description': 'a new description', 'points': 1}
         user_logger(client, 'tom_k')
         assert Oopsy.objects.count() == 1
-        response = client.post(reverse('dashboard:oopsy-update',
-                                       kwargs={'child_pk': 1,
-                                               'pk': 1}),
-                               form_data)
+        response = client.post(reverse('dashboard:oopsy-update', kwargs={'child_pk': 1, 'pk': 1}), form_data)
         assert response.status_code == 302
-        assert response.url == reverse('dashboard:child-detail',
-                                       kwargs={'pk': 1})
+        assert response.url == reverse('dashboard:child-detail', kwargs={'pk': 1})
         oopsy = Oopsy.objects.last()
         assert oopsy.description == 'a new description'
         assert oopsy.points == 1
