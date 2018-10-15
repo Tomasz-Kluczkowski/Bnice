@@ -4,4 +4,4 @@ exclude =
     .tox/
     env/
     venv/
-max-line-length = 79
+max-line-length = 120
