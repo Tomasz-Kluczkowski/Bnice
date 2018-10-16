@@ -19,8 +19,7 @@ def test_child_model(parent_user, child_user):
     child = ChildFactory(user=child_user, parent=parent_user, star_points=15)
     assert isinstance(child, Child)
     assert child.__str__() == child.user.username
-    assert child.get_absolute_url() == (
-        '/dashboard/child/{0}/'.format(child.pk))
+    assert child.get_absolute_url() == ('/dashboard/child/{0}/'.format(child.pk))
     assert User.objects.count() == 2
     assert child.user.username == 'nat_k'
     assert child.user.name == 'Natalie'
@@ -33,6 +32,5 @@ def test_child_model(parent_user, child_user):
 @pytest.mark.django_db
 def test_superuser_is_administrator():
     password = 'password'
-    admin = User.objects.create_superuser('admin_man', 'myemail@test.com',
-                                          password)
+    admin = User.objects.create_superuser('admin_man', 'myemail@test.com', password)
     assert admin.is_administrator()

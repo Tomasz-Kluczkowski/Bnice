@@ -11,8 +11,7 @@ class User(AbstractUser):
     user_type = models.CharField(max_length=30, editable=False, null=True)
     name = models.CharField(max_length=30, blank=False)
     email = models.EmailField(unique=True, null=True)
-    profile_photo = models.ImageField(upload_to='profiles/%Y/%m/%d',
-                                      blank=True)
+    profile_photo = models.ImageField(upload_to='profiles/%Y/%m/%d', blank=True)
 
     def save(self, *args, **kwargs):
         if self.is_superuser:
@@ -34,13 +33,8 @@ class User(AbstractUser):
 
 class Child(models.Model):
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL,
-                                on_delete=models.CASCADE,
-                                primary_key=True)
-    parent = models.ForeignKey(settings.AUTH_USER_MODEL,
-                               null=True,
-                               on_delete=models.CASCADE,
-                               related_name="children")
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
+    parent = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE, related_name="children")
     # Points required to be rewarded with a star.
     star_points = models.PositiveSmallIntegerField(blank=False, null=True)
 

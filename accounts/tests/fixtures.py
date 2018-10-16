@@ -84,15 +84,12 @@ def alt_child_user(db):
 @pytest.fixture()
 def child(db, child_user, parent_user):
     """Creates a Child object in the database."""
-    child_obj = ChildFactory(user=child_user, parent=parent_user,
-                             star_points=15)
+    child_obj = ChildFactory(user=child_user, parent=parent_user, star_points=15)
     return child_obj
 
 
 @pytest.fixture()
 def alt_child(db, alt_child_user, alt_parent_user_password):
     """Creates a Child object with an alt parent."""
-    child_obj = ChildFactory(user=alt_child_user,
-                             parent=alt_parent_user_password,
-                             star_points=15)
+    child_obj = ChildFactory(user=alt_child_user, parent=alt_parent_user_password, star_points=15)
     return child_obj

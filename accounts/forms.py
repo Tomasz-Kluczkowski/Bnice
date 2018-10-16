@@ -14,8 +14,8 @@ help_dict = {
 
 class UserCreateForm(UserCreationForm):
     """
-    Normal users are classified as parents. They are able later on to add
-    children which are also users but have mostly read-only access to the site.
+    Normal users are classified as parents. They are able later on to add children which are also users but have mostly
+    read-only access to the site.
     """
 
     def __init__(self, *args, **kwargs):
@@ -56,8 +56,7 @@ class ChildCreateForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'name', 'star_points', 'profile_photo',
-                  'password1', 'password2')
+        fields = ('username', 'email', 'name', 'star_points', 'profile_photo', 'password1', 'password2')
         help_texts = {
             'email': help_dict["required"],
             'profile_photo': help_dict["profile_photo"],
@@ -66,8 +65,7 @@ class ChildCreateForm(UserCreationForm):
 
     def clean(self):
         """
-        We need to record the star_points field value before trying to save a
-        child object.
+        We need to record the star_points field value before trying to save a child object.
 
         Returns
         -------
@@ -83,8 +81,7 @@ class ChildCreateForm(UserCreationForm):
         user = super().save(commit=False)
         user.user_type = User.TYPE_CHILD
         user.save()
-        Child.objects.create(user=user, parent=self.current_user,
-                             star_points=self.star_points)
+        Child.objects.create(user=user, parent=self.current_user, star_points=self.star_points)
         return user
 
 
