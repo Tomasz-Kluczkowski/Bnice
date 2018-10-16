@@ -11,9 +11,7 @@ class Action(models.Model):
     Claimed field will be set to True when child reaches enough points to
     get a star. This field is intended to never be shown to the user.
     """
-    owner = models.ForeignKey(Child,
-                              on_delete=models.CASCADE,
-                              null=True)
+    owner = models.ForeignKey(Child, on_delete=models.CASCADE, null=True)
     earned_on = models.DateTimeField(blank=False)
     claimed = models.BooleanField(default=False)
     points_remaining = models.PositiveSmallIntegerField(default=0)
@@ -25,10 +23,7 @@ class Action(models.Model):
         ordering = ['earned_on']
 
     def get_absolute_url(self):
-        return reverse(
-            "dashboard:child-detail",
-            kwargs={"pk": self.owner.pk}
-        )
+        return reverse("dashboard:child-detail", kwargs={"pk": self.owner.pk})
 
     def __str__(self):
         return self.description

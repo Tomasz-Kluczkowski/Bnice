@@ -21,11 +21,9 @@ class DashboardPage(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         if self.request.user.is_child():
-            return Child.objects.filter(
-                pk=self.request.user.pk).select_related('parent', 'user')
+            return Child.objects.filter(pk=self.request.user.pk).select_related('parent', 'user')
         else:
-            return Child.objects.filter(
-                parent=self.request.user).select_related('parent', 'user')
+            return Child.objects.filter(parent=self.request.user).select_related('parent', 'user')
 
 
 class CreateChildPage(LoginRequiredMixin, CreateView):
@@ -53,8 +51,7 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             kwargs['parent'] = child.parent.username
         kwargs['smileys'] = child.smiley_set.all()
         kwargs['oopsies'] = child.oopsy_set.all()
-        star_awarding = StarAwarding(kwargs['smileys'], kwargs['oopsies'],
-                                     child.star_points)
+        star_awarding = StarAwarding(kwargs['smileys'], kwargs['oopsies'], child.star_points)
         star_awarding.award_star()
         return super().get_context_data(**kwargs)
 
@@ -74,8 +71,7 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         if (self.current_user.is_parent() and
                 self.current_user.username == parent):
             return True
-        elif self.current_user.is_child() and self.current_user.pk == int(
-                self.kwargs["pk"]):
+        elif self.current_user.is_child() and self.current_user.pk == int(self.kwargs["pk"]):
             return True
         else:
             return False
@@ -84,8 +80,7 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 class AddAction(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def test_func(self):
-        child = Child.objects.filter(
-            pk=self.kwargs['pk']).select_related('parent')[0]
+        child = Child.objects.filter(pk=self.kwargs['pk']).select_related('parent')[0]
         current_user = self.request.user
         parent = child.parent.username
         if current_user.is_parent() and current_user.username == parent:
@@ -120,8 +115,7 @@ class UserUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     success_url = reverse_lazy('dashboard:dashboard')
 
     def test_func(self):
-        """Allow access only to logged in user who's data we are trying
-        to change.
+        """Allow access only to logged in user who's data we are trying to change.
 
         Returns
         -------
@@ -148,8 +142,7 @@ class ChildUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_context_data(self, **kwargs):
         child = Child.objects.get(user__pk=self.object.pk)
         kwargs['parent'] = child.parent.username
-        kwargs['child_form'] = self.child_form_class(
-            initial={'star_points': child.star_points})
+        kwargs['child_form'] = self.child_form_class(initial={'star_points': child.star_points})
         return super().get_context_data(**kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -162,11 +155,9 @@ class ChildUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             user_data.save()
             child_data = child_form.save(commit=False)
             child_data.save()
-            return HttpResponseRedirect(self.get_success_url(
-                kwargs={'pk': child.user.pk}))
+            return HttpResponseRedirect(self.get_success_url(kwargs={'pk': child.user.pk}))
         else:
-            return self.render_to_response(
-                self.get_context_data(form=user_form, child_form=child_form))
+            return self.render_to_response(self.get_context_data(form=user_form, child_form=child_form))
 
     def test_func(self):
         """Allow access only to logged in parent users who match child to be
@@ -192,8 +183,7 @@ class ChildDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = 'dashboard/child_delete.html'
 
     def test_func(self):
-        """Allow access only to logged in parent users who match child's to be
-        deleted parent.
+        """Allow access only to logged in parent users who match child's to be deleted parent.
 
         Returns
         -------
@@ -215,8 +205,7 @@ class ActionDeleteBase(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_queryset(self):
         qs = self.model.objects.filter(
-            pk=self.kwargs.get('pk')).select_related(
-            'owner', 'owner__user', 'owner__parent')
+            pk=self.kwargs.get('pk')).select_related('owner', 'owner__user', 'owner__parent')
         return qs
 
     def get_context_data(self, **kwargs):
@@ -227,12 +216,10 @@ class ActionDeleteBase(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def get_success_url(self):
         action = self.object
         child = action.owner
-        return reverse('dashboard:child-detail',
-                       kwargs={'pk': child.pk})
+        return reverse('dashboard:child-detail', kwargs={'pk': child.pk})
 
     def test_func(self):
-        """Allow access only to logged in parent user who is parent
-        of the child who's action we are deleting.
+        """Allow access only to logged in parent user who is parent of the child who's action we are deleting.
 
         Returns
         -------
@@ -262,8 +249,7 @@ class OopsyDelete(ActionDeleteBase):
 
 
 class ActionUpdateBase(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    """Base class for updating unclaimed smiley and oopsy objects.
-    Do not use on its own."""
+    """Base class for updating unclaimed smiley and oopsy objects. Do not use on its own."""
 
     model = None
     fields = ('description', 'points')
@@ -276,12 +262,10 @@ class ActionUpdateBase(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         action = self.object
         child = action.owner
-        return reverse('dashboard:child-detail',
-                       kwargs={'pk': child.pk})
+        return reverse('dashboard:child-detail', kwargs={'pk': child.pk})
 
     def test_func(self):
-        """Allow access only to logged in parent user who is parent
-        of the child who's action we are updating.
+        """Allow access only to logged in parent user who is parent of the child who's action we are updating.
 
         Returns
         -------

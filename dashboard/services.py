@@ -4,12 +4,10 @@
 class StarAwarding:
     """Class to help awarding stars.
 
-    This helper class is to be used in views when we have to decide if stars
-    should be awarded. The smiley which completes the amount of points required
-    to earn a star will get attribute star_awarded set to True.
-    If the smiley had more points than was needed to award a star they will
-    be saved as points_remaining on the last smiley accessed before terminating
-    the loop.
+    This helper class is to be used in views when we have to decide if stars should be awarded. The smiley which
+    completes the amount of points required to earn a star will get attribute star_awarded set to True. If the smiley
+    had more points than was needed to award a star they will be saved as points_remaining on the last smiley accessed
+    before terminating the loop.
 
     """
 
@@ -19,14 +17,11 @@ class StarAwarding:
         Parameters
         ----------
         smileys : Queryset(Smiley)
-            Django queryset of filtered Smiley objects
-            (for current child in view).
+            Django queryset of filtered Smiley objects (for current child in view).
         oopsies : Queryset(Ooopsy)
-            Django queryset of filtered Oopsy objects
-            (for current child in view).
+            Django queryset of filtered Oopsy objects (for current child in view).
         star_points : int
-            Attribute of Child object. Amount of points required to earn a
-            star.
+            Attribute of Child object. Amount of points required to earn a star.
         """
         self.smileys = smileys
         self.oopsies = oopsies
@@ -36,13 +31,10 @@ class StarAwarding:
         self.total_points = self.smiley_points - self.oopsy_points
 
     def __str__(self):
-        return ("smiley points: {0}\n"
-                "oopsy points: {1}\n"
-                "total points: {2}\n"
-                "star points: {3}".format(self.smiley_points,
-                                          self.oopsy_points,
-                                          self.total_points,
-                                          self.star_points))
+        return (
+            "smiley points: {0}\noopsy points: {1}\ntotal points: {2}\nstar points: {3}"
+            .format(self.smiley_points, self.oopsy_points, self.total_points, self.star_points)
+        )
 
     def update_smiley_points(self):
         """Renews sum of smiley_points.
@@ -76,20 +68,17 @@ class StarAwarding:
     def get_sum_action_points(self, actions):
         """Get total number of points for action collection.
 
-        Calculate sum of positive or negative points collected by child based
-        on action type and owner.
+        Calculate sum of positive or negative points collected by child based on action type and owner.
 
         Parameters
         ----------
         actions : Queryset(Action)
-            Django queryset of filtered Action objects
-            (for current child in view).
+            Django queryset of filtered Action objects (for current child in view).
 
         Returns
         -------
             action_points : int
-                Total amount of points collected per action type.
-                Returns 0 if no points were collected.
+                Total amount of points collected per action type. Returns 0 if no points were collected.
         """
         action_points = 0
         if not actions:
@@ -110,8 +99,7 @@ class StarAwarding:
     def claim_all_oopsies(self):
         """Claim all oopsies.
 
-        Changes claimed field to True on all oopsies as they get all consumed
-        before a star can be awarded.
+        Changes claimed field to True on all oopsies as they get all consumed before a star can be awarded.
 
         Returns
         -------
@@ -124,8 +112,8 @@ class StarAwarding:
     def award_star(self):
         """Iterate through smileys and oopsies and award stars.
 
-        Count points during the iteration and add star_awarded = True to the
-        smiley which completes the amount of points required for a star.
+        Count points during the iteration and add star_awarded = True to the smiley which completes the amount of points
+        required for a star.
 
         Returns
         -------

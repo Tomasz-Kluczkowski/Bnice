@@ -38,11 +38,10 @@ class AddActionForm(forms.ModelForm):
         return self.cleaned_data
 
     def set_description(self, model, initial_choice_list):
-        """Set 'description' field to forms.Choicefield.
+        """Set 'description' field to forms.ChoiceField.
 
-        Create a list of distinct descriptions for actions using appropriate
-        to the model base list and add that to options in select html element
-        when rendered in the form.
+        Create a list of distinct descriptions for actions using appropriate to the model base list and add that to
+        options in select html element when rendered in the form.
 
         Parameters
         ----------
@@ -55,13 +54,9 @@ class AddActionForm(forms.ModelForm):
         -------
             None
         """
-        choices = list(model.objects.order_by(
-            "description").values_list("description", flat=True).distinct())
-        distinct_choices = initial_choice_list + [
-            choice for choice in choices if choice not in initial_choice_list]
-        self.fields['description'] = forms.ChoiceField(
-            choices=[(choice, choice) for choice in distinct_choices]
-        )
+        choices = list(model.objects.order_by("description").values_list("description", flat=True).distinct())
+        distinct_choices = initial_choice_list + [choice for choice in choices if choice not in initial_choice_list]
+        self.fields['description'] = forms.ChoiceField(choices=[(choice, choice) for choice in distinct_choices])
         self.fields['description'].help_text = "Required"
 
     class Meta:
