@@ -32,8 +32,7 @@ def user_logger(client, username, password='password'):
 
 class TestDashboardPage:
 
-    def test_dashboard_page_parent_with_no_child(self, client,
-                                                 parent_user_password):
+    def test_dashboard_page_parent_with_no_child(self, client, parent_user_password):
         """Test logging to dashboard page with no children added."""
         assert User.objects.count() == 1
         user_logger(client, 'tom_k')
@@ -43,12 +42,9 @@ class TestDashboardPage:
         templates = response.templates
         assert templates[0].name == 'dashboard/dashboard.html'
 
-    def test_queryset_parent_with_matching_child(self, client,
-                                                 parent_user_password,
-                                                 child, alt_child):
-        """Test logging to dashboard page with a child added.
-        Confirms that only child who's parent is logged in is in the
-        child_list context data."""
+    def test_queryset_parent_with_matching_child(self, client, parent_user_password, child, alt_child):
+        """Test logging to dashboard page with a child added. Confirms that only child who's parent is logged in is in
+        the child_list context data."""
         user_logger(client, 'tom_k')
         response = client.get(reverse('dashboard:dashboard'))
         assert Child.objects.count() == 2
@@ -56,22 +52,16 @@ class TestDashboardPage:
         assert len(response.context['child_list']) == 1
         assert response.context['child_list'][0] == child
 
-    def test_queryset_parent_not_matching_child(self, client,
-                                                alt_parent_user_password,
-                                                child):
-        """Tests if get_queryset restricts children in child_list by checking
-        parent."""
+    def test_queryset_parent_not_matching_child(self, client, alt_parent_user_password, child):
+        """Tests if get_queryset restricts children in child_list by checking parent."""
         user_logger(client, 'johny_c')
         response = client.get(reverse('dashboard:dashboard'))
         assert response.status_code == 200
-        # Since child has different parent it should not be added to
-        # the queryset.
+        # Since child has different parent it should not be added to the queryset.
         assert len(response.context['child_list']) == 0
 
-    def test_queryset_with_child_logged_in(self, client, child_user_password,
-                                           child, alt_child):
-        """Test logging to dashboard page as a child user. child_list should
-        contain only the logged in child user."""
+    def test_queryset_with_child_logged_in(self, client, child_user_password, child, alt_child):
+        """Test logging to dashboard page as a child user. child_list should contain only the logged in child user."""
         user_logger(client, 'nat_k')
         response = client.get('/dashboard/')
         assert Child.objects.count() == 2
@@ -119,47 +109,36 @@ class TestCreateChildPage:
 
 class TestChildDetail:
 
-    def test_http_get_with_correct_parent(self, client,
-                                          child, parent_user_password):
-        """Confirm view is properly displayed for a logged in parent user who's
-        child we want to see."""
+    def test_http_get_with_correct_parent(self, client, child, parent_user_password):
+        """Confirm view is properly displayed for a logged in parent user who's child we want to see."""
         user_logger(client, 'tom_k')
         assert User.objects.count() == 2
         assert Child.objects.count() == 1
-        response = client.get(reverse('dashboard:child-detail',
-                                      kwargs={'pk': 1}))
+        response = client.get(reverse('dashboard:child-detail', kwargs={'pk': 1}))
         assert response.status_code == 200
         templates = response.templates
         assert templates[0].name == 'dashboard/child_detail.html'
 
-    def test_get_context_data_parent_user(self, client, child,
-                                          parent_user_password,
-                                          smiley_custom_description,
+    def test_get_context_data_parent_user(self, client, child, parent_user_password, smiley_custom_description,
                                           oopsy_custom_description):
-        """Confirm correct context data is set for the view if parent user is
-        logged in."""
+        """Confirm correct context data is set for the view if parent user is logged in."""
         user_logger(client, 'tom_k')
         assert User.objects.count() == 2
         assert Child.objects.count() == 1
-        response = client.get(reverse('dashboard:child-detail',
-                                      kwargs={'pk': 1}))
+        response = client.get(reverse('dashboard:child-detail', kwargs={'pk': 1}))
         assert response.status_code == 200
         assert len(response.context['smileys']) == 1
         assert len(response.context['oopsies']) == 1
         assert response.context['smileys'][0] == smiley_custom_description
         assert response.context['oopsies'][0] == oopsy_custom_description
 
-    def test_get_context_data_child_user(self, client,
-                                         child_user_password,
-                                         smiley_custom_description,
+    def test_get_context_data_child_user(self, client, child_user_password, smiley_custom_description,
                                          oopsy_custom_description):
-        """Confirm correct context data is set for the view if child user is
-        logged in."""
+        """Confirm correct context data is set for the view if child user is logged in."""
         user_logger(client, 'nat_k')
         assert User.objects.count() == 2
         assert Child.objects.count() == 1
-        response = client.get(reverse('dashboard:child-detail',
-                                      kwargs={'pk': 1}))
+        response = client.get(reverse('dashboard:child-detail', kwargs={'pk': 1}))
         assert response.status_code == 200
         assert response.context['parent'] == 'tom_k'
         assert len(response.context['smileys']) == 1
@@ -167,14 +146,11 @@ class TestChildDetail:
         assert response.context['smileys'][0] == smiley_custom_description
         assert response.context['oopsies'][0] == oopsy_custom_description
 
-    def test_no_edit_delete_action_for_child_user(self, client,
-                                                  child_user_password,
-                                                  smiley_custom_description,
+    def test_no_edit_delete_action_for_child_user(self, client, child_user_password, smiley_custom_description,
                                                   oopsy_custom_description):
         """Confirm child user unable to add/edit/delete their actions."""
         user_logger(client, 'nat_k')
-        response = client.get(reverse('dashboard:child-detail',
-                                      kwargs={'pk': 1}))
+        response = client.get(reverse('dashboard:child-detail', kwargs={'pk': 1}))
         print(response.content.decode())
 
     def test_test_func_redirects_parent_user(self, client, child, alt_parent_user_password):
@@ -183,13 +159,10 @@ class TestChildDetail:
         response = client.get(reverse('dashboard:child-detail', kwargs={'pk': 1}))
         assert response.status_code == 403
 
-    def test_test_func_redirects_child_user(self, client, child_user_password,
-                                            alt_child):
-        """Test test_func redirects when trying to access other child's data
-        when logged in as a child."""
+    def test_test_func_redirects_child_user(self, client, child_user_password, alt_child):
+        """Test test_func redirects when trying to access other child's data when logged in as a child."""
         user_logger(client, 'nat_k')
-        response = client.get(reverse('dashboard:child-detail',
-                                      kwargs={'pk': 2}))
+        response = client.get(reverse('dashboard:child-detail', kwargs={'pk': 2}))
         assert response.status_code == 403
 
 
@@ -218,20 +191,14 @@ class TestAddAction:
         assert smiley.description == 'Folded washing'
         assert smiley.points == 5
 
-    def test_http_post_smiley_custom_description(self, client,
-                                                 child, parent_user_password):
-        """Confirm Smiley object gets attributes owner and earned_on added
-        when form is valid and new description overrides description field."""
-        form_data = {'description': 'Add new',
-                     'new_description': 'Testing',
-                     'points': 5}
+    def test_http_post_smiley_custom_description(self, client, child, parent_user_password):
+        """Confirm Smiley object gets attributes owner and earned_on added when form is valid and new description
+        overrides description field."""
+        form_data = {'description': 'Add new', 'new_description': 'Testing', 'points': 5}
         user_logger(client, 'tom_k')
-        response = client.post(reverse('dashboard:smiley-create',
-                                       kwargs={'pk': 1}),
-                               form_data)
+        response = client.post(reverse('dashboard:smiley-create', kwargs={'pk': 1}), form_data)
         assert response.status_code == 302
-        assert response.url == reverse('dashboard:child-detail',
-                                       kwargs={'pk': 1})
+        assert response.url == reverse('dashboard:child-detail', kwargs={'pk': 1})
         assert Smiley.objects.count() == 1
         smiley = Smiley.objects.last()
         assert smiley.owner == child
@@ -241,18 +208,12 @@ class TestAddAction:
         assert smiley.points == 5
 
     def test_http_post_oopsy(self, client, child, parent_user_password):
-        """Confirm Oopsy object gets attributes owner and earned_on added
-        when form is valid."""
-        form_data = {'description': 'Was lying',
-                     'new_description': '',
-                     'points': 5}
+        """Confirm Oopsy object gets attributes owner and earned_on added when form is valid."""
+        form_data = {'description': 'Was lying', 'new_description': '', 'points': 5}
         user_logger(client, 'tom_k')
-        response = client.post(reverse('dashboard:oopsy-create',
-                                       kwargs={'pk': 1}),
-                               form_data)
+        response = client.post(reverse('dashboard:oopsy-create', kwargs={'pk': 1}), form_data)
         assert response.status_code == 302
-        assert response.url == reverse('dashboard:child-detail',
-                                       kwargs={'pk': 1})
+        assert response.url == reverse('dashboard:child-detail', kwargs={'pk': 1})
         assert Oopsy.objects.count() == 1
         oopsy = Oopsy.objects.last()
         assert oopsy.owner == child
@@ -261,20 +222,14 @@ class TestAddAction:
         assert oopsy.description == 'Was lying'
         assert oopsy.points == 5
 
-    def test_http_post_oopsy_custom_description(self, client, child,
-                                                parent_user_password):
-        """Confirm Oopsy object gets attributes owner and earned_on added
-        when form is valid and new description overrides description field."""
-        form_data = {'description': 'Add new',
-                     'new_description': 'Testing',
-                     'points': 5}
+    def test_http_post_oopsy_custom_description(self, client, child, parent_user_password):
+        """Confirm Oopsy object gets attributes owner and earned_on added when form is valid and new description
+        overrides description field."""
+        form_data = {'description': 'Add new', 'new_description': 'Testing', 'points': 5}
         user_logger(client, 'tom_k')
-        response = client.post(reverse('dashboard:oopsy-create',
-                                       kwargs={'pk': 1}),
-                               form_data)
+        response = client.post(reverse('dashboard:oopsy-create', kwargs={'pk': 1}), form_data)
         assert response.status_code == 302
-        assert response.url == reverse('dashboard:child-detail',
-                                       kwargs={'pk': 1})
+        assert response.url == reverse('dashboard:child-detail', kwargs={'pk': 1})
         assert Oopsy.objects.count() == 1
         oopsy = Oopsy.objects.last()
         assert oopsy.owner == child
