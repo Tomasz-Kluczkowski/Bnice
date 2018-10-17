@@ -4,15 +4,9 @@
     <div class="dashboard__display-panel col-sm-8 col-lg-9 col-xl-10 mr-auto">
         {% if request.path == "/dashboard/child/new/" %}
             <div class="row">
-                <div class="col-12 my-auto">
-                    <div class="alert alert-info alert-dismissible fade show"
-                         role="alert">
-                        Please fill in your child's account details.
-                        They can use it to log in and view their progress.
-                        <button type="button"
-                                class="close"
-                                data-dismiss="alert"
-                                aria-label="Close">
+                <div class="col-12 my-auto"><div class="alert alert-info alert-dismissible fade show" role="alert">
+                        Please fill in your child's account details. They can use it to log in and view their progress.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -67,15 +61,9 @@
         {% elif request.path == "/dashboard/" %}
             <div class="row">
                 <div class="col-12 my-auto">
-                    <div class="alert alert-info alert-dismissible fade show"
-                         role="alert">
-                        You have no children added.
-                        Please use "Add Child" option in the User Panel to
-                        get started.
-                        <button type="button"
-                                class="close"
-                                data-dismiss="alert"
-                                aria-label="Close">
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        You have no children added. Please use "Add Child" option in the User Panel to get started.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>

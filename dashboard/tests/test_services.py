@@ -55,7 +55,8 @@ class TestStarAwarding:
         assert star_awarding.get_sum_action_points(oopsies) == 25
 
     def test_get_sum_action_points_claimed_smiley_remaining_points(self, claimed_smiley_remaining_points,
-                                                                   smileys_with_same_description, oopsy_custom_description):
+                                                                   smileys_with_same_description,
+                                                                   oopsy_custom_description):
         """Confirm remaining points from claimed smiley are counted towards total points."""
         smileys = Smiley.objects.all()
         oopsy = Oopsy.objects.filter(pk=1)

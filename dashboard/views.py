@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -65,8 +66,7 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             Bool
         """
         self.current_user = self.request.user
-        self.child = Child.objects.filter(
-            pk=self.kwargs['pk']).select_related('parent')[0]
+        self.child = get_object_or_404(Child.objects.select_related('parent'), pk=self.kwargs['pk'])
         parent = self.child.parent.username
         if (self.current_user.is_parent() and
                 self.current_user.username == parent):
@@ -80,7 +80,7 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 class AddAction(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def test_func(self):
-        child = Child.objects.filter(pk=self.kwargs['pk']).select_related('parent')[0]
+        child = get_object_or_404(Child.objects.select_related('parent'), pk=self.kwargs['pk'])
         current_user = self.request.user
         parent = child.parent.username
         if current_user.is_parent() and current_user.username == parent:
