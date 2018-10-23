@@ -47,9 +47,6 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         child = self.child
-        current_user = self.current_user
-        if current_user.is_child:
-            kwargs['parent'] = child.parent.username
         kwargs['smileys'] = child.smiley_set.all()
         kwargs['oopsies'] = child.oopsy_set.all()
         star_awarding = StarAwarding(kwargs['smileys'], kwargs['oopsies'], child.star_points)
@@ -65,13 +62,13 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         -------
             Bool
         """
-        self.current_user = self.request.user
+        current_user = self.request.user
         self.child = get_object_or_404(Child.objects.select_related('parent'), pk=self.kwargs['pk'])
         parent = self.child.parent.username
-        if (self.current_user.is_parent() and
-                self.current_user.username == parent):
+        if (current_user.is_parent() and
+                current_user.username == parent):
             return True
-        elif self.current_user.is_child() and self.current_user.pk == int(self.kwargs["pk"]):
+        elif current_user.is_child() and current_user.pk == int(self.kwargs["pk"]):
             return True
         else:
             return False
