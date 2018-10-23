@@ -35,5 +35,3 @@ class Smiley(Action):
 
 class Oopsy(Action):
     owner = models.ForeignKey(Child, on_delete=models.CASCADE, related_name='oopsies')
-
-

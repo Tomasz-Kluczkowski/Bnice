@@ -47,8 +47,8 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         child = self.child
-        kwargs['smileys'] = child.smiley_set.all()
-        kwargs['oopsies'] = child.oopsy_set.all()
+        kwargs['smileys'] = child.smileys.all()
+        kwargs['oopsies'] = child.oopsies.all()
         star_awarding = StarAwarding(kwargs['smileys'], kwargs['oopsies'], child.star_points)
         star_awarding.award_star()
         return super().get_context_data(**kwargs)

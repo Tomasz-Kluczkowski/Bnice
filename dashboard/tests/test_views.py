@@ -140,7 +140,6 @@ class TestChildDetail:
         assert Child.objects.count() == 1
         response = client.get(reverse('dashboard:child-detail', kwargs={'pk': 1}))
         assert response.status_code == 200
-        assert response.context['parent'] == 'tom_k'
         assert len(response.context['smileys']) == 1
         assert len(response.context['oopsies']) == 1
         assert response.context['smileys'][0] == smiley_custom_description
