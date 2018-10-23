@@ -11,7 +11,6 @@ class Action(models.Model):
     Claimed field will be set to True when child reaches enough points to
     get a star. This field is intended to never be shown to the user.
     """
-    owner = models.ForeignKey(Child, on_delete=models.CASCADE, null=True)
     earned_on = models.DateTimeField(blank=False)
     claimed = models.BooleanField(default=False)
     points_remaining = models.PositiveSmallIntegerField(default=0)
@@ -30,8 +29,11 @@ class Action(models.Model):
 
 
 class Smiley(Action):
+    owner = models.ForeignKey(Child, on_delete=models.CASCADE, related_name='smileys')
     star_awarded = models.BooleanField(default=False)
 
 
 class Oopsy(Action):
-    pass
+    owner = models.ForeignKey(Child, on_delete=models.CASCADE, related_name='oopsies')
+
+
