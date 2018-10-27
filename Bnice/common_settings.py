@@ -25,7 +25,7 @@ STATIC_DIR = os.path.join(BASE_DIR, "assets")
 # SECRET_KEY = config('SECRET_KEY')
 #
 # # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = config('DEBUG', default=True, cast=bool)
+# DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ["192.168.1.156",
                  "127.0.0.1",
@@ -58,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.login_middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'Bnice.urls'
@@ -154,7 +155,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
 
-LOGIN_REDIRECT_URL = "core:home"
-LOGOUT_REDIRECT_URL = "core:home"
-AUTH_USER_MODEL = "accounts.User"
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = 'core:home'
+LOGOUT_REDIRECT_URL = 'core:home'
+AUTH_USER_MODEL = 'accounts.User'
 INTERNAL_IPS = ['127.0.0.1']

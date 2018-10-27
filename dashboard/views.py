@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView)
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 # from django.contrib.auth import login
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
@@ -16,7 +16,7 @@ from dashboard.services import StarAwarding
 # Create your views here.
 
 
-class DashboardPage(LoginRequiredMixin, ListView):
+class DashboardPage(ListView):
     model = Child
     template_name = "dashboard/dashboard.html"
 
@@ -27,7 +27,7 @@ class DashboardPage(LoginRequiredMixin, ListView):
             return Child.objects.filter(parent=self.request.user).select_related('parent', 'user')
 
 
-class CreateChildPage(LoginRequiredMixin, CreateView):
+class CreateChildPage(CreateView):
     model = Child
     template_name = "dashboard/add_child.html"
     form_class = ChildCreateForm
@@ -38,7 +38,7 @@ class CreateChildPage(LoginRequiredMixin, CreateView):
         return self.initial
 
 
-class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+class ChildDetail(UserPassesTestMixin, DetailView):
     """Awards stars before displaying Child details.
 
     """
@@ -74,7 +74,7 @@ class ChildDetail(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             return False
 
 
-class AddAction(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class AddAction(UserPassesTestMixin, CreateView):
 
     def test_func(self):
         child = get_object_or_404(Child.objects.select_related('parent'), pk=self.kwargs['pk'])
@@ -105,7 +105,7 @@ class AddOopsy(AddAction):
     form_class = AddOopsyForm
 
 
-class UserUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class UserUpdate(UserPassesTestMixin, UpdateView):
     model = User
     fields = ('username', 'email', 'profile_photo')
     template_name = 'dashboard/user_update.html'
@@ -127,7 +127,7 @@ class UserUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return False
 
 
-class ChildUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class ChildUpdate(UserPassesTestMixin, UpdateView):
     model = User
     form_class = UserUpdateForm
     child_form_class = ChildUpdateForm
@@ -174,7 +174,7 @@ class ChildUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return False
 
 
-class ChildDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class ChildDelete(UserPassesTestMixin, DeleteView):
     model = Child
     success_url = reverse_lazy('dashboard:dashboard')
     template_name = 'dashboard/child_delete.html'
@@ -195,7 +195,7 @@ class ChildDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return False
 
 
-class ActionDeleteBase(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class ActionDeleteBase(UserPassesTestMixin, DeleteView):
     """Base class for deleting actions. Not to be used on its own."""
 
     model = None
@@ -245,7 +245,7 @@ class OopsyDelete(ActionDeleteBase):
     template_name = 'dashboard/oopsy_delete.html'
 
 
-class ActionUpdateBase(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class ActionUpdateBase(UserPassesTestMixin, UpdateView):
     """Base class for updating unclaimed smiley and oopsy objects. Do not use on its own."""
 
     model = None
