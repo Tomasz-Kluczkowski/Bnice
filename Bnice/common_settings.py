@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'static_precompiler',
     'bootstrap4',
+    'django_extensions',
     'core',
     'accounts',
     'dashboard',
