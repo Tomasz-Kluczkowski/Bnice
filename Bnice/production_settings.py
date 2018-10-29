@@ -10,11 +10,13 @@ import dj_database_url
 # TODO move allowed hosts to env variable in heroku, use config(....., cast=csv())
 ALLOWED_HOSTS = ['b-nice-staging.herokuapp.com',
                  'b-nice.herokuapp.com']
+
 DATABASES = {
     'default': dj_database_url.config(
         default=config('DATABASE_URL')
     )
 }
+
 INSTALLED_APPS.append('storages')  # noqa
 
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
