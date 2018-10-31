@@ -30,8 +30,8 @@ SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
-
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+ON_HEROKU = config('ON_HEROKU', default=False, cast=bool)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
 
 
 # Application definition
@@ -165,3 +165,24 @@ INTERNAL_IPS = ['127.0.0.1']
 if DEBUG:
     INSTALLED_APPS.append('debug_toolbar')  # noqa
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')  # noqa
+
+
+# Production Settings
+if ON_HEROKU:
+    INSTALLED_APPS.append('storages')  # noqa
+
+    AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    AWS_LOCATION = 'static'
+
+    # STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+
+    DEFAULT_FILE_STORAGE = 'Bnice.storage_backends.MediaStorage'  # Media uploads
+    # Disabled |compile tag in <head> - all compilation in production is done using
+    # management command compilestatic before collectstatic is run.
+    STATIC_PRECOMPILER_DISABLE_AUTO_COMPILE = True

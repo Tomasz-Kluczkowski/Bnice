@@ -1,39 +1,40 @@
-from Bnice.common_settings import *  # noqa
-from decouple import config
-import dj_database_url
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-# TODO move allowed hosts to env variable in heroku, use config(....., cast=csv())
-ALLOWED_HOSTS = ['b-nice-staging.herokuapp.com',
-                 'b-nice.herokuapp.com']
-
-DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL')
-    )
-}
-
-INSTALLED_APPS.append('storages')  # noqa
-
-AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-}
-
-AWS_LOCATION = 'static'
-# STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
-
-DEFAULT_FILE_STORAGE = 'Bnice.storage_backends.MediaStorage'  # Media uploads
-# Disabled |compile tag in <head> - all compilation in production is done using
-# management command compilestatic before collectstatic is run.
-STATIC_PRECOMPILER_DISABLE_AUTO_COMPILE = True
+# from Bnice.common_settings import *  # noqa
+# from decouple import config
+# import dj_database_url
+#
+# # Quick-start development settings - unsuitable for production
+# # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
+#
+# # Database
+# # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
+# # TODO move allowed hosts to env variable in heroku, use config(....., cast=csv())
+# # TODO add env variable ON_HEROKU=True and use it to set production variables
+# ALLOWED_HOSTS = ['b-nice-staging.herokuapp.com',
+#                  'b-nice.herokuapp.com']
+#
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=config('DATABASE_URL')
+#     )
+# }
+#
+# INSTALLED_APPS.append('storages')  # noqa
+#
+# AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+# AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+# AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+# AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+#
+# AWS_S3_OBJECT_PARAMETERS = {
+#     'CacheControl': 'max-age=86400',
+# }
+#
+# AWS_LOCATION = 'static'
+# # STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+#
+# DEFAULT_FILE_STORAGE = 'Bnice.storage_backends.MediaStorage'  # Media uploads
+# # Disabled |compile tag in <head> - all compilation in production is done using
+# # management command compilestatic before collectstatic is run.
+# STATIC_PRECOMPILER_DISABLE_AUTO_COMPILE = True
