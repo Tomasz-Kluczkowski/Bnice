@@ -162,13 +162,13 @@ AUTH_USER_MODEL = 'accounts.User'
 INTERNAL_IPS = ['127.0.0.1']
 
 # Development Settings
-if DEBUG:
+if DEBUG:  # pragma: no cover
     INSTALLED_APPS.append('debug_toolbar')  # noqa
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')  # noqa
 
 
 # Production Settings
-if ON_HEROKU:
+if ON_HEROKU:  # pragma: no cover
     INSTALLED_APPS.append('storages')  # noqa
 
     AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')

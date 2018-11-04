@@ -1,8 +1,17 @@
 [run]
 omit =
+    .tox/*
     */migrations/*
-    *__init__.py*
-include =
-    accounts/*
-    dashboard/*
-    core/*
+    venv/*
+    */virtualenv/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+
+    def __repr__
+    def __unicode__
+    def __str__
+
+    raise AssertionError
+    raise NotImplementedError
