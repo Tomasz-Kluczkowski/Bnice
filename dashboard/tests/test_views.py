@@ -71,6 +71,8 @@ class TestDashboardPage:
 
 
 # Tests of CreateChildPage view.
+# TODO - TEST creating child with a profile photo
+
 class TestCreateChildPage:
 
     def test_http_get(self, client, parent_user_password):
@@ -239,6 +241,7 @@ class TestAddAction:
 
 
 # Tests for UserUpdate view.
+# TODO test updating image as well - also for a child
 
 class TestUserUpdate:
 
@@ -272,6 +275,8 @@ class TestUserUpdate:
 
 
 # Tests for ChildUpdate view.
+# TODO test updating image as well - also for a child
+
 
 class TestChildUpdate:
 
