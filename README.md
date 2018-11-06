@@ -124,15 +124,24 @@ ALLOWED_HOSTS=192.168.1.156, 127.0.0.1
 - 192.168.1.156:8000 will access site hosted at 192.168.1.156 on your local network.
 This is useful when testing behaviour of site on mobiles / tablets etc to confirm your browser's inspection tool is not faking it.
 
+## Contributing
+
+This project is meant to be fun exercise but some rules help (a bit).
+- use PEP8
+- 120 chars per line (the only PEP8 rule we break here) - anything else? PEP8!
+- numPy docstrings
+- pytest for tests
+- atm no standard for Javascript but suggestions are welcome
+
 ## Testing
 
-We use tox to run tests and pytest-django to write them (this is the main exercise to go away from the default UnitTest).
+We use tox to run tests locally and pytest-django to write them (this is the main exercise - to go away from the default UnitTest).
 To run tests simply type:
 ```bash
 tox
 ```
-- After tests inspect coverage - go to htmlcov folder that should appear after tox finished running. Use index.html to navigate
-between coverage of project's files. If anything was missed in testing coverage report will show it in red.
+- After tests if anything is missing in the tests - inspect coverage - go to htmlcov folder that should appear after tox finished running.
+Use index.html to navigate between coverage of project's files. If anything was missed in testing coverage report will show it in red.
 
 ## How to use the app?
 
