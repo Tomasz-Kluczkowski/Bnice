@@ -10,7 +10,7 @@
 In this project I am aiming at converting a wallchart where we record our kid's good and bad behaviour into a web app.
 The main idea is for your kid to collect points and get stars as a reward. You decide what they get for a star :).
 
-## What tech used?
+## What tech is used?
 
 The app is written using **Python / Django** and a few helpful libraries which I am mentioning to pay credit to the authors:
 - bootstrap (get your grid done in no time: <https://getbootstrap.com/>)
@@ -126,14 +126,13 @@ This is useful when testing behaviour of site on mobiles / tablets etc to confir
 
 ## Testing
 
-We use tox to tun tests and pytest-django to write them (this is the main exercise to go away from the default UnitTest).
+We use tox to run tests and pytest-django to write them (this is the main exercise to go away from the default UnitTest).
 To run tests simply type:
 ```bash
 tox
 ```
 - After tests inspect coverage - go to htmlcov folder that should appear after tox finished running. Use index.html to navigate
-between coverage of project's files. If anything was missed in testing coverage report will show it in red 
-(completely missed or yellow - partially missed :).
+between coverage of project's files. If anything was missed in testing coverage report will show it in red.
 
 ## How to use the app?
 
