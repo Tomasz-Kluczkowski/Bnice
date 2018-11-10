@@ -1,10 +1,14 @@
-var toTopButton = $("#toTopButton");
-var sections = $('section'),
-    nav = $('nav'),
-    navHeight = nav.outerHeight();
-var dropdown = $(".dropdown");
-var newDescription = $('#id_new_description');
-var description = $('#id_description');
+const toTopButton = $("#toTopButton");
+const sections = $('section'), nav = $('nav'), navHeight = nav.outerHeight();
+const dropdown = $(".dropdown");
+const newDescription = $('#id_new_description');
+const description = $('#id_description');
+
+// Temporary solution to file input field in user form - until django-bootstrap4 is fixed.
+const file_input = $('#id_profile_photo');
+const file_input_col = file_input.parent();
+const file_error = file_input_col.parent().next();
+file_error.appendTo(file_input_col);
 
 dropdown.hover(function() {
   $(this).find('.dropdown-menu').stop(true, true).fadeIn(500);
