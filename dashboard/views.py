@@ -108,7 +108,7 @@ class AddOopsy(AddAction):
 
 class UserUpdate(UserPassesTestMixin, UpdateView):
     model = User
-    fields = ('username', 'email', 'profile_photo')
+    form_class = UserUpdateForm
     template_name = 'dashboard/user_update.html'
     success_url = reverse_lazy('dashboard:dashboard')
 

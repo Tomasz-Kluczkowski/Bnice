@@ -25,8 +25,7 @@ class UserCreateForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'profile_photo', 'password1',
-                  'password2')
+        fields = ('username', 'email', 'profile_photo', 'password1', 'password2')
         help_texts = {
             'email': help_dict["required"],
             'profile_photo': help_dict["profile_photo"],
@@ -87,19 +86,24 @@ class ChildCreateForm(UserCreationForm):
 
 class ChildUpdateForm(forms.ModelForm):
     """
-
+    Form for updating Child model.
     """
 
     class Meta:
         model = Child
         fields = ('star_points', )
+        help_texts = {'star_points': help_dict['star_points']}
 
 
 class UserUpdateForm(forms.ModelForm):
     """
-
+    Form for updating User model.
     """
-
     class Meta:
         model = User
         fields = ('username', 'email', 'name', 'profile_photo')
+        help_texts = {
+            'email': help_dict["required"],
+            'profile_photo': help_dict["profile_photo"],
+            'name': help_dict["required"],
+        }
