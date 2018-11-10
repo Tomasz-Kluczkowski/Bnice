@@ -11,7 +11,7 @@ class User(AbstractUser):
     user_type = models.CharField(max_length=30, editable=False, null=True)
     name = models.CharField(max_length=30, blank=False)
     email = models.EmailField(unique=True, null=True)
-    profile_photo = models.ImageField(upload_to='profiles/%Y/%m/%d', blank=True)
+    profile_photo = models.ImageField(upload_to='profiles/%Y/%m/%d', blank=True, validators=[])
 
     def save(self, *args, **kwargs):
         if self.is_superuser:
