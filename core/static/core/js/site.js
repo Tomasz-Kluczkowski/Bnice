@@ -5,11 +5,6 @@ var sections = $('section'),
 var dropdown = $(".dropdown");
 var newDescription = $('#id_new_description');
 var description = $('#id_description');
-const profile_photo = $('#id_profile_photo');
-
-// Add form-control form-control-sm class to image field until django-bootstrap4 is fixed (or have to use a different
-// rendered.
-profile_photo.addClass('form-control form-control-sm');
 
 dropdown.hover(function() {
   $(this).find('.dropdown-menu').stop(true, true).fadeIn(500);

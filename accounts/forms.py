@@ -24,6 +24,7 @@ class UserCreateForm(UserCreationForm):
         self.fields['password1'].help_text = help_dict["password1"]
 
     class Meta:
+        abstract = True
         model = User
         fields = ('username', 'email', 'profile_photo', 'password1', 'password2')
         help_texts = {
@@ -31,6 +32,7 @@ class UserCreateForm(UserCreationForm):
             'profile_photo': help_dict["profile_photo"],
             'name': help_dict["required"],
         }
+        widgets = {'profile_photo': forms.ClearableFileInput(attrs={'class': 'form-control form-control-sm'})}
 
     def save(self, commit=False):
         user = super().save(commit=False)
@@ -53,14 +55,8 @@ class ChildCreateForm(UserCreationForm):
         # current_user is the user logged in classified as parent/superuser).
         self.current_user = kwargs["initial"]["current_user"]
 
-    class Meta:
-        model = User
+    class Meta(UserCreateForm.Meta):
         fields = ('username', 'email', 'name', 'star_points', 'profile_photo', 'password1', 'password2')
-        help_texts = {
-            'email': help_dict["required"],
-            'profile_photo': help_dict["profile_photo"],
-            'name': help_dict["required"],
-        }
 
     def clean(self):
         """
@@ -99,11 +95,6 @@ class UserUpdateForm(forms.ModelForm):
     """
     Form for updating User model.
     """
-    class Meta:
-        model = User
+    class Meta(UserCreateForm.Meta):
         fields = ('username', 'email', 'name', 'profile_photo')
-        help_texts = {
-            'email': help_dict["required"],
-            'profile_photo': help_dict["profile_photo"],
-            'name': help_dict["required"],
-        }
+
