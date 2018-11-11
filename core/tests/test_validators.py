@@ -85,4 +85,22 @@ class TestImageValidator:
         validator = FileValidator(max_width=1000)
         assert validator(mock_image_file) is None
 
+    def test_min_height_too_small_validation(self, mock_image_file):
+        validator = ImageValidator(min_height=1000)
+        with pytest.raises(ValidationError) as e:
+            validator(mock_image_file)
+        assert str(e.value) == "['The height of the image is too small - 500px. The minimum height allowed is 1000px.']"
 
+    def test_min_height_correct_validation(self, mock_image_file):
+        validator = FileValidator(min_height=450)
+        assert validator(mock_image_file) is None
+
+    def test_max_height_too_large_validation(self, mock_image_file):
+        validator = ImageValidator(max_height=450)
+        with pytest.raises(ValidationError) as e:
+            validator(mock_image_file)
+        assert str(e.value) == "['The height of the image is too large - 500px. The maximum height allowed is 450px.']"
+
+    def test_max_height_correct_validation(self, mock_image_file):
+        validator = FileValidator(max_height=1000)
+        assert validator(mock_image_file) is None

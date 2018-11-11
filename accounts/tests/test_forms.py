@@ -8,6 +8,7 @@ from accounts.forms import UserCreateForm, ChildCreateForm
 def test_user_create_form():
     form = UserCreateForm({'username': 'tom_k',
                            'email': 'tom@dot.pl',
+                           'name': 'tomek',
                            'profile_photo': '',
                            'password1': 'pass123password',
                            'password2': 'pass123password'})
@@ -22,6 +23,7 @@ def test_user_create_form():
     user = form.save()
     # Confirm saved user matches data from form.
     assert user.username == 'tom_k'
+    assert user.name == 'tomek'
     assert user.email == 'tom@dot.pl'
     assert user.profile_photo == ''
     # Confirm is_parent is appropriately set in save method.

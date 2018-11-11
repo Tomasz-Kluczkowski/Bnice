@@ -260,17 +260,15 @@ class TestUserUpdate:
 
     def test_updating_user_data(self, client, parent_user_password):
         """Confirm user data is modified and saved in the database."""
-        user = parent_user_password
-        form_data = {'username': 'test_username',
-                     'email': 'testemail@email.com'}
+        form_data = {'username': 'test_username', 'name': 'test_name', 'email': 'testemail@email.com'}
         user_logger(client, 'tom_k')
         assert User.objects.count() == 1
-        response = client.post(reverse('dashboard:user-update',
-                                       kwargs={'pk': 1}), form_data)
+        response = client.post(reverse('dashboard:user-update', kwargs={'pk': parent_user_password.pk}), form_data)
         assert response.status_code == 302
-        assert response.url == '/dashboard/'
-        user.refresh_from_db()
+        assert response.url == reverse('dashboard:dashboard')
+        user = User.objects.get(pk=parent_user_password.pk)
         assert user.username == 'test_username'
+        assert user.name == 'test_name'
         assert user.email == 'testemail@email.com'
 
 
@@ -303,12 +301,11 @@ class TestChildUpdate:
                      'email': 'testemail@email.com',
                      'star_points': 12}
         user_logger(client, 'tom_k')
-        response = client.post(reverse('dashboard:child-update',
-                                       kwargs={'pk': 2}), form_data)
+        response = client.post(reverse('dashboard:child-update', kwargs={'pk': child.pk}), form_data)
         assert response.status_code == 302
-        assert response.url == '/dashboard/child/2/'
-        child_user.refresh_from_db()
-        child.refresh_from_db()
+        assert response.url == reverse('dashboard:child-detail', kwargs={'pk': child.pk})
+        child_user = User.objects.get(pk=child_user.pk)
+        child = Child.objects.get(pk=child.pk)
         assert child_user.username == 'test_username'
         assert child_user.name == 'test_name'
         assert child_user.email == 'testemail@email.com'

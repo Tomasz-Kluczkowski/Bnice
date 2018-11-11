@@ -142,7 +142,7 @@ class ImageValidator(FileValidator):
         # check minimum height
         if self.min_height and height < self.min_height:
             raise ValidationError(
-                self.min_heigth_message,
+                self.min_height_message,
                 code='image_height_too_small',
                 params={'height': height, 'min_height': self.min_height}
             )
@@ -154,4 +154,3 @@ class ImageValidator(FileValidator):
                 code='image_height_too_large',
                 params={'height': height, 'max_height': self.max_height}
             )
-

@@ -26,7 +26,7 @@ class UserCreateForm(UserCreationForm):
     class Meta:
         abstract = True
         model = User
-        fields = ('username', 'email', 'profile_photo', 'password1', 'password2')
+        fields = ('username', 'name', 'email', 'profile_photo', 'password1', 'password2')
         help_texts = {
             'email': help_dict["required"],
             'profile_photo': help_dict["profile_photo"],
@@ -96,4 +96,4 @@ class UserUpdateForm(forms.ModelForm):
     Form for updating User model.
     """
     class Meta(UserCreateForm.Meta):
-        fields = ('username', 'email', 'profile_photo')
+        fields = ('username', 'name', 'email', 'profile_photo')
