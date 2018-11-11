@@ -32,6 +32,8 @@ class FileValidator:
         self.allowed_mimes = kwargs.get('allowed_mimes', None)
         self.min_size = kwargs.get('min_size', None)
         self.max_size = kwargs.get('max_size', None)
+        if self.min_size and self.max_size and self.min_size > self.max_size:
+            raise ValueError('min_size must be lower or equal to max_size. Please check validator parameters.')
 
     def __call__(self, value):
         # check extension
@@ -54,6 +56,7 @@ class FileValidator:
             )
 
         file_size = value.size
+        print(file_size)
 
         # check min size
         if self.min_size and file_size < self.min_size * 1024:
