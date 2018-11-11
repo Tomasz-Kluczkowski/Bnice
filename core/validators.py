@@ -33,7 +33,7 @@ class FileValidator:
         self.min_size = kwargs.get('min_size', None)
         self.max_size = kwargs.get('max_size', None)
         if self.min_size and self.max_size and self.min_size > self.max_size:
-            raise ValueError('min_size must be lower or equal to max_size. Please check validator parameters.')
+            raise ValueError(_('min_size must be lower than or equal to max_size. Please check validator parameters.'))
 
     def __call__(self, value):
         # check extension
@@ -56,8 +56,6 @@ class FileValidator:
             )
 
         file_size = value.size
-        print(file_size)
-
         # check min size
         if self.min_size and file_size < self.min_size * 1024:
             raise ValidationError(
@@ -78,27 +76,82 @@ class FileValidator:
 @deconstructible
 class ImageValidator(FileValidator):
 
+    min_width_message = _('The width of the image is too small - %(width)spx. '
+                          'The minimum width allowed is %(min_width)spx.')
+    max_width_message = _('The width of the image is too large - %(width)spx. '
+                          'The maximum width allowed is %(max_width)spx.')
+    min_height_message = _('The height of the image is too small - %(height)spx. '
+                           'The minimum height allowed is %(min_height)spx.')
+    max_height_message = _('The height of the image is too large - %(height)spx. '
+                           'The maximum height allowed is %(max_height)spx.')
+
+    wrong_config_message = _('%(min_attribute)s must be lower than or equal to %(max_attribute)s. '
+                             'Please check validator parameters.')
+    fields = ['width', 'height']
+
     def __init__(self, *args, **kwargs):
         """
         Validation of image files. Extends file validator.
 
-        Additional checks possible: min x dimension, max x dimension, min y dimension, max y dimension.
+        Additional checks possible: min width, max width, min height, max height.
+        Please note that we will NOT check file type here to prevent trying to read dimensions of a .txt file
+        - the onus is on the programmer to set allowed extensions and mime types to prevent this.
+        This is to avoid duplication in solving the same validation problem.
 
         Parameters
         ----------
-        min_x : int, minimum x dimension of the image
-        max_x : int, maximum x dimension of the image
-        min_y : int, minimum y dimension of the image
-        max_y : int, maximum y dimension of the image
+        min_width : int, minimum width of the image in px
+        max_width : int, maximum width of the image in px
+        min_height : int, minimum height of the image in px
+        max_height : int, maximum height of the image in px
         """
         super().__init__(*args, **kwargs)
-        self.min_x = kwargs.get('min_x', None)
-        self.max_x = kwargs.get('max_x', None)
-        self.min_y = kwargs.get('min_y', None)
-        self.max_y = kwargs.get('max_y', None)
+        self.min_width = kwargs.get('min_width', None)
+        self.max_width = kwargs.get('max_width', None)
+        self.min_height = kwargs.get('min_height', None)
+        self.max_height = kwargs.get('max_height', None)
+        for field in self.fields:
+            min_attribute, max_attribute = (f'min_{field}', f'max_{field}')
+            if (
+                    getattr(self, min_attribute) and
+                    getattr(self, max_attribute) and
+                    getattr(self, min_attribute) > getattr(self, max_attribute)
+            ):
+                raise ValueError(self.wrong_config_message % {'min_attribute': min_attribute,
+                                                              'max_attribute': max_attribute})
 
     def __call__(self, value):
-        x, y = get_image_dimensions(value)
+        width, height = get_image_dimensions(value)
 
-        # check dimensions
-        # print(get_image_dimensions(value))
+        # check minimum width
+        if self.min_width and width < self.min_width:
+            raise ValidationError(
+                self.min_width_message,
+                code='image_width_too_small',
+                params={'width': width, 'min_width': self.min_width}
+            )
+
+        # check maximum width
+        if self.max_width and width > self.max_width:
+            raise ValidationError(
+                self.max_width_message,
+                code='image_width_too_large',
+                params={'width': width, 'max_width': self.max_width}
+            )
+
+        # check minimum height
+        if self.min_height and height < self.min_height:
+            raise ValidationError(
+                self.min_heigth_message,
+                code='image_height_too_small',
+                params={'height': height, 'min_height': self.min_height}
+            )
+
+        # check maximum height
+        if self.max_height and height > self.max_height:
+            raise ValidationError(
+                self.max_height_message,
+                code='image_height_too_large',
+                params={'height': height, 'max_height': self.max_height}
+            )
+
