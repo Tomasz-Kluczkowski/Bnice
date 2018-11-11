@@ -96,5 +96,5 @@ class UserUpdateForm(forms.ModelForm):
     Form for updating User model.
     """
     class Meta(UserCreateForm.Meta):
-        fields = ('username', 'email', 'name', 'profile_photo')
+        fields = ('username', 'email', 'profile_photo')
 

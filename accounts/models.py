@@ -16,7 +16,8 @@ class User(AbstractUser):
     profile_photo = models.ImageField(
         upload_to='profiles/%Y/%m/%d',
         blank=True,
-        validators=[FileValidator(allowed_extensions=['doc'])]
+        validators=[FileValidator(allowed_extensions=['.jpg', '.png', '.gif'],
+                                  allowed_mimes=['image/jpeg', 'image/png', 'image/gif'])]
     )
 
     def save(self, *args, **kwargs):
