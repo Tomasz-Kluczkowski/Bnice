@@ -4,20 +4,22 @@ from os.path import splitext
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.core.files.images import get_image_dimensions
 
 
 @deconstructible
 class FileValidator:
     """
-    Use for validation of all image files.
+    Validation of files.
+    Possible checks: extension, mime type, min size, max size.
     """
 
-    extension_message = _("Extension '%(extension)s' not allowed. Allowed extensions are: '.%(allowed_extensions)s'.")
+    extension_message = _("Extension '%(extension)s' not allowed. Allowed extensions are: '%(allowed_extensions)s'.")
     mime_message = _("MIME type '%(mime_type)s' is not valid. Allowed types are: %(allowed_mimes)s.")
     min_size_message = _('File size is too small - %(size)s kB. The minimum file size is %(allowed_size)s kB.')
     max_size_message = _('File size is too large - %(size)s kB. The maximum file size is %(allowed_size)s kB.')
 
-    def __init__(self, allowed_extensions=None, allowed_mimes=None, min_size=None, max_size=None):
+    def __init__(self, *args, **kwargs):
         """
         Parameters
         ----------
@@ -26,10 +28,10 @@ class FileValidator:
         min_size : int, minimum file size in kB (1 = 1kiB = 1024B)
         max_size : int, maximum file size in kB ((10 = 10kiB = 10*1024B)
         """
-        self.allowed_extensions = allowed_extensions
-        self.allowed_mimes = allowed_mimes
-        self.min_size = min_size
-        self.max_size = max_size
+        self.allowed_extensions = kwargs.get('allowed_extensions', None)
+        self.allowed_mimes = kwargs.get('allowed_mimes', None)
+        self.min_size = kwargs.get('min_size', None)
+        self.max_size = kwargs.get('max_size', None)
 
     def __call__(self, value):
         # check extension
@@ -68,3 +70,32 @@ class FileValidator:
                 code='file_size_too_large',
                 params={'size': round(file_size / 1024, 1), 'allowed_size': self.max_size}
             )
+
+
+@deconstructible
+class ImageValidator(FileValidator):
+
+    def __init__(self, *args, **kwargs):
+        """
+        Validation of image files. Extends file validator.
+
+        Additional checks possible: min x dimension, max x dimension, min y dimension, max y dimension.
+
+        Parameters
+        ----------
+        min_x : int, minimum x dimension of the image
+        max_x : int, maximum x dimension of the image
+        min_y : int, minimum y dimension of the image
+        max_y : int, maximum y dimension of the image
+        """
+        super().__init__(*args, **kwargs)
+        self.min_x = kwargs.get('min_x', None)
+        self.max_x = kwargs.get('max_x', None)
+        self.min_y = kwargs.get('min_y', None)
+        self.max_y = kwargs.get('max_y', None)
+
+    def __call__(self, value):
+        x, y = get_image_dimensions(value)
+
+        # check dimensions
+        # print(get_image_dimensions(value))

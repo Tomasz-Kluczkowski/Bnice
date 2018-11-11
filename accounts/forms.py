@@ -97,4 +97,3 @@ class UserUpdateForm(forms.ModelForm):
     """
     class Meta(UserCreateForm.Meta):
         fields = ('username', 'email', 'profile_photo')
-

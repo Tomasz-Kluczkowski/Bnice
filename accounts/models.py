@@ -20,7 +20,7 @@ class User(AbstractUser):
             FileValidator(
                 allowed_extensions=['.jpg', '.png', '.gif'],
                 allowed_mimes=['image/jpeg', 'image/png', 'image/gif'],
-                min_size=50,
+                min_size=25,
                 max_size=150
             )
         ]
