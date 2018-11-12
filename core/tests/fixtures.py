@@ -1,6 +1,8 @@
 import pytest
+from unittest import mock
 from PIL import Image
 from io import StringIO, BytesIO
+
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 
@@ -31,3 +33,13 @@ def mock_image_file():
     image_file = InMemoryUploadedFile(io, None, 'test.png', 'png', 100*1024, None)
     image_file.seek(0)
     return image_file
+
+
+@pytest.fixture
+def mock_img_save():
+    """
+    Use to fake save to the django file sotrage system.
+    """
+    mock_save = mock.Mock()
+    mock_save.return_value = 'test.png'
+    return mock_save
