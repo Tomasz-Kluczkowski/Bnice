@@ -7,7 +7,7 @@ help_dict = {
     "password1": '8 characters or more & not numerical only.',
     "required": "Required",
     "profile_photo":
-        'Image file, size: 500x500 px, jpeg, png or gif type only.',
+        'Image file, 300 - 500px width/height, .jpeg, .png or .gif.',
     'star_points': 'Required, How many points to earn a star?',
 }
 

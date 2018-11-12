@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.urls import reverse
 
-from core.validators import FileValidator
+from core.validators import ImageValidator
 
 
 class User(AbstractUser):
@@ -17,11 +17,15 @@ class User(AbstractUser):
         upload_to='profiles/%Y/%m/%d',
         blank=True,
         validators=[
-            FileValidator(
+            ImageValidator(
                 allowed_extensions=['.jpg', '.png', '.gif'],
                 allowed_mimes=['image/jpeg', 'image/png', 'image/gif'],
                 min_size=25,
-                max_size=150
+                max_size=150,
+                min_width=300,
+                max_width=500,
+                min_height=300,
+                max_height=500
             )
         ]
     )
