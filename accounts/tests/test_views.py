@@ -62,7 +62,8 @@ class TestSignupView:
                      }
         assert not User.objects.exists()
         response = client.post(reverse('accounts:signup'), form_data)
-        assert '<div class="invalid-feedback">Upload a valid image. The file you uploaded was either not an image or a ' \
-               'corrupted image.</div>' in response.content.decode()
+        assert (
+                   '<div class="invalid-feedback">Upload a valid image. The file you uploaded was either not an image '
+                   'or a corrupted image.</div>'
+               ) in response.content.decode()
         assert not User.objects.exists()
-

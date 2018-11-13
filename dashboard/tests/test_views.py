@@ -151,8 +151,22 @@ class TestChildDetail:
                                                   oopsy_custom_description):
         """Confirm child user unable to add/edit/delete their actions."""
         user_logger(client, 'nat_k')
-        response = client.get(reverse('dashboard:child-detail', kwargs={'pk': 1}))
-        print(response.content.decode())
+        response = client.get(reverse('dashboard:child-detail', kwargs={'pk': child_user_password.pk}))
+        assert (
+                   f'href="/dashboard/child/{child_user_password.pk}/smiley/{smiley_custom_description.pk}/delete/">'
+               ) not in response.content.decode()
+
+        assert (
+                   f'href="/dashboard/child/{child_user_password.pk}/smiley/{smiley_custom_description.pk}/edit/">'
+               ) not in response.content.decode()
+
+        assert (
+                   f'href="/dashboard/child/{child_user_password.pk}/oopsy/{oopsy_custom_description.pk}/delete/">'
+               ) not in response.content.decode()
+
+        assert (
+                   f'href="/dashboard/child/{child_user_password.pk}/oopsy/{oopsy_custom_description.pk}/edit/">'
+               ) not in response.content.decode()
 
     def test_test_func_redirects_parent_user(self, client, child, alt_parent_user_password):
         """Test test_func redirects when trying to access other user's child data when logged in as a parent."""

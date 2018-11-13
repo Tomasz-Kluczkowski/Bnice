@@ -37,9 +37,7 @@ def mock_image_file():
 
 @pytest.fixture
 def mock_img_save():
-    """
-    Use to fake save to the django file sotrage system.
-    """
+    """Use to fake save to the django file storage system."""
     mock_save = mock.Mock()
     mock_save.return_value = 'test.png'
     return mock_save
