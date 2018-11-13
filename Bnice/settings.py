@@ -92,6 +92,7 @@ STATIC_PRECOMPILER_COMPILERS = (
     ('static_precompiler.compilers.SCSS', {
         "load_paths": [os.path.join(BASE_DIR, "assets", "_sass")],
         "precision": 8,
+        "sourcemap_enabled": True,
         "output_style": "compressed",
     }),
 )
