@@ -8,6 +8,7 @@ from accounts.forms import UserCreateForm, ChildCreateForm
 def test_user_create_form():
     form = UserCreateForm({'username': 'tom_k',
                            'email': 'tom@dot.pl',
+                           'name': 'tomek',
                            'profile_photo': '',
                            'password1': 'pass123password',
                            'password2': 'pass123password'})
@@ -18,10 +19,11 @@ def test_user_create_form():
     assert form.fields['email'].required is True
     assert form.fields['email'].help_text == 'Required'
     assert form.fields['profile_photo'].help_text == (
-        'Image file, size: 500x500 px, jpeg, png or gif type only.')
+        'Image file, 300 - 500px width/height, .jpeg, .png or .gif.')
     user = form.save()
     # Confirm saved user matches data from form.
     assert user.username == 'tom_k'
+    assert user.name == 'tomek'
     assert user.email == 'tom@dot.pl'
     assert user.profile_photo == ''
     # Confirm is_parent is appropriately set in save method.
@@ -46,7 +48,7 @@ def test_child_create_form(parent_user):
     assert form.fields['email'].required is True
     assert form.fields['email'].help_text == 'Required'
     assert form.fields['profile_photo'].help_text == (
-        'Image file, size: 500x500 px, jpeg, png or gif type only.')
+        'Image file, 300 - 500px width/height, .jpeg, .png or .gif.')
     child_user = form.save()
     # Confirm saved child user matches data from form.
     assert child_user.username == 'nat_k'

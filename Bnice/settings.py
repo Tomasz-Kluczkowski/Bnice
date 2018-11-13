@@ -53,7 +53,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -93,6 +92,7 @@ STATIC_PRECOMPILER_COMPILERS = (
     ('static_precompiler.compilers.SCSS', {
         "load_paths": [os.path.join(BASE_DIR, "assets", "_sass")],
         "precision": 8,
+        "sourcemap_enabled": True,
         "output_style": "compressed",
     }),
 )
@@ -178,7 +178,6 @@ if ON_HEROKU:  # pragma: no cover
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
     AWS_LOCATION = 'static'
 
-    # STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 

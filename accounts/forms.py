@@ -7,7 +7,7 @@ help_dict = {
     "password1": '8 characters or more & not numerical only.',
     "required": "Required",
     "profile_photo":
-        'Image file, size: 500x500 px, jpeg, png or gif type only.',
+        'Image file, 300 - 500px width/height, .jpeg, .png or .gif.',
     'star_points': 'Required, How many points to earn a star?',
 }
 
@@ -24,14 +24,15 @@ class UserCreateForm(UserCreationForm):
         self.fields['password1'].help_text = help_dict["password1"]
 
     class Meta:
+        abstract = True
         model = User
-        fields = ('username', 'email', 'profile_photo', 'password1',
-                  'password2')
+        fields = ('username', 'name', 'email', 'profile_photo', 'password1', 'password2')
         help_texts = {
             'email': help_dict["required"],
             'profile_photo': help_dict["profile_photo"],
             'name': help_dict["required"],
         }
+        widgets = {'profile_photo': forms.ClearableFileInput(attrs={'class': 'form-control form-control-sm'})}
 
     def save(self, commit=False):
         user = super().save(commit=False)
@@ -54,14 +55,8 @@ class ChildCreateForm(UserCreationForm):
         # current_user is the user logged in classified as parent/superuser).
         self.current_user = kwargs["initial"]["current_user"]
 
-    class Meta:
-        model = User
+    class Meta(UserCreateForm.Meta):
         fields = ('username', 'email', 'name', 'star_points', 'profile_photo', 'password1', 'password2')
-        help_texts = {
-            'email': help_dict["required"],
-            'profile_photo': help_dict["profile_photo"],
-            'name': help_dict["required"],
-        }
 
     def clean(self):
         """
@@ -87,19 +82,18 @@ class ChildCreateForm(UserCreationForm):
 
 class ChildUpdateForm(forms.ModelForm):
     """
-
+    Form for updating Child model.
     """
 
     class Meta:
         model = Child
         fields = ('star_points', )
+        help_texts = {'star_points': help_dict['star_points']}
 
 
 class UserUpdateForm(forms.ModelForm):
     """
-
+    Form for updating User model.
     """
-
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'name', 'profile_photo')
+    class Meta(UserCreateForm.Meta):
+        fields = ('username', 'name', 'email', 'profile_photo')

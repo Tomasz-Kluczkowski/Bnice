@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView)
@@ -107,7 +108,7 @@ class AddOopsy(AddAction):
 
 class UserUpdate(UserPassesTestMixin, UpdateView):
     model = User
-    fields = ('username', 'email', 'profile_photo')
+    form_class = UserUpdateForm
     template_name = 'dashboard/user_update.html'
     success_url = reverse_lazy('dashboard:dashboard')
 
@@ -142,10 +143,11 @@ class ChildUpdate(UserPassesTestMixin, UpdateView):
         kwargs['child_form'] = self.child_form_class(initial={'star_points': child.star_points})
         return super().get_context_data(**kwargs)
 
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         child = Child.objects.get(user__pk=self.object.pk)
-        user_form = self.form_class(request.POST, instance=self.object)
+        user_form = self.form_class(request.POST, request.FILES, instance=self.object)
         child_form = self.child_form_class(request.POST, instance=child)
         if user_form.is_valid() and child_form.is_valid():
             user_data = user_form.save(commit=False)

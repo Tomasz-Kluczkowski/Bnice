@@ -25,7 +25,6 @@ class LoginRequiredMiddleware:
 
     @staticmethod
     def process_view(request, view_func, view_args, view_kwargs):
-        print('middleware check login')
         assert hasattr(request, 'user')
 
         if request.user.is_authenticated:

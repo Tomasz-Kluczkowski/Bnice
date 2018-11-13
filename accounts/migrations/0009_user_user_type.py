@@ -5,12 +5,7 @@ from django.db import migrations, models
 
 
 def move_to_user_type(apps, schema_editor):
-    existing_users = (
-        apps
-        .get_model('accounts', 'User')
-        .objects
-        .all()
-    )
+    existing_users = apps.get_model('accounts', 'User').objects.all()
     for user in existing_users:
         if user.is_superuser:
             user.user_type = User.TYPE_ADMIN
