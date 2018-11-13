@@ -4,8 +4,6 @@ from django.urls import reverse
 from accounts.models import User, Child
 from dashboard.models import Smiley, Oopsy
 
-# from django.urls import reverse
-
 # Mark all tests as requiring database.
 pytestmark = pytest.mark.django_db
 
@@ -27,8 +25,6 @@ def user_logger(client, username, password='password'):
     """
     client.login(username=username, password=password)
 
-
-# Tests of DashboardPage view.
 
 class TestDashboardPage:
 
@@ -70,9 +66,6 @@ class TestDashboardPage:
         assert response.context['child_list'][0] == child
 
 
-# Tests of CreateChildPage view.
-# TODO - TEST creating child with a profile photo
-
 class TestCreateChildPage:
 
     def test_http_get(self, client, parent_user_password):
@@ -87,27 +80,31 @@ class TestCreateChildPage:
         templates = response.templates
         assert templates[0].name == 'dashboard/add_child.html'
 
-    def test_http_post(self, client, parent_user_password):
+    def test_http_post(self, client, parent_user_password, mock_image_file, mock_img_save, monkeypatch):
+        monkeypatch.setattr('django.core.files.storage.FileSystemStorage.save', mock_img_save)
         form_data = {'username': 'kid',
                      'name': 'lili',
                      'email': 'lili@gmail.com',
+                     'profile_photo': mock_image_file,
                      'star_points': 20,
                      'password1': 'new_pass',
                      'password2': 'new_pass'}
         user_logger(client, 'tom_k')
         response = client.post(reverse('dashboard:child-create'), form_data)
         assert response.status_code == 302
-        assert response.url == '/dashboard/'
+        assert response.url == reverse('dashboard:dashboard')
+        mock_img_save.assert_called_once()
         assert Child.objects.count() == 1
-        child = Child.objects.last()
-        assert child.user.username == 'kid'
-        assert child.user.name == 'lili'
-        assert child.user.email == 'lili@gmail.com'
+        assert User.objects.count() == 2
+        child = Child.objects.get()
+        child_user = User.objects.get(username='kid')
+        assert child_user.username == 'kid'
+        assert child_user.name == 'lili'
+        assert child_user.email == 'lili@gmail.com'
+        assert child_user.profile_photo == 'test.png'
         assert child.parent == parent_user_password
         assert child.star_points == 20
 
-
-# Tests of ChildDetail view.
 
 class TestChildDetail:
 
@@ -181,8 +178,6 @@ class TestChildDetail:
         assert response.status_code == 403
 
 
-# Tests of AddAction view.
-
 class TestAddAction:
 
     def test_test_func_redirects(self, client, child, alt_parent_user_password):
@@ -254,9 +249,6 @@ class TestAddAction:
         assert oopsy.points == 5
 
 
-# Tests for UserUpdate view.
-# TODO test updating image as well - also for a child
-
 class TestUserUpdate:
 
     def test_http_get(self, client, parent_user_password):
@@ -272,22 +264,26 @@ class TestUserUpdate:
         response = client.get(reverse('dashboard:user-update', kwargs={'pk': 2}))
         assert response.status_code == 403
 
-    def test_updating_user_data(self, client, parent_user_password):
+    def test_updating_user_data(self, client, parent_user_password, mock_image_file, mock_img_save, monkeypatch):
         """Confirm user data is modified and saved in the database."""
-        form_data = {'username': 'test_username', 'name': 'test_name', 'email': 'testemail@email.com'}
+        monkeypatch.setattr('django.core.files.storage.FileSystemStorage.save', mock_img_save)
+        form_data = {
+            'username': 'test_username',
+            'name': 'test_name',
+            'email': 'testemail@email.com',
+            'profile_photo': mock_image_file
+        }
         user_logger(client, 'tom_k')
         assert User.objects.count() == 1
         response = client.post(reverse('dashboard:user-update', kwargs={'pk': parent_user_password.pk}), form_data)
         assert response.status_code == 302
         assert response.url == reverse('dashboard:dashboard')
+        mock_img_save.assert_called_once()
         user = User.objects.get(pk=parent_user_password.pk)
         assert user.username == 'test_username'
         assert user.name == 'test_name'
         assert user.email == 'testemail@email.com'
-
-
-# Tests for ChildUpdate view.
-# TODO test updating image as well - also for a child
+        assert user.profile_photo == 'test.png'
 
 
 class TestChildUpdate:
@@ -307,22 +303,28 @@ class TestChildUpdate:
         templates = response.templates
         assert templates[0].name == 'dashboard/child_update.html'
 
-    def test_updating_child_data(self, client, parent_user_password,
-                                 child_user, child):
+    def test_updating_child_data(self, client, parent_user_password, child_user, child, mock_image_file, mock_img_save,
+                                 monkeypatch):
         """Confirm child user data is modified and saved in the database."""
-        form_data = {'username': 'test_username',
-                     'name': 'test_name',
-                     'email': 'testemail@email.com',
-                     'star_points': 12}
+        monkeypatch.setattr('django.core.files.storage.FileSystemStorage.save', mock_img_save)
+        form_data = {
+            'username': 'test_username',
+            'name': 'test_name',
+            'email': 'testemail@email.com',
+            'star_points': 12,
+            'profile_photo': mock_image_file
+        }
         user_logger(client, 'tom_k')
         response = client.post(reverse('dashboard:child-update', kwargs={'pk': child.pk}), form_data)
         assert response.status_code == 302
         assert response.url == reverse('dashboard:child-detail', kwargs={'pk': child.pk})
+        mock_img_save.assert_called_once()
         child_user = User.objects.get(pk=child_user.pk)
         child = Child.objects.get(pk=child.pk)
         assert child_user.username == 'test_username'
         assert child_user.name == 'test_name'
         assert child_user.email == 'testemail@email.com'
+        assert child_user.profile_photo == 'test.png'
         assert child.star_points == 12
 
     def test_updating_child__invalid_data(self, client, parent_user_password,
@@ -337,13 +339,10 @@ class TestChildUpdate:
         response = client.post(reverse('dashboard:child-update',
                                        kwargs={'pk': 2}), form_data)
         assert response.status_code == 200
-        assert ('Enter a valid username. '
-                'This value may contain only'
-                ' letters, numbers, and'
-                ' @/./+/-/_ characters.') in response.content.decode()
+        assert (
+                   'Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters.'
+               ) in response.content.decode()
 
-
-# Test ChildDelete view.
 
 class TestChildDelete:
 
@@ -370,9 +369,6 @@ class TestChildDelete:
         assert response.url == '/dashboard/'
         assert Child.objects.count() == 0
 
-
-# Test ActionDeleteBase using its child classes.
-# Test SmileyDelete view.
 
 class TestSmileyDelete:
 
@@ -402,8 +398,6 @@ class TestSmileyDelete:
         assert Smiley.objects.count() == 0
 
 
-# Test OopsyDelete view.
-
 class TestOopsyDelete:
 
     def test_http_get_correct_parent(self, client, child, oopsy_custom_description, parent_user_password):
@@ -431,9 +425,6 @@ class TestOopsyDelete:
         assert response.url == reverse('dashboard:child-detail', kwargs={'pk': 1})
         assert Oopsy.objects.count() == 0
 
-
-# Tests for ActionUpdateBase and its child classes.
-# Test SmileyUpdate
 
 class TestSmileyUpdate:
 
@@ -475,8 +466,6 @@ class TestSmileyUpdate:
         assert smiley.description == 'a new description'
         assert smiley.points == 1
 
-
-# Test SmileyUpdate
 
 class TestOopsyUpdate:
 

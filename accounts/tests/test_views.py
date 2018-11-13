@@ -32,13 +32,14 @@ class TestSignupView:
     def test_signup_data_correct(self, mock_img_save, client, mock_image_file, monkeypatch):
         """Confirm new account is created."""
         monkeypatch.setattr('django.core.files.storage.FileSystemStorage.save', mock_img_save)
-        form_data = {'username': 'test_username',
-                     'name': 'test_name',
-                     'email': 'testemail@email.com',
-                     'profile_photo': mock_image_file,
-                     'password1': 'passwordmustbelong',
-                     'password2': 'passwordmustbelong',
-                     }
+        form_data = {
+            'username': 'test_username',
+            'name': 'test_name',
+            'email': 'testemail@email.com',
+            'profile_photo': mock_image_file,
+            'password1': 'passwordmustbelong',
+            'password2': 'passwordmustbelong',
+        }
         assert not User.objects.exists()
         response = client.post(reverse('accounts:signup'), form_data)
         mock_img_save.assert_called_once()
