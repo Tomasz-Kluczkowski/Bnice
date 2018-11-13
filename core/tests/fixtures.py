@@ -35,6 +35,17 @@ def mock_image_file():
     return image_file
 
 
+"""
+DO NOT SAVE TO HDD IN TESTS!
+To avoid reading the file system we generate in memory file - use fixtures mock_txt_file and mock_image_file.
+If needed - parametrize them to make them flexible.
+To prevent saving to the file system we use mock_img_save as a fixture together with monkeypatch fixture.
+Then we patch django storage save method as per line below:
+monkeypatch.setattr('django.core.files.storage.FileSystemStorage.save', mock_img_save)
+Example usage: dashboard/tests/test_views.py::TestChildUpdate::test_updating_child_data
+"""
+
+
 @pytest.fixture
 def mock_img_save():
     """Use to fake save to the django file storage system."""
