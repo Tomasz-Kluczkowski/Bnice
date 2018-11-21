@@ -6,6 +6,10 @@ from django.urls import reverse
 from core.validators import ImageValidator
 
 
+def get_anonymous_user_instance(user):
+    return User(username='Anonymous', email='anonymous@anonymous.anonymous')
+
+
 class User(AbstractUser):
     TYPE_ADMIN = 'Administrator'
     TYPE_PARENT = 'Parent'
