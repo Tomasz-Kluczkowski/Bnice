@@ -63,6 +63,7 @@ MIDDLEWARE = [
     'core.login_middleware.LoginRequiredMiddleware',
 ]
 
+ANONYMOUS_USER_NAME = 'Anonymous'
 GUARDIAN_GET_INIT_ANONYMOUS_USER = 'accounts.models.get_anonymous_user_instance'
 
 AUTHENTICATION_BACKENDS = (

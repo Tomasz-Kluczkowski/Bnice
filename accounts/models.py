@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.urls import reverse
@@ -7,7 +7,7 @@ from core.validators import ImageValidator
 
 
 def get_anonymous_user_instance(user):
-    return User(username='Anonymous', email='anonymous@anonymous.anonymous')
+    return User(username=settings.ANONYMOUS_USER_NAME, email='anonymous@anonymous.anonymous')
 
 
 class User(AbstractUser):
@@ -34,6 +34,7 @@ class User(AbstractUser):
         ]
     )
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         if self.is_superuser:
             self.user_type = self.TYPE_ADMIN
