@@ -8,7 +8,9 @@ from Bnice import settings
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def add_object_permissions(sender, instance, created, **kwargs):
     """
-    Adds per object permissions to the User instance after its creation.
+    Adds per object permissions to the User instance after its creation. Django guardian adds anonymous user before
+    permissions get created in the database so we have to eliminate triggering signal for that (as per django guardian
+    docs).
     Parameters
     ----------
     sender : User
@@ -25,7 +27,3 @@ def add_object_permissions(sender, instance, created, **kwargs):
         if instance.is_parent() or instance.is_administrator():
             assign_perm('accounts.add_user_instance', instance, instance)
             assign_perm('accounts.delete_user_instance', instance, instance)
-
-        print('User post save done')
-        print(sender)
-        print(instance)
