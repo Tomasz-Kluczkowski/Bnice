@@ -34,6 +34,14 @@ class User(AbstractUser):
         ]
     )
 
+    class Meta:
+        permissions = (
+            ('view_user_instance', 'View User Instance'),
+            ('add_user_instance', 'Add User Instance'),
+            ('edit_user_instance', 'Edit User Instance'),
+            ('delete_user_instance', 'Delete User Instance')
+        )
+
     @transaction.atomic
     def save(self, *args, **kwargs):
         if self.is_superuser:

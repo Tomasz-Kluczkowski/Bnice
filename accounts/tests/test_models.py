@@ -1,5 +1,6 @@
 import pytest
 
+from Bnice import settings
 from accounts.models import User, Child
 from accounts.tests.factories import ChildFactory
 
@@ -7,7 +8,7 @@ from accounts.tests.factories import ChildFactory
 def test_user_model(parent_user):
     assert isinstance(parent_user, User)
     assert parent_user.__str__() == parent_user.username
-    assert User.objects.count() == 1
+    assert User.objects.exclude(username=settings.ANONYMOUS_USER_NAME).count() == 1
     assert parent_user.username == 'tom_k'
     assert parent_user.name == 'Tom'
     assert parent_user.email == 'tom@dot.pl'
@@ -21,7 +22,7 @@ def test_child_model(parent_user, child_user):
     assert isinstance(child, Child)
     assert child.__str__() == child.user.username
     assert child.get_absolute_url() == ('/dashboard/child/{0}/'.format(child.pk))
-    assert User.objects.count() == 2
+    assert User.objects.exclude(username=settings.ANONYMOUS_USER_NAME).count() == 2
     assert child.user.username == 'nat_k'
     assert child.user.name == 'Natalie'
     assert child.user.email == 'nat@dot.pl'
