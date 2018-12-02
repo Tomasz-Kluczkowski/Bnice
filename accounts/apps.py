@@ -6,4 +6,3 @@ class AccountsConfig(AppConfig):
 
     def ready(self):
         import accounts.signals  # noqa
-        print('IMPORTING ACCOUNTS SIGNALS')

@@ -18,6 +18,19 @@ def parent_user(db):
 
 
 @pytest.fixture()
+def admin_user(db):
+    """Creates an administrator website user."""
+    user = UserFactory(
+        username='mac_k',
+        name='Mac',
+        email='mac@dot.pl',
+        user_type=User.TYPE_ADMIN,
+        profile_photo=''
+    )
+    return user
+
+
+@pytest.fixture()
 def parent_user_password(db, parent_user):
     """Creates a parent website user with a password."""
     user = parent_user
