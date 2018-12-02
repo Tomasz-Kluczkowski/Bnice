@@ -32,6 +32,22 @@ class Smiley(Action):
     owner = models.ForeignKey(Child, on_delete=models.CASCADE, related_name='smileys')
     star_awarded = models.BooleanField(default=False)
 
+    class Meta:
+        permissions = (
+            ('view_smiley_instance', 'View Smiley Instance'),
+            ('add_smiley_instance', 'Add Smiley Instance'),
+            ('edit_smiley_instance', 'Edit Smiley Instance'),
+            ('delete_smiley_instance', 'Delete Smiley Instance')
+        )
+
 
 class Oopsy(Action):
     owner = models.ForeignKey(Child, on_delete=models.CASCADE, related_name='oopsies')
+
+    class Meta:
+        permissions = (
+            ('view_oopsy_instance', 'View Oopsy Instance'),
+            ('add_oopsy_instance', 'Add Oopsy Instance'),
+            ('edit_oopsy_instance', 'Edit Oopsy Instance'),
+            ('delete_oopsy_instance', 'Delete Oopsy Instance')
+        )

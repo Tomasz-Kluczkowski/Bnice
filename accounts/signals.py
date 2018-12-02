@@ -32,6 +32,11 @@ def add_user_object_permissions(sender, instance, created, **kwargs):
         if instance.is_parent() or instance.is_administrator():
             assign_perm('accounts.add_user_instance', instance)
             assign_perm('accounts.delete_user_instance', instance, instance)
+            assign_perm('accounts.add_child_instance', instance)
+            # Additionally parent / admin users can add new objects to children.
+            # TODO: create group and assign those permissions to the group.
+            assign_perm('dashboard.add_smiley_instance', instance)
+            assign_perm('dashboard.add_oopsy_instance', instance)
 
 
 @receiver(pre_delete, sender=settings.AUTH_USER_MODEL)
