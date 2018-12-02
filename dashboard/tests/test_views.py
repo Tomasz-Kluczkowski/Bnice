@@ -166,15 +166,14 @@ class TestChildDetail:
                    f'href="/dashboard/child/{child_user_password.pk}/oopsy/{oopsy_custom_description.pk}/edit/">'
                ) not in response.content.decode()
 
-    def test_test_func_redirects_parent_user(self, client, child, alt_parent_user_password):
-        """Test test_func redirects when trying to access other user's child data when logged in as a parent."""
+    def test_redirects_wrong_parent_user(self, client, child, alt_parent_user_password):
+        """Test view redirects when trying to access other user's child data when logged in as a parent."""
         user_logger(client, 'johny_c')
         response = client.get(reverse('dashboard:child-detail', kwargs={'pk': child.pk}))
-        print(response.content.decode())
-        # assert response.status_code == 403
+        assert response.status_code == 403
 
-    def test_test_func_redirects_child_user(self, client, child_user_password, alt_child):
-        """Test test_func redirects when trying to access other child's data when logged in as a child."""
+    def test_redirects_wrong_child_user(self, client, child_user_password, alt_child):
+        """Test view redirects when trying to access other child's data when logged in as a child."""
         user_logger(client, 'nat_k')
         response = client.get(reverse('dashboard:child-detail', kwargs={'pk': alt_child.pk}))
         assert response.status_code == 403

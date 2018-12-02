@@ -53,9 +53,6 @@ class TestSignupView:
         assert user.email == 'testemail@email.com'
         assert user.profile_photo == 'test.png'
 
-    # def test_user_instance_permissions_parent(self):
-    #     """Confirm parent user get all object permissions."""
-
     def test_signup_data_incorrect(self, client, mock_text_file):
         """Confirm new account is not created."""
         form_data = {**self.base_form_data, 'profile_photo': mock_text_file}

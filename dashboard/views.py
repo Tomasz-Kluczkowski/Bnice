@@ -3,18 +3,16 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView)
 from django.contrib.auth.mixins import UserPassesTestMixin
-# from django.contrib.auth import login
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.http import HttpResponseRedirect
+
 from accounts.models import Child, User
 from accounts.forms import ChildCreateForm, ChildUpdateForm, UserUpdateForm
+from core.mixins.permission_mixins import PermissionRequiredMixin403
 from dashboard.models import Smiley, Oopsy
 from dashboard.forms import AddSmileyForm, AddOopsyForm
 from dashboard.services import StarAwarding
-
-
-# Create your views here.
 
 
 class DashboardPage(ListView):
@@ -39,40 +37,19 @@ class CreateChildPage(CreateView):
         return self.initial
 
 
-class ChildDetail(UserPassesTestMixin, DetailView):
-    """Awards stars before displaying Child details.
-
-    """
+class ChildDetail(PermissionRequiredMixin403, DetailView):
+    """Awards stars before displaying Child details."""
     model = Child
     template_name = "dashboard/child_detail.html"
+    permission_required = 'accounts.view_child_instance'
 
     def get_context_data(self, **kwargs):
-        child = self.child
+        child = self.get_object()
         kwargs['smileys'] = child.smileys.all()
         kwargs['oopsies'] = child.oopsies.all()
         star_awarding = StarAwarding(kwargs['smileys'], kwargs['oopsies'], child.star_points)
         star_awarding.award_star()
         return super().get_context_data(**kwargs)
-
-    def test_func(self):
-        """Allow access only to parent / child users.
-
-        We have to check differently for parent and child users hence if/elif.
-
-        Returns
-        -------
-            Bool
-        """
-        current_user = self.request.user
-        self.child = get_object_or_404(Child.objects.select_related('parent'), pk=self.kwargs['pk'])
-        parent = self.child.parent.username
-        if (current_user.is_parent() and
-                current_user.username == parent):
-            return True
-        elif current_user.is_child() and current_user.pk == int(self.kwargs["pk"]):
-            return True
-        else:
-            return False
 
 
 class AddAction(UserPassesTestMixin, CreateView):

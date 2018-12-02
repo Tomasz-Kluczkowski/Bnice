@@ -30,7 +30,7 @@ def add_user_object_permissions(sender, instance, created, **kwargs):
         assign_perm('accounts.view_user_instance', instance, instance)
         assign_perm('accounts.edit_user_instance', instance, instance)
         if instance.is_parent() or instance.is_administrator():
-            assign_perm('accounts.add_user_instance', instance, instance)
+            assign_perm('accounts.add_user_instance', instance)
             assign_perm('accounts.delete_user_instance', instance, instance)
 
 
@@ -49,6 +49,30 @@ def remove_user_object_permissions(sender, instance, **kwargs):
     filters = Q(content_type=ContentType.objects.get_for_model(instance), object_pk=instance.pk)
     UserObjectPermission.objects.filter(filters).delete()
     GroupObjectPermission.objects.filter(filters).delete()
+
+
+@receiver(post_save, sender=Child)
+def add_child_object_permissions(sender, instance, created, **kwargs):
+    """
+    Adds per object permissions for parent and child users related to Child object instance after it was saved.
+
+    Parameters
+    ----------
+    sender : Child
+        Signal sender. Model of the object that was saved.
+    instance : Child
+        Instance of the Child object that was saved.
+    created : Bool
+        If True instance was saved correctly.
+    """
+    if created:
+        parent_user = instance.parent
+        # common permissions
+        assign_perm('accounts.view_child_instance', parent_user, instance)
+        assign_perm('accounts.view_child_instance', instance.user, instance)
+        # parent_user permissions
+        assign_perm('accounts.edit_child_instance', parent_user, instance)
+        assign_perm('accounts.delete_child_instance', parent_user, instance)
 
 
 @receiver(post_delete, sender=Child)

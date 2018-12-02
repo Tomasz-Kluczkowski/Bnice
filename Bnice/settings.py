@@ -65,6 +65,8 @@ MIDDLEWARE = [
 
 ANONYMOUS_USER_NAME = 'Anonymous'
 GUARDIAN_GET_INIT_ANONYMOUS_USER = 'accounts.models.get_anonymous_user_instance'
+GUARDIAN_RENDER_403 = True
+GUARDIAN_TEMPLATE_403 = os.path.join(BASE_DIR, 'core', 'templates', 'core', '403.html')
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',

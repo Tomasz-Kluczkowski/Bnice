@@ -68,6 +68,14 @@ class Child(models.Model):
     # Points required to be rewarded with a star.
     star_points = models.PositiveSmallIntegerField(blank=False, null=True)
 
+    class Meta:
+        permissions = (
+            ('view_child_instance', 'View Child Instance'),
+            ('add_child_instance', 'Add Child Instance'),
+            ('edit_child_instance', 'Edit Child Instance'),
+            ('delete_child_instance', 'Delete Child Instance')
+        )
+
     def get_absolute_url(self):
         return reverse("dashboard:child-detail", kwargs={"pk": self.pk})
 

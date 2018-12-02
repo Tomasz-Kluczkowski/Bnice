@@ -13,7 +13,7 @@ class TestUserPostSaveSignal:
         user = parent_user
         assert user.has_perm('accounts.view_user_instance', user)
         assert user.has_perm('accounts.edit_user_instance', user)
-        assert user.has_perm('accounts.add_user_instance', user)
+        assert user.has_perm('accounts.add_user_instance')
         assert user.has_perm('accounts.delete_user_instance', user)
 
     def test_administrator_user_post_save_signal(self, admin_user):
@@ -21,7 +21,7 @@ class TestUserPostSaveSignal:
         user = admin_user
         assert user.has_perm('accounts.view_user_instance', user)
         assert user.has_perm('accounts.edit_user_instance', user)
-        assert user.has_perm('accounts.add_user_instance', user)
+        assert user.has_perm('accounts.add_user_instance')
         assert user.has_perm('accounts.delete_user_instance', user)
 
     def test_child_user_post_save_signal(self, child_user):
@@ -29,7 +29,7 @@ class TestUserPostSaveSignal:
         user = child_user
         assert user.has_perm('accounts.view_user_instance', user)
         assert user.has_perm('accounts.edit_user_instance', user)
-        assert not user.has_perm('accounts.add_user_instance', user)
+        assert not user.has_perm('accounts.add_user_instance')
         assert not user.has_perm('accounts.delete_user_instance', user)
 
     def test_user_permissions_removed_after_user_deleted(self, parent_user):
