@@ -8,36 +8,7 @@ from guardian.shortcuts import assign_perm
 
 from Bnice import settings
 from accounts.models import Child
-
-INSTANCE = 'instance'
-
-# Group keys
-PARENTS = 'Parents'
-
-# App keys
-ACCOUNTS = 'accounts'
-DASHBOARD = 'dashboard'
-
-# Permission verb keys
-ADD = 'add'
-
-# Model keys
-USER = 'user'
-CHILD = 'child'
-SMILEY = 'smiley'
-OOPSY = 'oopsy'
-
-GROUPS = [PARENTS]
-GROUP_PERMISSIONS = {
-    PARENTS: {
-        ACCOUNTS: {
-            ADD: [USER, CHILD]
-        },
-        DASHBOARD: {
-            ADD: [SMILEY, OOPSY]
-        }
-    }
-}
+from accounts.permissions import GROUPS, GROUP_PERMISSIONS, INSTANCE
 
 
 def add_groups(sender, **kwargs):
@@ -61,13 +32,14 @@ def add_groups(sender, **kwargs):
 def add_permissions(sender, **kwargs):
     """
     Add permissions to groups after accounts app migration.
+    Use the following hierarchy: group(dict), app(dict), verb(str), objects(list),
+
     Parameters
     ----------
     sender : AccountsConfig
         Signal sender. AccountsConfig app configuration class.
     """
 
-    # group, app, verb, objects,
     print('Assigning group permissions.')
     counter = 0
     for group, apps in GROUP_PERMISSIONS.items():
