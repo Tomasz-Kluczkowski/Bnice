@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.db.models.signals import post_save, pre_delete, post_delete
@@ -7,6 +8,80 @@ from guardian.shortcuts import assign_perm
 
 from Bnice import settings
 from accounts.models import Child
+
+INSTANCE = 'instance'
+
+# Group keys
+PARENTS = 'Parents'
+
+# App keys
+ACCOUNTS = 'accounts'
+DASHBOARD = 'dashboard'
+
+# Permission verb keys
+ADD = 'add'
+
+# Model keys
+USER = 'user'
+CHILD = 'child'
+SMILEY = 'smiley'
+OOPSY = 'oopsy'
+
+GROUPS = [PARENTS]
+GROUP_PERMISSIONS = {
+    PARENTS: {
+        ACCOUNTS: {
+            ADD: [USER, CHILD]
+        },
+        DASHBOARD: {
+            ADD: [SMILEY, OOPSY]
+        }
+    }
+}
+
+
+def add_groups(sender, **kwargs):
+    """
+    Add groups after accounts app migration.
+    Parameters
+    ----------
+    sender : AccountsConfig
+        Signal sender. AccountsConfig app configuration class.
+    """
+
+    print('Running add_groups.')
+    for group in GROUPS:
+        group, created = Group.objects.get_or_create(name=group)
+        if created:
+            print(f'Group {group} created.')
+        else:
+            print(f'Group {group} already existing. Not creating.')
+
+
+def add_permissions(sender, **kwargs):
+    """
+    Add permissions to groups after accounts app migration.
+    Parameters
+    ----------
+    sender : AccountsConfig
+        Signal sender. AccountsConfig app configuration class.
+    """
+
+    # group, app, verb, objects,
+    print('Assigning group permissions.')
+    counter = 0
+    for group, apps in GROUP_PERMISSIONS.items():
+        group = Group.objects.get(name=group)
+        for app, verbs in apps.items():
+            for verb, models in verbs.items():
+                for model in models:
+                    permission = ('_'.join([verb, model, INSTANCE]))
+                    assign_perm(f"{app}.{permission}", group)
+                    print(f'Assigned permission: {app}.{permission}')
+                    counter += 1
+
+    print(f'{counter} group permissions assigned.')
+    print('Assigning group permissions complete.')
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -30,13 +105,9 @@ def add_user_object_permissions(sender, instance, created, **kwargs):
         assign_perm('accounts.view_user_instance', instance, instance)
         assign_perm('accounts.edit_user_instance', instance, instance)
         if instance.is_parent() or instance.is_administrator():
-            assign_perm('accounts.add_user_instance', instance)
+            parents = Group.objects.get(name='Parents')
+            instance.groups.add(parents)
             assign_perm('accounts.delete_user_instance', instance, instance)
-            assign_perm('accounts.add_child_instance', instance)
-            # Additionally parent / admin users can add new objects to children.
-            # TODO: create group and assign those permissions to the group.
-            assign_perm('dashboard.add_smiley_instance', instance)
-            assign_perm('dashboard.add_oopsy_instance', instance)
 
 
 @receiver(pre_delete, sender=settings.AUTH_USER_MODEL)

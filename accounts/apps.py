@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.db.models.signals import post_migrate
 
 
 class AccountsConfig(AppConfig):
@@ -6,3 +7,5 @@ class AccountsConfig(AppConfig):
 
     def ready(self):
         import accounts.signals  # noqa
+        post_migrate.connect(accounts.signals.add_groups, sender=self)
+        post_migrate.connect(accounts.signals.add_permissions, sender=self)
