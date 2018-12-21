@@ -2,6 +2,7 @@
 Support for declaring global groups, their per object permissions and any classes / functions needed for this purpose.
 """
 from django.contrib.auth.models import Group
+from django.template.defaultfilters import pluralize
 from guardian.shortcuts import assign_perm
 
 
@@ -55,11 +56,11 @@ class GroupPermissionSetter:
         for group in cls.GROUPS:
             group, created = Group.objects.get_or_create(name=group)
             if created:
-                print(f'Group {group} created.')
+                print(f"Group '{group}' created.")
                 counter += 1
             else:
-                print(f'Group {group} already existing. Not creating.')
-        print(f'Created {counter} groups.')
+                print(f"Group '{group}' already existing. Not creating.")  # pragma: no cover
+        print(f'Created {counter} group{pluralize(counter)}.')
 
     @classmethod
     def add_app_permissions(cls, sender, **kwargs):
@@ -85,4 +86,4 @@ class GroupPermissionSetter:
                     assign_perm(f'{app}.{permission_code}', group)
                     print(f'Assigned permission: {app}.{permission_code}')
                     counter += 1
-        print(f'{counter} {app} group permissions assigned.')
+        print(f"{counter} '{app}' group permissions assigned.")
