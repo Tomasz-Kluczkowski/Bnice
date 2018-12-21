@@ -1,9 +1,6 @@
-import pytest
 from guardian.models import UserObjectPermission
 
 from accounts.models import User
-
-pytestmark = pytest.mark.django_db
 
 
 class TestUserPostSaveSignal:

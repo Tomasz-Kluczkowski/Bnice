@@ -8,52 +8,6 @@ from guardian.shortcuts import assign_perm
 
 from Bnice import settings
 from accounts.models import Child
-from accounts.permissions import GROUPS, GROUP_PERMISSIONS, INSTANCE
-
-
-def add_groups(sender, **kwargs):
-    """
-    Add groups after accounts app migration.
-    Parameters
-    ----------
-    sender : AccountsConfig
-        Signal sender. AccountsConfig app configuration class.
-    """
-
-    print('Running add_groups.')
-    for group in GROUPS:
-        group, created = Group.objects.get_or_create(name=group)
-        if created:
-            print(f'Group {group} created.')
-        else:
-            print(f'Group {group} already existing. Not creating.')
-
-
-def add_permissions(sender, **kwargs):
-    """
-    Add permissions to groups after accounts app migration.
-    Use the following hierarchy: group(dict), app(dict), verb(str), objects(list),
-
-    Parameters
-    ----------
-    sender : AccountsConfig
-        Signal sender. AccountsConfig app configuration class.
-    """
-
-    print('Assigning group permissions.')
-    counter = 0
-    for group, apps in GROUP_PERMISSIONS.items():
-        group = Group.objects.get(name=group)
-        for app, verbs in apps.items():
-            for verb, models in verbs.items():
-                for model in models:
-                    permission = ('_'.join([verb, model, INSTANCE]))
-                    assign_perm(f"{app}.{permission}", group)
-                    print(f'Assigned permission: {app}.{permission}')
-                    counter += 1
-
-    print(f'{counter} group permissions assigned.')
-    print('Assigning group permissions complete.')
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

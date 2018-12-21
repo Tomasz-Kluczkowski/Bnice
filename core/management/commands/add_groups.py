@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
 
-from accounts.permissions import GROUPS
+from core.permissions import GroupPermissionSetter
 
 
 class Command(BaseCommand):
@@ -11,10 +11,13 @@ class Command(BaseCommand):
     help = 'Add groups in the database.'
 
     def handle(self, *args, **kwargs):
-        print('Running add_groups.')
-        for group in GROUPS:
+        print('Adding groups.')
+        counter = 0
+        for group in GroupPermissionSetter.GROUPS:
             group, created = Group.objects.get_or_create(name=group)
             if created:
                 print(f'Group {group} created.')
+                counter += 1
             else:
                 print(f'Group {group} already existing. Not creating.')
+        print(f'Created {counter} groups.')

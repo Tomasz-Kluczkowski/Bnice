@@ -4,6 +4,8 @@ from Bnice import settings
 from accounts.models import User, Child
 from accounts.tests.factories import ChildFactory
 
+pytestmark = pytest.mark.django_db
+
 
 def test_user_model(parent_user):
     assert isinstance(parent_user, User)
@@ -16,7 +18,6 @@ def test_user_model(parent_user):
     assert parent_user.user_type == User.TYPE_PARENT
 
 
-@pytest.mark.django_db
 def test_child_model(parent_user, child_user):
     child = ChildFactory(user=child_user, parent=parent_user, star_points=15)
     assert isinstance(child, Child)
@@ -31,7 +32,6 @@ def test_child_model(parent_user, child_user):
     assert child.parent.username == 'tom_k'
 
 
-@pytest.mark.django_db
 def test_superuser_is_administrator():
     password = 'password'
     admin = User.objects.create_superuser('admin_man', 'myemail@test.com', password)
