@@ -19,8 +19,6 @@ def test_add_permissions_command(parent_user):
     parents = Group.objects.get(name='Parents')
     parent_user.groups.add(parents)
     call_command('add_group_permissions')
-    assert parents.permissions.count() == 4
+    assert parents.permissions.count() == 2
     assert parent_user.has_perm('accounts.add_user_instance')
     assert parent_user.has_perm('accounts.add_child_instance')
-    assert parent_user.has_perm('dashboard.add_smiley_instance')
-    assert parent_user.has_perm('dashboard.add_oopsy_instance')

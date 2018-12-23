@@ -14,7 +14,6 @@ class GroupPermissionSetter:
 
     # App keys
     ACCOUNTS = 'accounts'
-    DASHBOARD = 'dashboard'
 
     # Permission verb keys
     ADD = 'add'
@@ -22,8 +21,6 @@ class GroupPermissionSetter:
     # Model keys
     USER = 'user'
     CHILD = 'child'
-    SMILEY = 'smiley'
-    OOPSY = 'oopsy'
 
     GROUPS = [PARENTS]
 
@@ -33,11 +30,6 @@ class GroupPermissionSetter:
                 ADD: [USER, CHILD]
             }
         },
-        DASHBOARD: {
-            PARENTS: {
-                ADD: [SMILEY, OOPSY]
-            }
-        }
     }
 
     @classmethod

@@ -18,6 +18,6 @@ class Command(BaseCommand):
             if created:
                 print(f'Group {group} created.')
                 counter += 1
-            else:
+            else:  # pragma: no cover
                 print(f'Group {group} already existing. Not creating.')
         print(f'Created {counter} groups.')
