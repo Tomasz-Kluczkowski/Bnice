@@ -1,5 +1,4 @@
 from django.db import transaction
-from django.shortcuts import get_object_or_404
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView)
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -9,7 +8,7 @@ from django.http import HttpResponseRedirect
 
 from accounts.models import Child, User
 from accounts.forms import ChildCreateForm, ChildUpdateForm, UserUpdateForm
-from core.mixins.permission_mixins import PermissionRequiredMixin403
+from core.mixins.permission_mixins import PermissionRequired403Mixin, PermissionRequiredSetChild403Mixin
 from dashboard.models import Smiley, Oopsy
 from dashboard.forms import AddSmileyForm, AddOopsyForm
 from dashboard.services import StarAwarding
@@ -37,7 +36,7 @@ class CreateChildPage(CreateView):
         return self.initial
 
 
-class ChildDetail(PermissionRequiredMixin403, DetailView):
+class ChildDetail(PermissionRequired403Mixin, DetailView):
     """Awards stars before displaying Child details."""
     model = Child
     template_name = "dashboard/child_detail.html"
@@ -52,15 +51,8 @@ class ChildDetail(PermissionRequiredMixin403, DetailView):
         return super().get_context_data(**kwargs)
 
 
-class AddAction(PermissionRequiredMixin403, CreateView):
+class AddAction(PermissionRequiredSetChild403Mixin, CreateView):
     permission_required = 'accounts.edit_child_instance'
-
-    def dispatch(self, request, *args, **kwargs):
-        self.child = get_object_or_404(Child.objects, pk=self.kwargs['pk'])
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_permission_object(self):
-        return self.child
 
     def form_valid(self, form):
         form.instance = form.save(commit=False)
@@ -82,7 +74,7 @@ class AddOopsy(AddAction):
     form_class = AddOopsyForm
 
 
-class UserUpdate(PermissionRequiredMixin403, UpdateView):
+class UserUpdate(PermissionRequired403Mixin, UpdateView):
     model = User
     form_class = UserUpdateForm
     template_name = 'dashboard/user_update.html'
