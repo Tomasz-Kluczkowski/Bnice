@@ -82,26 +82,12 @@ class AddOopsy(AddAction):
     form_class = AddOopsyForm
 
 
-class UserUpdate(UserPassesTestMixin, UpdateView):
+class UserUpdate(PermissionRequiredMixin403, UpdateView):
     model = User
     form_class = UserUpdateForm
     template_name = 'dashboard/user_update.html'
     success_url = reverse_lazy('dashboard:dashboard')
-
-    def test_func(self):
-        """Allow access only to logged in user who's data we are trying to change.
-
-        Returns
-        -------
-            Bool
-        """
-        current_user = self.request.user
-        user_pk = self.kwargs['pk']
-        user = User.objects.get(pk=user_pk)
-        if current_user == user:
-            return True
-        else:
-            return False
+    permission_required = 'accounts.edit_user_instance'
 
 
 class ChildUpdate(UserPassesTestMixin, UpdateView):
