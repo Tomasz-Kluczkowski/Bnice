@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView)
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -54,6 +55,10 @@ class ChildDetail(PermissionRequired403Mixin, DetailView):
 class AddAction(PermissionRequiredSetChild403Mixin, CreateView):
     permission_required = 'accounts.edit_child_instance'
 
+    def dispatch(self, request, *args, **kwargs):
+        self.child = get_object_or_404(Child.objects, pk=self.kwargs['pk'])
+        return super().dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         form.instance = form.save(commit=False)
         form.instance.owner = self.child
@@ -82,52 +87,37 @@ class UserUpdate(PermissionRequired403Mixin, UpdateView):
     permission_required = 'accounts.edit_user_instance'
 
 
-class ChildUpdate(UserPassesTestMixin, UpdateView):
+class ChildUpdate(PermissionRequiredSetChild403Mixin, UpdateView):
     model = User
     form_class = UserUpdateForm
     child_form_class = ChildUpdateForm
     template_name = 'dashboard/child_update.html'
+    permission_required = 'accounts.edit_child_instance'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.child = get_object_or_404(Child.objects.select_related('parent'), user__pk=self.kwargs['pk'])
+        return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self, **kwargs):
         return reverse_lazy('dashboard:child-detail', **kwargs)
 
     def get_context_data(self, **kwargs):
-        child = Child.objects.get(user__pk=self.object.pk)
-        kwargs['parent'] = child.parent.username
-        kwargs['child_form'] = self.child_form_class(initial={'star_points': child.star_points})
+        kwargs['child_form'] = self.child_form_class(initial={'star_points': self.child.star_points})
         return super().get_context_data(**kwargs)
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        child = Child.objects.get(user__pk=self.object.pk)
         user_form = self.form_class(request.POST, request.FILES, instance=self.object)
-        child_form = self.child_form_class(request.POST, instance=child)
+        child_form = self.child_form_class(request.POST, instance=self.child)
         if user_form.is_valid() and child_form.is_valid():
             user_data = user_form.save(commit=False)
             user_data.save()
             child_data = child_form.save(commit=False)
             child_data.save()
-            return HttpResponseRedirect(self.get_success_url(kwargs={'pk': child.user.pk}))
+            return HttpResponseRedirect(self.get_success_url(kwargs={'pk': self.child.user.pk}))
         else:
             return self.render_to_response(self.get_context_data(form=user_form, child_form=child_form))
-
-    def test_func(self):
-        """Allow access only to logged in parent users who match child to be
-        updated parent.
-
-        Returns
-        -------
-            Bool
-        """
-        current_user = self.request.user
-        child_user = self.get_object()
-        child = Child.objects.get(user=child_user)
-        parent = child.parent.username
-        if current_user.is_parent() and current_user.username == parent:
-            return True
-        else:
-            return False
 
 
 class ChildDelete(UserPassesTestMixin, DeleteView):

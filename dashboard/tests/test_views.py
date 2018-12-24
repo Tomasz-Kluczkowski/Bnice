@@ -295,15 +295,6 @@ class TestChildUpdate:
         response = client.get(reverse('dashboard:child-update', kwargs={'pk': child.pk}))
         assert response.status_code == 403
 
-    def test_get_context_data(self, client, child, child_user, parent_user_password):
-        """Confirm user currently logged in is set as parent in the context data"""
-        user_logger(client, 'tom_k')
-        response = client.get(reverse('dashboard:child-update', kwargs={'pk': child.pk}))
-        assert response.context['parent'] == 'tom_k'
-        assert response.status_code == 200
-        templates = response.templates
-        assert templates[0].name == 'dashboard/child_update.html'
-
     def test_updating_child_data(self, client, parent_user_password, child_user, child, mock_image_file, mock_img_save,
                                  monkeypatch):
         """Confirm child user data is modified and saved in the database."""

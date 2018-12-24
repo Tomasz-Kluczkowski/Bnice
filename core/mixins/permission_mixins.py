@@ -1,18 +1,11 @@
 # Permission mixins to override default django-guardian behaviour
-from django.shortcuts import get_object_or_404
 from guardian.mixins import PermissionRequiredMixin
-
-from accounts.models import Child
 
 
 class SetChildPermissionObjectMixin:
     """
-    Adds child attribute to the view which is needed for the permission check and view logic.
+    Sets child object as the focus of the permission check in the view.
     """
-    def dispatch(self, request, *args, **kwargs):
-        self.child = get_object_or_404(Child.objects, pk=self.kwargs['pk'])
-        return super().dispatch(request, *args, **kwargs)
-
     def get_permission_object(self):
         return self.child
 
