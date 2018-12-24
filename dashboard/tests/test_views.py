@@ -181,8 +181,8 @@ class TestChildDetail:
 
 class TestAddAction:
 
-    def test_test_func_redirects(self, client, child, alt_parent_user_password):
-        """Test test_func when trying to access other user's child data when logged in as a parent."""
+    def test_permission_required_check(self, client, child, alt_parent_user_password):
+        """Test redirection when trying to access other user's child data when logged in as a parent."""
         user_logger(client, 'johny_c')
         response = client.get(reverse('dashboard:smiley-create', kwargs={'pk': child.pk}))
         assert response.status_code == 403
@@ -259,8 +259,8 @@ class TestUserUpdate:
         templates = response.templates
         assert templates[0].name == 'dashboard/user_update.html'
 
-    def test_test_func_redirects(self, client, child_user_password, parent_user_password):
-        """Confirm test_func redirects to login when trying to update other user's profile."""
+    def test_permission_check(self, client, child_user_password, parent_user_password):
+        """Confirm redirection when trying to update other user's profile."""
         user_logger(client, 'nat_k')
         response = client.get(reverse('dashboard:user-update', kwargs={'pk': parent_user_password.pk}))
         assert response.status_code == 403
@@ -289,8 +289,8 @@ class TestUserUpdate:
 
 class TestChildUpdate:
 
-    def test_test_func_redirects(self, client, alt_parent_user_password, child_user, child):
-        """Confirm test_func redirects to login when trying to update other parent's child."""
+    def test_permission_check(self, client, alt_parent_user_password, child_user, child):
+        """Confirm redirection when trying to update other parent's child."""
         user_logger(client, 'johny_c')
         response = client.get(reverse('dashboard:child-update', kwargs={'pk': child.pk}))
         assert response.status_code == 403
