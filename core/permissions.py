@@ -5,23 +5,23 @@ from django.contrib.auth.models import Group
 from django.template.defaultfilters import pluralize
 from guardian.shortcuts import assign_perm
 
+INSTANCE = 'instance'
+
+# Group keys
+PARENTS = 'Parents'
+
+# App keys
+ACCOUNTS = 'accounts'
+
+# Permission verb keys
+ADD = 'add'
+
+# Model keys
+USER = 'user'
+CHILD = 'child'
+
 
 class GroupPermissionSetter:
-    INSTANCE = 'instance'
-
-    # Group keys
-    PARENTS = 'Parents'
-
-    # App keys
-    ACCOUNTS = 'accounts'
-
-    # Permission verb keys
-    ADD = 'add'
-
-    # Model keys
-    USER = 'user'
-    CHILD = 'child'
-
     GROUPS = [PARENTS]
 
     GROUP_PERMISSIONS = {
@@ -74,8 +74,12 @@ class GroupPermissionSetter:
             group = Group.objects.get(name=group)
             for verb, models in verbs.items():
                 for model in models:
-                    permission_code = ('_'.join([verb, model, cls.INSTANCE]))
+                    permission_code = ('_'.join([verb, model, INSTANCE]))
                     assign_perm(f'{app}.{permission_code}', group)
                     print(f'Assigned permission: {app}.{permission_code}')
                     counter += 1
         print(f"{counter} '{app}' group permissions assigned.")
+
+
+class ObjectPermissionSetter:
+    pass

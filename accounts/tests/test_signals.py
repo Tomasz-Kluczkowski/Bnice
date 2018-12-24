@@ -1,9 +1,11 @@
+from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 from guardian.models import UserObjectPermission
 
 from accounts.models import User
 
 
-class TestUserPostSaveSignal:
+class TestUserSignals:
 
     def test_parent_user_post_save_signal(self, parent_user):
         """Make sure all permissions are correctly assigned to the new parent user instance."""
@@ -31,8 +33,9 @@ class TestUserPostSaveSignal:
 
     def test_user_permissions_removed_after_user_deleted(self, parent_user):
         user = parent_user
+        filters = Q(content_type=ContentType.objects.get_for_model(parent_user), object_pk=parent_user.pk)
         user.delete()
-        assert UserObjectPermission.objects.count() == 0
+        assert not UserObjectPermission.objects.filter(filters).exists()
 
     def test_related_child_user_deleted_when_child_instance_deleted(self, child):
         child_user_pk = child.user.pk

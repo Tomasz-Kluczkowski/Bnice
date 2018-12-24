@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.db.models.signals import post_save, pre_delete, post_delete
 from django.dispatch import receiver
-from guardian.models import UserObjectPermission, GroupObjectPermission
+from guardian.models import UserObjectPermission
 from guardian.shortcuts import assign_perm
 
 from Bnice import settings
@@ -50,7 +50,6 @@ def remove_user_object_permissions(sender, instance, **kwargs):
     """
     filters = Q(content_type=ContentType.objects.get_for_model(instance), object_pk=instance.pk)
     UserObjectPermission.objects.filter(filters).delete()
-    GroupObjectPermission.objects.filter(filters).delete()
 
 
 @receiver(post_save, sender=Child)

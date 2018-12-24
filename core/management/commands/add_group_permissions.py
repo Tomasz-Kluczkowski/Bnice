@@ -2,7 +2,7 @@ from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
 from guardian.shortcuts import assign_perm
 
-from core.permissions import GroupPermissionSetter
+from core.permissions import GroupPermissionSetter, INSTANCE
 
 
 class Command(BaseCommand):
@@ -20,7 +20,7 @@ class Command(BaseCommand):
                 group = Group.objects.get(name=group)
                 for verb, models in verbs.items():
                     for model in models:
-                        permission_code = ('_'.join([verb, model, GroupPermissionSetter.INSTANCE]))
+                        permission_code = ('_'.join([verb, model, INSTANCE]))
                         assign_perm(f'{app}.{permission_code}', group)
                         print(f'Assigned permission: {app}.{permission_code}')
                         app_counter += 1
