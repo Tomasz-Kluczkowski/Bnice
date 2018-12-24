@@ -120,25 +120,11 @@ class ChildUpdate(PermissionRequiredSetChild403Mixin, UpdateView):
             return self.render_to_response(self.get_context_data(form=user_form, child_form=child_form))
 
 
-class ChildDelete(UserPassesTestMixin, DeleteView):
+class ChildDelete(PermissionRequired403Mixin, DeleteView):
     model = Child
     success_url = reverse_lazy('dashboard:dashboard')
     template_name = 'dashboard/child_delete.html'
-
-    def test_func(self):
-        """Allow access only to logged in parent users who match child's to be deleted parent.
-
-        Returns
-        -------
-            Bool
-        """
-        current_user = self.request.user
-        child = self.get_object()
-        parent = child.parent.username
-        if current_user.is_parent() and current_user.username == parent:
-            return True
-        else:
-            return False
+    permission_required = 'accounts.delete_child_instance'
 
 
 class ActionDeleteBase(UserPassesTestMixin, DeleteView):
