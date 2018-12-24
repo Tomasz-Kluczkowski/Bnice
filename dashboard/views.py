@@ -52,20 +52,19 @@ class ChildDetail(PermissionRequiredMixin403, DetailView):
         return super().get_context_data(**kwargs)
 
 
-class AddAction(UserPassesTestMixin, CreateView):
+class AddAction(PermissionRequiredMixin403, CreateView):
+    permission_required = 'accounts.edit_child_instance'
 
-    def test_func(self):
-        child = get_object_or_404(Child.objects.select_related('parent'), pk=self.kwargs['pk'])
-        current_user = self.request.user
-        parent = child.parent.username
-        if current_user.is_parent() and current_user.username == parent:
-            return True
-        else:
-            return False
+    def dispatch(self, request, *args, **kwargs):
+        self.child = get_object_or_404(Child.objects, pk=self.kwargs['pk'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_permission_object(self):
+        return self.child
 
     def form_valid(self, form):
         form.instance = form.save(commit=False)
-        form.instance.owner = Child.objects.get(pk=self.kwargs["pk"])
+        form.instance.owner = self.child
         form.instance.earned_on = timezone.now()
         form.save()
         return super().form_valid(form)
