@@ -2,8 +2,13 @@
 Support for declaring global groups, their per object permissions and any classes / functions needed for this purpose.
 """
 from django.contrib.auth.models import Group
+from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 from django.template.defaultfilters import pluralize
+from guardian.models import UserObjectPermission
 from guardian.shortcuts import assign_perm
+
+from dashboard.models import Action
 
 INSTANCE = 'instance'
 
@@ -12,16 +17,25 @@ PARENTS = 'Parents'
 
 # App keys
 ACCOUNTS = 'accounts'
+DASHBOARD = 'dashboard'
 
 # Permission verb keys
 ADD = 'add'
+VIEW = 'view'
+EDIT = 'edit'
+DELETE = 'delete'
 
 # Model keys
 USER = 'user'
 CHILD = 'child'
+SMILEY = 'smiley'
+OOPSY = 'oopsy'
 
 
 class GroupPermissionSetter:
+    """
+    Helper class to be used to create groups and add their permissions.
+    """
     GROUPS = [PARENTS]
 
     GROUP_PERMISSIONS = {
@@ -82,4 +96,52 @@ class GroupPermissionSetter:
 
 
 class ObjectPermissionSetter:
-    pass
+    """
+    Helper class to be used to add per object permissions.
+    """
+    CHILD_USER_VERBS = [VIEW]
+    VERBS = [VIEW, EDIT, DELETE]
+
+    def add_object_permissions(self, sender, instance, created, **kwargs):
+        """
+        Adds per object permissions for the parent and child users when object is initially saved to the database.
+
+        Parameters
+        ----------
+        sender : Class
+            Class of the object that was saved.
+        instance : Any
+            Instance of the object that was saved.
+        created : Bool
+            If True instance was saved correctly.
+        """
+        parent_user = None
+        child_user = None
+        if issubclass(sender, Action):
+            parent_user = instance.owner.parent
+            child_user = instance.owner.user
+        if created:
+            ct = ContentType.objects.get_for_model(instance)
+            app = ct.app_label
+            model = ct.model
+            # add parent user permissions.
+            for verb in self.VERBS:
+                permission_code = ('_'.join([verb, model, INSTANCE]))
+                assign_perm(f'{app}.{permission_code}', parent_user, instance)
+                if verb in self.CHILD_USER_VERBS:
+                    # add child user permissions.
+                    assign_perm(f'{app}.{permission_code}', child_user, instance)
+
+    def remove_object_permissions(self, sender, instance, **kwargs):
+        """
+        Removes all permissions associated with the object about to get deleted.
+
+        Parameters
+        ----------
+        sender : Class
+            Signal sender. Class of the object that is about to get deleted.
+        instance : Any
+            Instance of the object that we need to remove all permissions from.
+        """
+        filters = Q(content_type=ContentType.objects.get_for_model(instance), object_pk=instance.pk)
+        UserObjectPermission.objects.filter(filters).delete()
