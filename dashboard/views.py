@@ -9,7 +9,8 @@ from django.http import HttpResponseRedirect
 
 from accounts.models import Child, User
 from accounts.forms import ChildCreateForm, ChildUpdateForm, UserUpdateForm
-from core.mixins.permission_mixins import PermissionRequired403Mixin, PermissionRequiredSetChild403Mixin
+from core.mixins.permission_mixins import PermissionRequired403Mixin, PermissionRequiredSetChild403Mixin, \
+    PermissionRequired403GlobalMixin
 from dashboard.models import Smiley, Oopsy
 from dashboard.forms import AddSmileyForm, AddOopsyForm
 from dashboard.services import StarAwarding
@@ -26,11 +27,12 @@ class DashboardPage(ListView):
             return Child.objects.filter(parent=self.request.user).select_related('parent', 'user')
 
 
-class CreateChildPage(CreateView):
+class CreateChildPage(PermissionRequired403GlobalMixin, CreateView):
     model = Child
     template_name = "dashboard/add_child.html"
     form_class = ChildCreateForm
     success_url = reverse_lazy('dashboard:dashboard')
+    permission_required = 'accounts.add_child_instance'
 
     def get_initial(self):
         self.initial.update({"current_user": self.request.user})

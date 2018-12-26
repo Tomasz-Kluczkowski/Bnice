@@ -8,6 +8,6 @@ class AccountsConfig(AppConfig):
     def ready(self):
         import accounts.signals  # noqa
         from core.permissions import GroupPermissionSetter
-        group_adder = GroupPermissionSetter
-        post_migrate.connect(group_adder.add_groups, sender=self)
-        post_migrate.connect(group_adder.add_app_permissions, sender=self)
+        group_permission_setter = GroupPermissionSetter
+        post_migrate.connect(group_permission_setter.add_groups, sender=self)
+        post_migrate.connect(group_permission_setter.add_app_permissions, sender=self)

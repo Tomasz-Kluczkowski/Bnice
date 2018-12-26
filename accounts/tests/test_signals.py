@@ -37,11 +37,13 @@ class TestChildSignals:
     def test_add_child_object_permissions_parent_user(self, parent_user, child):
         assert parent_user.has_perm('accounts.view_child_instance', child)
         assert parent_user.has_perm('accounts.edit_child_instance', child)
+        assert parent_user.has_perm('accounts.add_child_instance')
         assert parent_user.has_perm('accounts.delete_child_instance', child)
 
     def test_add_child_object_permissions_child_user(self, parent_user, child, child_user):
         assert child_user.has_perm('accounts.view_child_instance', child)
         assert not child_user.has_perm('accounts.edit_child_instance', child)
+        assert not child_user.has_perm('accounts.add_child_instance')
         assert not child_user.has_perm('accounts.delete_child_instance', child)
 
     def test_child_object_permissions_removed_after_child_deleted(self, parent_user, child):

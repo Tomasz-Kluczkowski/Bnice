@@ -12,9 +12,20 @@ class SetChildPermissionObjectMixin:
 
 class PermissionRequired403Mixin(PermissionRequiredMixin):
     """
-    Basic PermissionRequired mixin to use in views.
+    Basic PermissionRequired mixin to use in views. Forces 403 http error on failed permission check.
     """
     return_403 = True
+
+
+class PermissionRequired403GlobalMixin(PermissionRequiredMixin):
+    """
+    Basic Global PermissionRequired mixin to use in views. Forces 403 http error on failed permission check.
+    """
+    return_403 = True
+    accept_global_perms = True
+
+    def get_permission_object(self):
+        return None
 
 
 class PermissionRequiredSetChild403Mixin(SetChildPermissionObjectMixin, PermissionRequired403Mixin):

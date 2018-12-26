@@ -69,6 +69,11 @@ class TestDashboardPage:
 
 class TestCreateChildPage:
 
+    def test_access_denied_to_child_users(self, client, child_user_password):
+        user_logger(client, 'nat_k')
+        response = client.get(reverse('dashboard:child-create'))
+        assert response.status_code == 403
+
     def test_http_get(self, client, parent_user_password):
         user = parent_user_password
         user_logger(client, 'tom_k')
