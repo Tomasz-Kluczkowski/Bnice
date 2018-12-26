@@ -8,6 +8,7 @@ from django.template.defaultfilters import pluralize
 from guardian.models import UserObjectPermission
 from guardian.shortcuts import assign_perm
 
+from accounts.models import Child
 from dashboard.models import Action
 
 INSTANCE = 'instance'
@@ -100,7 +101,7 @@ class ObjectPermissionSetter:
     Helper class to be used to add per object permissions.
     """
     CHILD_USER_VERBS = [VIEW]
-    VERBS = [VIEW, EDIT, DELETE]
+    PARENT_USER_VERBS = [VIEW, EDIT, DELETE]
 
     def add_object_permissions(self, sender, instance, created, **kwargs):
         """
@@ -120,12 +121,15 @@ class ObjectPermissionSetter:
         if issubclass(sender, Action):
             parent_user = instance.owner.parent
             child_user = instance.owner.user
+        elif sender is Child:
+            parent_user = instance.parent
+            child_user = instance.user
         if created:
             ct = ContentType.objects.get_for_model(instance)
             app = ct.app_label
             model = ct.model
             # add parent user permissions.
-            for verb in self.VERBS:
+            for verb in self.PARENT_USER_VERBS:
                 permission_code = ('_'.join([verb, model, INSTANCE]))
                 assign_perm(f'{app}.{permission_code}', parent_user, instance)
                 if verb in self.CHILD_USER_VERBS:

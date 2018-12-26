@@ -62,7 +62,6 @@ class User(AbstractUser):
 
 
 class Child(models.Model):
-
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
     parent = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE, related_name="children")
     # Points required to be rewarded with a star.
