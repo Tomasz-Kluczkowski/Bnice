@@ -443,8 +443,9 @@ class TestSmileyUpdate:
         templates = response.templates
         assert templates[0].name == 'dashboard/smiley_update.html'
 
-    def test_test_func_redirects(self, client, child, smiley_custom_description, alt_parent_user_password):
-        """Confirm test_func redirects to login when trying to update smiley of child of other parent."""
+    def test_redirection_on_failed_permission_check(self, client, child, smiley_custom_description,
+                                                    alt_parent_user_password):
+        """Confirm redirection when trying to update smiley of child of other parent."""
         user_logger(client, 'johny_c')
         response = client.get(reverse('dashboard:smiley-update',
                                       kwargs={'child_pk': child.pk, 'pk': smiley_custom_description.pk}))
@@ -481,9 +482,9 @@ class TestOopsyUpdate:
         templates = response.templates
         assert templates[0].name == 'dashboard/oopsy_update.html'
 
-    def test_test_func_redirects(self, client, child, oopsy_custom_description, alt_parent_user_password):
-        """Confirm test_func redirects to login when trying to update oopsy
-        of child of other parent."""
+    def test_redirection_on_failed_permission_check(self, client, child, oopsy_custom_description,
+                                                    alt_parent_user_password):
+        """Confirm redirection when trying to update oopsy of child of other parent."""
         user_logger(client, 'johny_c')
         response = client.get(reverse('dashboard:oopsy-update',
                                       kwargs={'child_pk': child.pk, 'pk': oopsy_custom_description.pk}))

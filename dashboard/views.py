@@ -1,16 +1,14 @@
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-from django.views.generic import (
-    ListView, DetailView, CreateView, UpdateView, DeleteView)
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 
 from accounts.models import Child, User
 from accounts.forms import ChildCreateForm, ChildUpdateForm, UserUpdateForm
-from core.mixins.permission_mixins import PermissionRequired403Mixin, PermissionRequiredSetChild403Mixin, \
-    PermissionRequired403GlobalMixin
+from core.mixins.permission_mixins import (PermissionRequired403Mixin, PermissionRequiredSetChild403Mixin,
+                                           PermissionRequired403GlobalMixin)
 from dashboard.models import Smiley, Oopsy
 from dashboard.forms import AddSmileyForm, AddOopsyForm
 from dashboard.services import StarAwarding
@@ -129,14 +127,12 @@ class ChildDelete(PermissionRequired403Mixin, DeleteView):
     permission_required = 'accounts.delete_child_instance'
 
 
-class ActionDeleteBase(UserPassesTestMixin, DeleteView):
+class ActionDeleteBase(PermissionRequired403Mixin, DeleteView):
     """Base class for deleting actions. Not to be used on its own."""
-
     model = None
 
     def get_queryset(self):
-        qs = self.model.objects.filter(
-            pk=self.kwargs.get('pk')).select_related('owner', 'owner__user', 'owner__parent')
+        qs = self.model.objects.filter(pk=self.kwargs.get('pk')).select_related('owner', 'owner__user', 'owner__parent')
         return qs
 
     def get_context_data(self, **kwargs):
@@ -149,39 +145,23 @@ class ActionDeleteBase(UserPassesTestMixin, DeleteView):
         child = action.owner
         return reverse('dashboard:child-detail', kwargs={'pk': child.pk})
 
-    def test_func(self):
-        """Allow access only to logged in parent user who is parent of the child who's action we are deleting.
-
-        Returns
-        -------
-            Bool
-        """
-        current_user = self.request.user
-        action = self.get_object()
-        parent = action.owner.parent.username
-        if current_user.is_parent() and current_user.username == parent:
-            return True
-        else:
-            return False
-
 
 class SmileyDelete(ActionDeleteBase):
     """Delete smiley actions."""
-
     model = Smiley
     template_name = 'dashboard/smiley_delete.html'
+    permission_required = 'dashboard.delete_smiley_instance'
 
 
 class OopsyDelete(ActionDeleteBase):
     """Delete oopsy actions."""
-
     model = Oopsy
     template_name = 'dashboard/oopsy_delete.html'
+    permission_required = 'dashboard.delete_oopsy_instance'
 
 
-class ActionUpdateBase(UserPassesTestMixin, UpdateView):
+class ActionUpdateBase(PermissionRequired403Mixin, UpdateView):
     """Base class for updating unclaimed smiley and oopsy objects. Do not use on its own."""
-
     model = None
     fields = ('description', 'points')
 
@@ -195,27 +175,14 @@ class ActionUpdateBase(UserPassesTestMixin, UpdateView):
         child = action.owner
         return reverse('dashboard:child-detail', kwargs={'pk': child.pk})
 
-    def test_func(self):
-        """Allow access only to logged in parent user who is parent of the child who's action we are updating.
-
-        Returns
-        -------
-            Bool
-        """
-        current_user = self.request.user
-        action = self.get_object()
-        parent = action.owner.parent.username
-        if current_user.is_parent() and current_user.username == parent:
-            return True
-        else:
-            return False
-
 
 class SmileyUpdate(ActionUpdateBase):
     model = Smiley
     template_name = 'dashboard/smiley_update.html'
+    permission_required = 'dashboard.edit_smiley_instance'
 
 
 class OopsyUpdate(ActionUpdateBase):
     model = Oopsy
     template_name = 'dashboard/oopsy_update.html'
+    permission_required = 'dashboard.edit_oopsy_instance'
