@@ -2,7 +2,7 @@
 {% load static %}
 {% block form %}
     <div class="dashboard__action-form">
-        {%  if "add_oopsy" in request.path %}
+        {%  if "oopsy/new/" in request.path %}
             {% include "core/form.html" with title="Add Oopsy" %}
         {% else %}
             {% include "core/form.html" with title="Add Smiley" %}
